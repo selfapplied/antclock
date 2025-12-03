@@ -1,3 +1,4 @@
+#!/Users/joelstover/antclock/.venv/bin/python
 """
 AntClock: Complete CE1 Framework Demonstration
 Consolidated demo covering all CE1 framework components.
@@ -36,8 +37,8 @@ def demo_basic_curvature_walker():
     print(f"Mirror-phase transitions: {summary['mirror_phase_transitions']}")
 
     # Plot geometry
-    walker.plot_geometry('antclock_geometry.png')
-    print("Geometry plot saved to antclock_geometry.png")
+    walker.plot_geometry('.out/antclock_geometry.png')
+    print("Geometry plot saved to .out/antclock_geometry.png")
 
     return walker, summary
 
@@ -258,8 +259,8 @@ def demo_trajectory_evolution():
     ax4.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig('antclock_trajectory.png', dpi=300, bbox_inches='tight')
-    print("Trajectory evolution plot saved to antclock_trajectory.png")
+    plt.savefig('.out/antclock_trajectory.png', dpi=300, bbox_inches='tight')
+    print("Trajectory evolution plot saved to .out/antclock_trajectory.png")
 
 
 def demo_topology_evolution():
@@ -314,8 +315,8 @@ def demo_topology_evolution():
     plt.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig('topology_evolution.png', dpi=300, bbox_inches='tight')
-    print("Topology evolution plot saved to topology_evolution.png")
+    plt.savefig('.out/topology_evolution.png', dpi=300, bbox_inches='tight')
+    print("Topology evolution plot saved to .out/topology_evolution.png")
 
 
 def main():
@@ -342,9 +343,9 @@ def main():
     print("DEMONSTRATION COMPLETE")
     print("="*80)
     print("Generated plots:")
-    print("- antclock_geometry.png: Unit circle geometry with phase transitions")
-    print("- antclock_trajectory.png: Body evolution and clock phase accumulation")
-    print("- topology_evolution.png: Betti number changes across shells")
+    print("- .out/antclock_geometry.png: Unit circle geometry with phase transitions")
+    print("- .out/antclock_trajectory.png: Body evolution and clock phase accumulation")
+    print("- .out/topology_evolution.png: Betti number changes across shells")
     print()
     print("Key insights:")
     print("- Mirror-phase shells (n ≡ 3 mod 4) behave like Re(s) = 1/2")
