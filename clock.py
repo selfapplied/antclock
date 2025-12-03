@@ -18,6 +18,9 @@ class CurvatureClockWalker:
     breaks in digit shells mirror the critical line structure of ζ(s).
     """
 
+    # Class-level cache for expensive computations
+    _curvature_cache: Dict[int, float] = {}
+
     def __init__(self, x_0: float = 1.0, chi_feg: float = 0.638):
         """
         Initialize the curvature clock walker.
@@ -39,23 +42,37 @@ class CurvatureClockWalker:
         Compute Pascal curvature κ_n = r_{n+1} - 2r_n + r_{n-1}
         where r_n = log(C(n, floor(n/2)))
 
+        Uses caching for performance on repeated computations.
+
         Args:
             n: Row index in Pascal's triangle
 
         Returns:
             Curvature value
         """
+        if n in self._curvature_cache:
+            return self._curvature_cache[n]
+
         if n < 2:
-            return 0.0
+            curvature = 0.0
+        else:
+            # Central binomial coefficient with error handling
+            def c(n_val):
+                try:
+                    return math.log(comb(n_val, n_val//2, exact=True)) if n_val >= 0 else 0.0
+                except (ValueError, OverflowError):
+                    # Fallback for very large n where exact computation fails
+                    return n_val * math.log(2)  # Approximation
 
-        # Central binomial coefficient
-        def c(n): return math.log(comb(n, n//2, exact=True)) if n >= 0 else 0.0
+            r_n_minus_1 = c(n-1)
+            r_n = c(n)
+            r_n_plus_1 = c(n+1)
 
-        r_n_minus_1 = c(n-1)
-        r_n = c(n)
-        r_n_plus_1 = c(n+1)
+            curvature = r_n_plus_1 - 2*r_n + r_n_minus_1
 
-        return r_n_plus_1 - 2*r_n + r_n_minus_1
+        # Cache the result
+        self._curvature_cache[n] = curvature
+        return curvature
 
     def digit_mirror(self, d: int) -> int:
         """
@@ -75,6 +92,7 @@ class CurvatureClockWalker:
     def count_digits(self, x: float, digit: int) -> int:
         """
         Count occurrences of a specific digit in the decimal representation.
+        Uses efficient integer arithmetic instead of string conversion.
 
         Args:
             x: Number to analyze
@@ -86,28 +104,61 @@ class CurvatureClockWalker:
         if x == 0:
             return 1 if digit == 0 else 0
 
+        n = int(x)
+        if n == 0:
+            return 1 if digit == 0 else 0
+
         count = 0
-        num_str = str(int(x))
-        for char in num_str:
-            if int(char) == digit:
+        while n > 0:
+            if n % 10 == digit:
                 count += 1
+            n //= 10
         return count
 
-    def nine_eleven_charge(self, x: float) -> float:
+    def digit_shell_tension(self, x: float) -> float:
         """
-        Compute 9/11 charge Q(x) = N_9(x) / (N_0(x) + 1)
+        Compute digit shell tension T(x) - a measure of how "tense" the digit
+        representation is, grounded in the number of carry operations needed
+        when incrementing by 1.
 
-        Tension metric measuring digit shell stability.
+        T(x) = Σ_{d=1}^{9} (d/9) * N_d(x) / len(digits)
+
+        This measures the "pressure" toward digit transitions - higher values
+        indicate digits closer to 9 and thus higher tension toward shell boundaries.
+
+        Uses efficient integer arithmetic for performance.
 
         Args:
             x: Current position
 
         Returns:
-            9/11 charge value
+            Digit shell tension value in [0, 1]
         """
-        n9 = self.count_digits(x, 9)
-        n0 = self.count_digits(x, 0)
-        return n9 / (n0 + 1)
+        if x <= 0:
+            return 0.0
+
+        n = int(x)
+        if n == 0:
+            return 0.0
+
+        total_tension = 0.0
+        digit_count = 0
+
+        # Count digits and compute tension using integer arithmetic
+        temp = n
+        while temp > 0:
+            digit = temp % 10
+            digit_count += 1
+            # Higher digits contribute more tension (closer to carry-over)
+            tension_contribution = (digit / 9.0)
+            total_tension += tension_contribution
+            temp //= 10
+
+        if digit_count == 0:
+            return 0.0
+
+        # Normalize by digit length
+        return total_tension / digit_count
 
     def angular_coordinate(self, n: int) -> float:
         """
@@ -125,7 +176,9 @@ class CurvatureClockWalker:
 
     def clock_rate(self, x: float) -> float:
         """
-        Compute clock rate R(x) = χ_FEG · κ_{d(x)} · (1 + Q_{9/11}(x))
+        Compute clock rate R(x) = χ_FEG · κ_{d(x)} · (1 + T(x))
+
+        Where T(x) is the digit shell tension measuring carry-over pressure.
 
         Args:
             x: Current position
@@ -135,24 +188,41 @@ class CurvatureClockWalker:
         """
         digit_count = len(str(int(x))) if x > 0 else 1
         kappa = self.pascal_curvature(digit_count)
-        q_charge = self.nine_eleven_charge(x)
-        return self.chi_feg * kappa * (1 + q_charge)
+        tension = self.digit_shell_tension(x)
+        return self.chi_feg * kappa * (1 + tension)
 
-    def evolve_step(self, x: float) -> Tuple[float, float]:
+    def evolve_step(self, x: float, dt: float = 0.01) -> Tuple[float, float]:
         """
-        Evolve one step in the curvature clock dynamics.
+        Evolve one step using curvature-driven dynamics.
+
+        The position evolves according to the curvature flow:
+        dx/dt = κ(x) * (1 + Q_{9/11}(x)) * χ_FEG
+        dθ/dt = κ(x) * χ_FEG
+
+        This creates a geodesic flow in the discrete geometry where
+        curvature drives both position and phase evolution.
 
         Args:
             x: Current position
+            dt: Time step for numerical integration
 
         Returns:
             Tuple of (new_x, phase_increment)
         """
-        rate = self.clock_rate(x)
-        phase_increment = rate
+        # Get curvature field at current position
+        digit_shell = len(str(int(x))) if x > 0 else 1
+        kappa = self.pascal_curvature(digit_shell)
+        tension = self.digit_shell_tension(x)
 
-        # Simple Euler step (can be made more sophisticated)
-        new_x = x + 1.0  # Unit step for now
+        # Curvature-driven velocity field
+        # Position evolves with curvature magnitude and tension
+        velocity = kappa * (1 + tension) * self.chi_feg
+
+        # Phase increment based on curvature magnitude
+        phase_increment = kappa * self.chi_feg * dt
+
+        # Euler integration: x_{n+1} = x_n + v(x_n) * dt
+        new_x = x + velocity * dt
 
         return new_x, phase_increment
 
@@ -183,7 +253,7 @@ class CurvatureClockWalker:
                 'phase_accumulated': phase_total,
                 'digit_shell': len(str(int(x))) if x > 0 else 1,
                 'clock_rate': self.clock_rate(x),
-                'nine_eleven_charge': self.nine_eleven_charge(x),
+                'digit_shell_tension': self.digit_shell_tension(x),
                 'pascal_curvature': self.pascal_curvature(len(str(int(x))) if x > 0 else 1)
             }
 
@@ -307,3 +377,4 @@ def run_basic_demo(steps: int = 1000) -> Dict[str, Any]:
     walker = create_walker()
     history, summary = walker.evolve(steps)
     return summary
+

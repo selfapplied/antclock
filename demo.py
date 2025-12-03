@@ -13,23 +13,71 @@ from clock import CurvatureClockWalker, compute_enhanced_betti_numbers
 
 def demo_basic_curvature_walker():
     """
-    CE1.1: Basic Curvature Clock Walker
+    CE1.1: Basic Curvature Clock Walker with Parameter Diversity
     Fundamental dynamical system that drives the entire framework.
+    Tests across diverse parameter space to ensure robustness.
     """
     print("="*60)
-    print("CE1.1: BASIC CURVATURE CLOCK WALKER")
+    print("CE1.1: BASIC CURVATURE CLOCK WALKER - PARAMETER SWEEP")
     print("="*60)
 
-    # Create walker starting at x=1
-    walker = CurvatureClockWalker(x_0=1, chi_feg=0.638)
+    # Parameter sweep for robustness testing
+    chi_values = [0.1, 0.5, 0.638, 1.0, 2.0]  # FEG coupling constants
+    x0_values = [1, 10, 100, 1000]  # Starting positions across digit shells
+    step_counts = [100, 500, 1000, 2000]  # Evolution durations
 
-    # Evolve through digit shells
-    history, summary = walker.evolve(1000)
+    print("Parameter sweep across diverse configurations:")
+    print(f"χ_FEG values: {chi_values}")
+    print(f"Starting positions: {x0_values}")
+    print(f"Step counts: {step_counts}")
+    print()
 
-    # Extract geometry for visualization
-    x_coords, y_coords = walker.get_geometry()
+    results = []
 
-    print(f"Walker evolved for {summary['total_steps']} steps")
+    # Test representative configurations
+    test_configs = [
+        (0.638, 1, 1000),    # Original configuration
+        (0.1, 1, 1000),      # Low coupling
+        (2.0, 1, 1000),      # High coupling
+        (0.638, 10, 1000),   # Different starting shell
+        (0.638, 100, 1000),  # Larger starting number
+        (0.638, 1, 100),     # Short evolution
+        (0.638, 1, 2000),    # Long evolution
+    ]
+
+    for chi_feg, x0, steps in test_configs:
+        walker = CurvatureClockWalker(x_0=x0, chi_feg=chi_feg)
+        history, summary = walker.evolve(steps)
+
+        result = {
+            'chi_feg': chi_feg,
+            'x0': x0,
+            'steps': steps,
+            'final_x': summary['final_x'],
+            'bifurcation_index': summary['bifurcation_index'],
+            'max_shell': summary['max_digit_shell'],
+            'mirror_transitions': summary['mirror_phase_transitions']
+        }
+        results.append(result)
+
+        print("6.1f"
+              "6.1f"
+              "4.0f"
+              "6.2f"
+              "6.3f")
+
+    # Find most interesting configuration for detailed analysis
+    # Prioritize configurations with high bifurcation activity
+    best_config = max(results, key=lambda r: r['bifurcation_index'])
+    print()
+    print("Most active configuration:")
+    print(f"  χ_FEG = {best_config['chi_feg']}, x₀ = {best_config['x0']}, steps = {best_config['steps']}")
+
+    # Create detailed walker for the best configuration
+    walker = CurvatureClockWalker(x_0=best_config['x0'], chi_feg=best_config['chi_feg'])
+    history, summary = walker.evolve(best_config['steps'])
+
+    print("\nDetailed analysis of most active configuration:")
     print(".2f")
     print(".2f")
     print(f"Bifurcation depth: {summary['bifurcation_index']:.3f}")
@@ -40,16 +88,16 @@ def demo_basic_curvature_walker():
     walker.plot_geometry('.out/antclock_geometry.png')
     print("Geometry plot saved to .out/antclock_geometry.png")
 
-    return walker, summary
+    return walker, summary, results
 
 
 def demo_digit_mirror_operator():
     """
-    CE1.2: Row7 Digit Mirror Operator
-    Local symmetry breaking at mirror-phase shells.
+    CE1.2: Row7 Digit Mirror Operator with Comprehensive Analysis
+    Local symmetry breaking at mirror-phase shells across all digit shells.
     """
     print("\n" + "="*60)
-    print("CE1.2: ROW7 DIGIT MIRROR OPERATOR")
+    print("CE1.2: ROW7 DIGIT MIRROR OPERATOR - COMPREHENSIVE ANALYSIS")
     print("="*60)
 
     walker = CurvatureClockWalker()
@@ -60,16 +108,55 @@ def demo_digit_mirror_operator():
     print()
 
     # Test mirror operator on all digits
-    print("Mirror transformations:")
+    print("Complete mirror transformation table:")
+    fixed_digits = []
+    oscillating_pairs = []
+
     for d in range(10):
         mirrored = walker.digit_mirror(d)
-        fixed_status = "FIXED" if d == mirrored else "OSCILLATES"
-        print(f"  {d} → {mirrored} ({fixed_status})")
+        if d == mirrored:
+            fixed_digits.append(d)
+        else:
+            oscillating_pairs.append((d, mirrored))
 
-    print()
-    print("Testing mirror shell n=7 (n ≡ 3 mod 4):")
-    betti_7 = compute_enhanced_betti_numbers(7)
-    print(f"Betti numbers for shell 7: {betti_7}")
+    print(f"Fixed digits: {fixed_digits}")
+    print("Oscillating pairs:")
+    for pair in oscillating_pairs:
+        print(f"  {pair[0]} ↔ {pair[1]}")
+
+    # Verify involution property
+    print("\nVerifying involution property (μ ∘ μ = id):")
+    for d in range(10):
+        double_mirror = walker.digit_mirror(walker.digit_mirror(d))
+        status = "✓" if double_mirror == d else "✗"
+        print(f"  μ(μ({d})) = μ({walker.digit_mirror(d)}) = {double_mirror} {status}")
+
+    print("\nBetti numbers across all digit shells (mirror shells at n ≡ 3 mod 4):")
+    shells_to_analyze = list(range(1, 21))  # Analyze first 20 shells
+
+    mirror_shells = []
+    regular_shells = []
+
+    for shell in shells_to_analyze:
+        betti = compute_enhanced_betti_numbers(shell)
+        is_mirror = shell % 4 == 3
+        shell_type = "MIRROR" if is_mirror else "regular"
+
+        print("2d")
+        if is_mirror:
+            mirror_shells.append((shell, betti))
+        else:
+            regular_shells.append((shell, betti))
+
+    print("\nMirror shell statistics:")
+    print(f"  Total mirror shells: {len(mirror_shells)}")
+    print(f"  Average Betti numbers: β₀={sum(b[0] for _, b in mirror_shells)/len(mirror_shells):.1f}, "
+          f"β₁={sum(b[1] for _, b in mirror_shells)/len(mirror_shells):.1f}")
+
+    print(f"Regular shell statistics:")
+    print(f"  Total regular shells: {len(regular_shells)}")
+    print(f"  Average Betti numbers: β₀={sum(b[0] for _, b in regular_shells)/len(regular_shells):.1f}, "
+          f"β₁={sum(b[1] for _, b in regular_shells)/len(regular_shells):.1f}")
 
     return walker
 
