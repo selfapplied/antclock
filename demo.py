@@ -12,7 +12,7 @@ Author: Joel
 
 import numpy as np
 import matplotlib.pyplot as plt
-from pascal_clock import CurvatureClockWalker
+from clock import CurvatureClockWalker
 
 def main():
     """Run the AntClock demo."""
@@ -39,8 +39,7 @@ def main():
 
     history, summary = walker.evolve(100)
 
-    print("
-Summary:")
+    print("Summary:")
     print(f"  Final x: {summary['x_final']}")
     print(f"  Final τ: {summary['tau_final']:.3f}")
     print(f"  Final φ: {summary['phi_final']:.3f} rad ({summary['phi_final']*180/np.pi:.1f}°)")
@@ -50,8 +49,7 @@ Summary:")
     print(f"  x range: {summary['x_range']}")
 
     # Show first few steps
-    print("
-First 10 steps:")
+    print("First 10 steps:")
     for h in history[:10]:
         print(f"  t={h['t']:3d}: x={h['x']:4d} → {h['x_next']:4d}, "
               f"τ={h['tau']:6.3f}, φ={h['phi']:6.3f}, R={h['R']:.6f}, "
