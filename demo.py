@@ -207,7 +207,7 @@ def demo_branch_corridors():
     regular_corridors = []
 
     for h in history:
-        if h['theta'] == 3*math.pi/2:  # Mirror shell
+        if h['mirror_cross']:  # Mirror shell crossing
             mirror_shells.append(h)
         else:
             regular_corridors.append(h)
@@ -311,7 +311,7 @@ def demo_trajectory_evolution():
     # Plot trajectory evolution
     steps = [h['step'] for h in history]
     x_positions = [h['x'] for h in history]
-    phases = [h['phase_accumulated'] for h in history]
+    phases = [h['phase'] for h in history]
     clock_rates = [h['clock_rate'] for h in history]
 
     fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 10))
