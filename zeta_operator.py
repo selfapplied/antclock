@@ -86,8 +86,11 @@ class CE1ZetaGeometry:
             for k, ((start_idx, start_shell), (end_idx, end_shell)) in enumerate(
                 zip(crossing_points[:-1], crossing_points[1:])
             ):
-                # Calculate corridor length (integrated clock rate)
-                length = sum(step['clock_rate'] for step in history[start_idx:end_idx])
+                # Calculate corridor length with curvature profile
+                length = self._calculate_corridor_length_with_curvature(
+                    history[start_idx:end_idx],
+                    start_shell, end_shell
+                )
 
                 # Calculate parity from digit mirror symmetry
                 parity = self._calculate_corridor_parity(start_shell, end_shell)
@@ -115,8 +118,10 @@ class CE1ZetaGeometry:
                 start_shell = mirror_shells[k]
                 end_shell = mirror_shells[k + 1]
 
-                # Synthetic length based on shell distance
-                length = (end_shell - start_shell) * 0.1
+                # Use curvature-based length calculation even for synthetic corridors
+                length = self._calculate_corridor_length_with_curvature(
+                    [], start_shell, end_shell
+                )
 
                 # Calculate parity from digit mirror symmetry
                 parity = self._calculate_corridor_parity(start_shell, end_shell)
@@ -162,15 +167,126 @@ class CE1ZetaGeometry:
 
     def _calculate_spectral_weight(self, length: float, parity: int) -> float:
         """
-        Calculate w_k spectral weight.
+        Calculate w_k spectral weight with prime structure injection.
 
-        Simplified proxy for Laplacian eigenvalues on corridor graph.
-        In full implementation, this would solve the graph Laplacian.
+        Uses local prime density and Dirichlet character information
+        to create the CE version of Euler factors.
         """
-        # Weight based on corridor length and parity
+        midpoint = (self.corridors[-1].start_shell + self.corridors[-1].end_shell) // 2 if self.corridors else 100
+
+        # Prime density factor - higher weight for prime-rich corridors
+        prime_density = self._local_prime_density(midpoint, window=10)
+        prime_factor = 1.0 + 0.5 * prime_density  # Boost by local primality
+
+        # Dirichlet character contribution (simplified quadratic character)
+        dirichlet_factor = 1.0 + 0.3 * self._quadratic_character(midpoint)
+
+        # Base length/parity factors
         base_weight = 1.0 / (1.0 + length)
         parity_factor = 1.0 if parity == 1 else 0.5
-        return base_weight * parity_factor
+
+        # Combine all factors
+        weight = base_weight * parity_factor * prime_factor * dirichlet_factor
+
+        # Normalize to reasonable range
+        return min(max(weight, 0.1), 2.0)
+
+    def _local_prime_density(self, center: int, window: int = 10) -> float:
+        """Calculate local prime density around a center point."""
+        if center < 2:
+            return 0.0
+
+        count = 0
+        total = 0
+
+        for n in range(max(2, center - window), center + window + 1):
+            total += 1
+            if self._is_prime(n):
+                count += 1
+
+        return count / total if total > 0 else 0.0
+
+    def _is_prime(self, n: int) -> bool:
+        """Simple primality test."""
+        if n < 2:
+            return False
+        if n == 2:
+            return True
+        if n % 2 == 0:
+            return False
+
+        for i in range(3, int(n**0.5) + 1, 2):
+            if n % i == 0:
+                return False
+        return True
+
+    def _quadratic_character(self, n: int) -> int:
+        """Simplified quadratic character (Legendre symbol proxy)."""
+        # For modulus 4: related to n mod 4 structure
+        mod4 = n % 4
+        if mod4 == 1:
+            return 1
+        elif mod4 == 3:
+            return -1
+        else:
+            return 0
+
+    def _calculate_corridor_length_with_curvature(self, corridor_steps: List[AntClockStep],
+                                                 start_shell: int, end_shell: int) -> float:
+        """
+        Calculate corridor length using curvature profile and digit entropy.
+
+        This creates non-uniform corridor lengths that better reflect
+        the geometric complexity of the integer manifold.
+        """
+        if not corridor_steps:
+            return 0.1
+
+        # Base length from clock rate integration
+        base_length = sum(step['clock_rate'] for step in corridor_steps)
+
+        # Curvature factor: use Pascal curvature at representative shell
+        rep_shell = (start_shell + end_shell) // 2
+        curvature_factor = 1.0 + 0.5 * self._pascal_curvature(rep_shell)
+
+        # Digit entropy factor: measure shell transition complexity
+        entropy_factor = 1.0 + 0.3 * self._digit_entropy_factor(start_shell, end_shell)
+
+        # Shell distance factor: longer corridors get slightly different scaling
+        shell_distance = end_shell - start_shell
+        distance_factor = 1.0 + 0.1 * (shell_distance / 10.0)
+
+        # Combine factors
+        length = base_length * curvature_factor * entropy_factor * distance_factor
+
+        # Ensure positive and reasonable bounds
+        return max(min(length, 5.0), 0.05)
+
+    def _pascal_curvature(self, n: int) -> float:
+        """Calculate Pascal curvature κ_n."""
+        if n < 2:
+            return 0.0
+        try:
+            # Simplified approximation of central binomial coefficient curvature
+            return 1.0 / (n * math.log(n + 1))
+        except:
+            return 0.0
+
+    def _digit_entropy_factor(self, start: int, end: int) -> float:
+        """Calculate digit entropy factor for shell transition."""
+        # Measure how much digit structure changes between shells
+        start_digits = len(str(start))
+        end_digits = len(str(end))
+
+        # Digit length change contributes to entropy
+        length_change = abs(end_digits - start_digits)
+
+        # Prime gap factor (primes create more "chaotic" transitions)
+        prime_gaps = sum(1 for i in range(start, min(end, start + 20))
+                        if self._is_prime(i))
+
+        entropy = 0.1 * length_change + 0.05 * prime_gaps
+        return min(entropy, 1.0)  # Cap at reasonable level
 
 
 class CE2ZetaFlow:
@@ -528,8 +644,8 @@ def demonstrate_zeta_operator():
     from clock import CurvatureClockWalker
 
     print("🔧 Constructing ζ-operator from AntClock trajectory...")
-    walker = CurvatureClockWalker(x_0=1, chi_feg=0.638)
-    history, summary = walker.evolve(200)  # Generate sufficient trajectory
+    walker = CurvatureClockWalker(x_0=10, chi_feg=0.638)  # Adjusted x_0 for more shell exploration
+    history, summary = walker.evolve(2000)  # Increased steps for more mirror crossings
 
     print(f"Trajectory: {len(history)} steps, {summary['mirror_phase_transitions']} mirror crossings")
 
@@ -553,7 +669,9 @@ def demonstrate_zeta_operator():
     print(f"Functional equation verification:")
     print(f"  Points tested: {len(test_points)}")
     print(f"  Satisfied: {fe_results['satisfied_points']}")
-    print(".2e")
+    print(f"  Violated: {fe_results['violated_points']}")
+    print(f"  Max error: {fe_results['max_error']:.2e}")
+    print(f"  Avg error: {fe_results['avg_error']:.2e}")
 
     # Evaluate at key points
     print("\n📊 ζ_CE(s) Evaluation at Key Points:")
@@ -566,7 +684,7 @@ def demonstrate_zeta_operator():
 
     for label, s in key_points:
         value = zeta_op.evaluate(s)
-        print("15s")
+        print(f"  {label:18s} -> {value.real:+.6f} + {value.imag:+.6f}i")
 
     # Generate witness report
     print("\n🏛️ CE3 Witness Report:")
@@ -574,7 +692,10 @@ def demonstrate_zeta_operator():
 
     print(f"Status: {witness['status']}")
     print(f"Zeros found: {witness['zeros_found']}")
-    print(".3f")
+    print(f"Functional equation max error: "
+          f"{witness['functional_equation']['max_error']:.3f}")
+    print(f"Simplicial dimension: "
+          f"{witness['simplicial_structure']['zeta_function_dimension']}")
     print(f"Simplicial dimension: {witness['simplicial_structure']['zeta_function_dimension']}")
 
     # Generate critical line visualization
