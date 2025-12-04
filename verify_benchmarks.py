@@ -93,6 +93,7 @@ def verify_ce_benchmarks():
 
             # Copy to archiX/paper_data with CE-appropriate metrics
             paper_results_file = Path("archiX/paper_data/benchmark_results/mirror_phase_classification_result.json")
+            paper_results_file.parent.mkdir(parents=True, exist_ok=True)
             result_data = {
                 "accuracy": result.accuracy,  # May be 0.0 (not the focus)
                 "convergence_speed": result.convergence_speed,  # May be 0.0 (not the focus)
@@ -164,6 +165,7 @@ def generate_ce_timing_summary():
 
     # Save timing summary
     timing_file = Path("archiX/paper_data/benchmark_results/ce_timing_results.json")
+    timing_file.parent.mkdir(parents=True, exist_ok=True)
     with open(timing_file, 'w') as f:
         json.dump(timing_results, f, indent=2)
 
