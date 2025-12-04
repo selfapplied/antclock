@@ -328,6 +328,67 @@ class CE2ZetaFlow:
 
         return total
 
+    def zeta_centered(self, s: complex) -> complex:
+        """
+        hat{Ξ}_CE(s) = Ξ_CE(s) - Ξ_CE(1/2)
+
+        Centered CE zeta operator that is zero at s = 1/2.
+        Preserves the functional equation: hat{Ξ}(s) = hat{Ξ}(1-s).
+        """
+        base_value = self.zeta_completed(s)
+        center_value = self.zeta_completed(complex(0.5, 0.0))
+        return base_value - center_value
+
+    def _calculate_corridor_character(self, corridor_index: int, start_shell: int, end_shell: int) -> complex:
+        """
+        Calculate χ_k character for nontrivial sign/phase structure.
+
+        This is separate from the parity ε_k which ensures FE per corridor.
+        χ_k can be ±1, ±i for complex phases, providing cancellation structure.
+        """
+        midpoint = (start_shell + end_shell) // 2
+
+        # Option 1: Legendre-like symbol (quadratic character)
+        legendre = self.ce1_geometry._quadratic_character(midpoint)
+
+        # Option 2: Digit sum parity
+        digit_sum = sum(int(d) for d in str(midpoint))
+        digit_parity = 1 if digit_sum % 2 == 0 else -1
+
+        # Option 3: Shell mod 4 for complex phases
+        mod4 = midpoint % 4
+        if mod4 == 0:
+            phase = 1
+        elif mod4 == 1:
+            phase = 1j      # i
+        elif mod4 == 2:
+            phase = -1      # -1
+        else:  # mod4 == 3
+            phase = -1j     # -i
+
+        # Combine: use phase for complex structure, modulated by quadratic character
+        return phase * legendre
+
+    def zeta_with_character(self, s: complex) -> complex:
+        """
+        Ξ_CE(s) = Σ_k χ_k * w_k * F_k(s)
+
+        CE zeta operator with character layer χ_k for nontrivial cancellation.
+        Preserves functional equation since χ_k multiplies entire F_k(s) = F_k(1-s).
+        """
+        if not self.corridors:
+            return 0.0
+
+        total = 0.0
+        for corridor in self.corridors:
+            chi_k = self._calculate_corridor_character(
+                corridor.index, corridor.start_shell, corridor.end_shell
+            )
+            term = chi_k * corridor.weight * corridor.corridor_term(s)
+            total += term
+
+        return total
+
     def functional_equation_error(self, s: complex) -> complex:
         """
         Measure violation of functional equation: Ξ_CE(s) - Ξ_CE(1-s)
@@ -339,12 +400,13 @@ class CE2ZetaFlow:
         return zeta_s - zeta_1_minus_s
 
     def find_zeros(self, sigma: float = 0.5, t_range: Tuple[float, float] = (-50, 50),
-                   resolution: int = 1000, tolerance: float = 1e-2) -> List[complex]:
+                   resolution: int = 1000, tolerance: float = 1e-2,
+                   zeta_function=None) -> List[complex]:
         """
         Find zeros of Ξ_CE(s) near the critical line σ = 1/2.
 
         Returns list of s = σ + i t where Ξ_CE(s) ≈ 0.
-        Uses adaptive search to find actual zeros.
+        Uses adaptive search to find actual zeros, including sign-change detection on critical line.
         """
         zeros = []
 
@@ -355,13 +417,52 @@ class CE2ZetaFlow:
         for i in range(resolution):
             t = t_range[0] + (t_range[1] - t_range[0]) * i / (resolution - 1)
             s = complex(sigma, t)
-            zeta_val = self.zeta_completed(s)
+            zeta_val = zeta_function(s) if zeta_function else self.zeta_completed(s)
 
             # Look for sign changes or very small values
             if abs(zeta_val) < tolerance * 10:  # 10x tolerance for candidates
                 candidate_regions.append((t, zeta_val))
 
             prev_val = zeta_val
+
+        # Special case: sign-change detection on critical line (σ = 1/2)
+        if abs(sigma - 0.5) < 1e-10:
+            sign_change_intervals = []
+            prev_real = None
+
+            for i in range(resolution):
+                t = t_range[0] + (t_range[1] - t_range[0]) * i / (resolution - 1)
+                s = complex(0.5, t)
+                zeta_val = zeta_function(s) if zeta_function else self.zeta_completed(s)
+                curr_real = zeta_val.real
+
+                if prev_real is not None and prev_real * curr_real < 0:
+                    # Sign change detected between previous and current t
+                    t_prev = t_range[0] + (t_range[1] - t_range[0]) * (i - 1) / (resolution - 1)
+                    sign_change_intervals.append((t_prev, t))
+
+                prev_real = curr_real
+
+            # Refine sign-change intervals with bisection
+            for t_left, t_right in sign_change_intervals:
+                # Bisection search for zero crossing
+                for _ in range(20):  # 20 bisection steps
+                    t_mid = (t_left + t_right) / 2
+                    s_mid = complex(0.5, t_mid)
+                    val_mid = (zeta_function(s_mid) if zeta_function else self.zeta_completed(s_mid)).real
+
+                    if abs(val_mid) < tolerance:
+                        zeros.append(complex(0.5, t_mid))
+                        break
+
+                    # Determine which half contains the zero
+                    s_left = complex(0.5, t_left)
+                    val_left = (zeta_function(s_left) if zeta_function else self.zeta_completed(s_left)).real
+
+                    if val_left * val_mid < 0:
+                        t_right = t_mid
+                    else:
+                        t_left = t_mid
 
         # Second pass: refine candidates with local minimization
         for t_candidate, _ in candidate_regions:
@@ -560,11 +661,25 @@ class ZetaOperator:
 
         return self
 
-    def evaluate(self, s: complex) -> complex:
-        """Evaluate Ξ_CE(s) at the given point."""
+    def evaluate(self, s: complex, mode: str = "standard") -> complex:
+        """
+        Evaluate ζ-operator at s with different modes.
+
+        Args:
+            s: Complex point to evaluate
+            mode: "standard" (Ξ_CE), "centered" (hat{Ξ}_CE), "character" (with χ_k)
+        """
         if not self.ce2_flow:
             raise ValueError("Zeta operator not constructed. Call construct_from_trajectory first.")
-        return self.ce2_flow.zeta_completed(s)
+
+        if mode == "standard":
+            return self.ce2_flow.zeta_completed(s)
+        elif mode == "centered":
+            return self.ce2_flow.zeta_centered(s)
+        elif mode == "character":
+            return self.ce2_flow.zeta_with_character(s)
+        else:
+            raise ValueError(f"Unknown mode: {mode}. Use 'standard', 'centered', or 'character'.")
 
     def get_witness_report(self) -> Dict[str, Any]:
         """Get complete witness report from CE3 layer."""
@@ -572,11 +687,48 @@ class ZetaOperator:
             raise ValueError("Zeta operator not constructed. Call construct_from_trajectory first.")
         return self.ce3_witness.generate_witness_report()
 
-    def verify_functional_equation(self, test_points: List[complex]) -> Dict[str, Any]:
-        """Verify the functional equation Ξ_CE(s) = Ξ_CE(1-s)."""
+    def verify_functional_equation(self, test_points: List[complex], mode: str = "standard") -> Dict[str, Any]:
+        """Verify the functional equation for different operator modes."""
         if not self.ce2_flow:
             raise ValueError("Zeta operator not constructed. Call construct_from_trajectory first.")
-        return self.ce2_flow.verify_functional_equation(test_points)
+
+        results = {
+            'satisfied_points': 0,
+            'violated_points': 0,
+            'max_error': 0.0,
+            'avg_error': 0.0
+        }
+
+        errors = []
+        for s in test_points:
+            zeta_s = self.evaluate(s, mode)
+            zeta_1_minus_s = self.evaluate(1 - s, mode)
+            error = abs(zeta_s - zeta_1_minus_s)
+            errors.append(error)
+
+            if error < 1e-10:
+                results['satisfied_points'] += 1
+            else:
+                results['violated_points'] += 1
+
+        results['max_error'] = max(errors) if errors else 0.0
+        results['avg_error'] = sum(errors) / len(errors) if errors else 0.0
+
+        return results
+
+    def find_zeros(self, sigma: float = 0.5, t_range: Tuple[float, float] = (-50, 50),
+                   resolution: int = 1000, tolerance: float = 1e-2, mode: str = "standard") -> List[complex]:
+        """Find zeros using different operator modes."""
+        if not self.ce2_flow:
+            raise ValueError("Zeta operator not constructed. Call construct_from_trajectory first.")
+
+        # Create zeta function for the requested mode
+        def zeta_func(s):
+            return self.evaluate(s, mode)
+
+        return self.ce2_flow.find_zeros(sigma=sigma, t_range=t_range,
+                                       resolution=resolution, tolerance=tolerance,
+                                       zeta_function=zeta_func)
 
     def visualize_critical_line(self, save_path: str = ".out/zeta_critical_line.png") -> None:
         """
@@ -696,6 +848,24 @@ def demonstrate_zeta_operator():
     for label, s in key_points:
         value = zeta_op.evaluate(s)
         print(f"  {label:18s} -> {value.real:+.6f} + {value.imag:+.6f}i")
+
+    # Test new operator modes
+    print("\n🎭 Testing Operator Modes:")
+    s_test = complex(0.5, 0)
+
+    modes = ['standard', 'centered', 'character']
+    for mode in modes:
+        val = zeta_op.evaluate(s_test, mode)
+        print(f"  {mode:10s} at s=1/2: {val.real:+.6f} + {val.imag:+.6f}i")
+
+    # Test zero finding with different modes
+    print("\n🎯 Zero Finding with Different Modes:")
+    for mode in modes:
+        zeros = zeta_op.find_zeros(sigma=0.5, t_range=(-20, 20), resolution=200, tolerance=1.0, mode=mode)
+        print(f"  {mode:10s}: {len(zeros)} zeros found")
+        if zeros and len(zeros) <= 3:
+            zero_strs = [f"{z.imag:+.3f}i" for z in zeros]
+            print(f"               {', '.join(zero_strs)}")
 
     # Generate witness report
     print("\n🏛️ CE3 Witness Report:")
