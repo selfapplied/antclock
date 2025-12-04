@@ -1,0 +1,8 @@
+🏃 Running COGS Baseline Benchmark...
+Training COGS:   0%|          | 0/20 [00:00<?, ?it/s]Training COGS:   5%|▌         | 1/20 [00:00<00:02,  8.21it/s]Training COGS:  15%|█▌        | 3/20 [00:00<00:01, 10.56it/s]Training COGS:  25%|██▌       | 5/20 [00:00<00:01, 11.14it/s]Training COGS:  35%|███▌      | 7/20 [00:00<00:01, 11.58it/s]Training COGS:  45%|████▌     | 9/20 [00:00<00:00, 11.67it/s]Training COGS:  55%|█████▌    | 11/20 [00:00<00:00, 11.34it/s]Training COGS:  65%|██████▌   | 13/20 [00:01<00:00, 11.66it/s]Training COGS:  75%|███████▌  | 15/20 [00:01<00:00, 11.69it/s]Training COGS:  85%|████████▌ | 17/20 [00:01<00:00, 11.80it/s]Training COGS:  95%|█████████▌| 19/20 [00:01<00:00, 11.96it/s]Training COGS: 100%|██████████| 20/20 [00:01<00:00, 11.57it/s]
+Epoch 0: Loss=3.8516, Dev Acc=0.0000
+Epoch 10: Loss=2.2150, Dev Acc=0.0000
+Baseline Loss: 1.6896
+Dev Accuracy: 0.0% (0/4)
+Test Accuracy: 0.0% (0/11)
+COGS_BASELINE: {'train_loss_final': 1.68962824344635, 'dev_accuracy': 0.0, 'test_accuracy': 0.0, 'dev_correct': 0, 'dev_total': 4, 'test_correct': 0, 'test_total': 11}
