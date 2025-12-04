@@ -1,4 +1,4 @@
-#!/Users/joelstover/antclock/.venv/bin/python
+#!.venv/bin/python
 """
 Formal Categorical Braiding: CE1 → CE2 → CE3 via Three Spines
 
