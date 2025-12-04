@@ -1,429 +1,491 @@
+#!/usr/bin/env python3
 """
-CE-Enhanced Neural Network Modules
+CE Modules: Core CE Neural Network Components
 
-Integrates CE framework components into neural architectures:
-- Zeta operator regularization
-- Mirror symmetry operators
-- Curvature coupling layers
-- Guardian threshold activation functions
+Contains the fundamental neural network modules for CE (Corridor + Flow + Witness) architecture:
+- CEEnhancedLSTM: LSTM with CE regularization
+- MirrorOperator: Mirror symmetry operations
+- CurvatureCouplingLayer: Curvature-aware coupling
+- GuardianThreshold: CE timing threshold mechanisms
+- ZetaRegularization: Functional equation regularization
+
+These modules implement the discrete geometric intelligence principles.
 """
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import numpy as np
 import math
-from typing import Optional, Tuple, List
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from zeta_operator import ZetaOperator, Corridor
+import numpy as np
+from typing import List, Tuple, Dict, Any, Optional, Union
+from dataclasses import dataclass
+
+
+@dataclass
+class CEConfig:
+    """Configuration for CE modules."""
+    hidden_size: int = 128
+    num_layers: int = 1
+    dropout: float = 0.1
+    kappa: float = 0.35  # Curvature threshold
+    chi: float = 0.638  # FEG ratio
+    zeta_strength: float = 1.0
 
 
 class MirrorOperator(nn.Module):
     """
-    CE Mirror Operator: Implements digit mirror symmetries as neural operations.
+    Mirror Operator: Implements discrete mirror symmetry operations.
 
-    The mirror operator μ₇(d) = d⁷ mod 10 provides involutive transformations
-    that enforce discrete symmetry breaking.
+    Based on the principle that mirror phases (n mod 4) determine
+    the symmetry properties of shell structures.
     """
 
-    def __init__(self, embed_dim: int):
+    def __init__(self, hidden_size: int):
         super().__init__()
-        self.embed_dim = embed_dim
+        self.hidden_size = hidden_size
 
-        # Mirror transformation matrix (learned projection)
-        self.mirror_proj = nn.Linear(embed_dim, embed_dim)
+        # Mirror phase detectors
+        self.phase_detector = nn.Sequential(
+            nn.Linear(hidden_size, hidden_size // 2),
+            nn.ReLU(),
+            nn.Linear(hidden_size // 2, 4)  # 4 mirror phases
+        )
 
-        # Fixed mirror operator parameters
-        self.register_buffer('mirror_matrix', self._create_mirror_matrix())
+        # Mirror transformation matrices (learned)
+        self.mirror_transform = nn.Linear(hidden_size, hidden_size, bias=False)
 
-    def _create_mirror_matrix(self) -> torch.Tensor:
-        """Create the digit mirror operator matrix."""
-        # Based on μ₇(d) = d^7 mod 10 with fixed points {0,1,4,5,6,9}
-        # and oscillating pairs {2↔8, 3↔7}
-        mirror_map = {
-            0: 0, 1: 1, 2: 8, 3: 7, 4: 4, 5: 5,
-            6: 6, 7: 3, 8: 2, 9: 9
-        }
+        # Initialize with reflection-like properties
+        with torch.no_grad():
+            # Create reflection matrix (reverse order)
+            reflection = torch.eye(hidden_size)
+            reflection = torch.flip(reflection, dims=[0])
+            self.mirror_transform.weight.data = reflection * 0.9
 
-        # Create permutation matrix
-        size = 10
-        matrix = torch.zeros(size, size)
-        for i in range(size):
-            j = mirror_map.get(i, i)
-            matrix[i, j] = 1.0
-
-        return matrix
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         """
-        Apply mirror operator transformation.
+        Apply mirror operator.
 
         Args:
-            x: Input tensor [batch, seq_len, embed_dim]
+            x: Input tensor (batch_size, seq_len, hidden_size)
 
         Returns:
-            Mirrored tensor with symmetry-breaking properties
+            Tuple of (transformed_x, mirror_loss)
         """
-        # Get input dimensions
-        original_shape = x.shape
-        batch_seq_size = original_shape[0] * original_shape[1] if len(original_shape) > 2 else original_shape[0]
+        batch_size, seq_len, hidden_size = x.shape
 
-        # Reshape for linear transformation
-        x_flat = x.reshape(batch_seq_size, -1)
+        # Detect mirror phases
+        phases = self.phase_detector(x.mean(dim=1))  # (batch_size, 4)
+        phase_probs = F.softmax(phases, dim=-1)
 
-        # Apply learned mirror projection
-        mirrored_flat = self.mirror_proj(x_flat)
+        # Apply mirror transformation
+        mirrored = self.mirror_transform(x)
 
-        # Reshape back to original shape
-        mirrored = mirrored_flat.reshape(original_shape)
+        # Compute mirror consistency loss
+        # Mirror operation should be involution: M^2 = I
+        mirror_squared = self.mirror_transform(mirrored)
+        mirror_consistency = F.mse_loss(mirror_squared, x)
 
-        # Apply involution constraint through residual connection
-        # This creates a transformation that's approximately its own inverse
-        mirrored = torch.tanh(mirrored)  # Bound the transformation
-
-        return mirrored
+        return mirrored, mirror_consistency
 
 
 class CurvatureCouplingLayer(nn.Module):
     """
-    CE Curvature Coupling Layer: Implements χ_FEG coupling between layers.
+    Curvature Coupling Layer: Implements curvature-aware information flow.
 
-    Provides continuous-time evolution with curvature-driven dynamics.
+    Based on the principle that information flow should respect
+    the curvature fields defined by mirror phase boundaries.
     """
 
-    def __init__(self, embed_dim: int, chi_feg: float = 0.638):
+    def __init__(self, hidden_size: int, kappa: float = 0.35):
         super().__init__()
-        self.embed_dim = embed_dim
-        self.chi_feg = chi_feg
+        self.hidden_size = hidden_size
+        self.kappa = kappa
 
-        # Curvature computation layers
-        self.curvature_net = nn.Sequential(
-            nn.Linear(embed_dim, embed_dim // 2),
+        # Curvature field computation
+        self.curvature_encoder = nn.Sequential(
+            nn.Linear(hidden_size * 2, hidden_size),
+            nn.LayerNorm(hidden_size),
             nn.ReLU(),
-            nn.Linear(embed_dim // 2, 1)
+            nn.Linear(hidden_size, 1),
+            nn.Sigmoid()  # Output in [0, 1]
+        )
+
+        # Coupling strength modulation
+        self.coupling_gate = nn.Sequential(
+            nn.Linear(hidden_size, hidden_size),
+            nn.Sigmoid()
         )
 
         # Evolution operator
-        self.evolution_gate = nn.Linear(embed_dim, embed_dim)
+        self.evolution_op = nn.Linear(hidden_size, hidden_size)
 
-    def compute_curvature(self, x: torch.Tensor) -> torch.Tensor:
-        """Compute local curvature field."""
-        # Simplified curvature as second derivative proxy
-        curvature = self.curvature_net(x)
-
-        # Apply Feigenbaum coupling
-        coupled_curvature = curvature * self.chi_feg
-
-        return coupled_curvature
-
-    def forward(self, x: torch.Tensor, dt: float = 0.01) -> torch.Tensor:
+    def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         """
-        Apply curvature-coupled evolution.
+        Apply curvature coupling.
 
         Args:
-            x: Input tensor [batch, seq_len, embed_dim]
-            dt: Time step for evolution
+            x: Input tensor (batch_size, seq_len, hidden_size)
 
         Returns:
-            Evolved tensor with curvature coupling
+            Tuple of (coupled_x, curvature_loss)
         """
-        # Get input dimensions
-        original_shape = x.shape
-        batch_seq_size = original_shape[0] * original_shape[1] if len(original_shape) > 2 else original_shape[0]
+        batch_size, seq_len, hidden_size = x.shape
 
-        # Reshape for processing
-        x_flat = x.reshape(batch_seq_size, -1)
+        # Compute local curvature fields
+        curvatures = []
+        for i in range(seq_len):
+            if i == 0:
+                # Boundary condition
+                local_curvature = self.curvature_encoder(
+                    torch.cat([x[:, i], x[:, i]], dim=-1)
+                )
+            else:
+                local_curvature = self.curvature_encoder(
+                    torch.cat([x[:, i-1], x[:, i]], dim=-1)
+                )
+            curvatures.append(local_curvature)
 
-        # Compute curvature field
-        kappa_flat = self.compute_curvature(x_flat)  # [batch_seq_size, 1]
+        curvature_field = torch.stack(curvatures, dim=1)  # (batch_size, seq_len, 1)
 
-        # Apply curvature-driven evolution
-        # dx/dt = κ(x) * χ_FEG * x
-        evolution_flat = self.evolution_gate(x_flat)  # [batch_seq_size, embed_dim]
-        dx_flat = kappa_flat * evolution_flat
+        # Apply curvature-aware coupling
+        coupling_strength = self.coupling_gate(x)  # (batch_size, seq_len, hidden_size)
 
-        # Euler integration step
-        x_new_flat = x_flat + dt * dx_flat
+        # Modulate by curvature
+        kappa_tensor = torch.full_like(curvature_field, self.kappa)
+        evolution = self.evolution_op(x)
 
-        # Reshape back
-        x_new = x_new_flat.reshape(original_shape)
+        # Curvature-modulated update
+        dx = kappa_tensor.unsqueeze(-1) * evolution
+        coupled_x = x + coupling_strength * dx
 
-        return x_new
+        # Compute curvature consistency loss
+        # Adjacent positions should have smooth curvature transitions
+        curvature_diff = torch.abs(curvature_field[:, 1:] - curvature_field[:, :-1])
+        curvature_smoothness = torch.mean(curvature_diff)
+
+        return coupled_x, curvature_smoothness
 
 
 class GuardianThreshold(nn.Module):
     """
-    CE Guardian Threshold: κ = 0.35 activation function.
+    Guardian Threshold: CE timing mechanism for early stopping and regularization.
 
-    Implements the guardian threshold that prevents phase locking
-    and maintains separation between correlated states.
+    Implements the Kappa Guardian principle: stop when zeta loss exceeds threshold,
+    indicating loss of geometric awareness.
     """
 
-    def __init__(self, kappa: float = 0.35):
+    def __init__(self, threshold: float = 0.35, patience: int = 5):
         super().__init__()
-        self.kappa = kappa
+        self.threshold = threshold
+        self.patience = patience
+        self.reset()
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def reset(self):
+        """Reset guardian state."""
+        self.violation_count = 0
+        self.best_zeta = float('inf')
+        self.early_stop_triggered = False
+
+    def forward(self, zeta_loss: float) -> Tuple[bool, float]:
         """
-        Apply guardian threshold activation.
+        Check if guardian threshold is violated.
 
-        κ = 0.35 prevents phase locking while maintaining
-        information flow through the network.
+        Args:
+            zeta_loss: Current zeta regularization loss
+
+        Returns:
+            Tuple of (should_stop, guardian_score)
         """
-        # Guardian threshold activation
-        # f(x) = x / (1 + κ * |x|) - maintains separation
-        thresholded = x / (1 + self.kappa * torch.abs(x))
+        if self.early_stop_triggered:
+            return True, 0.0
 
-        # Apply learned scaling to maintain expressivity
-        return thresholded
+        # Update best zeta
+        if zeta_loss < self.best_zeta:
+            self.best_zeta = zeta_loss
+            self.violation_count = 0
+        else:
+            self.violation_count += 1
+
+        # Check threshold violation
+        threshold_violation = zeta_loss > self.threshold
+
+        if threshold_violation:
+            self.violation_count += 1
+
+        # Check early stopping condition
+        if self.violation_count >= self.patience:
+            self.early_stop_triggered = True
+
+        # Guardian score (lower is better, indicates awareness)
+        guardian_score = zeta_loss / (self.threshold + 1e-8)
+
+        return self.early_stop_triggered, guardian_score
 
 
 class ZetaRegularization(nn.Module):
     """
-    CE Zeta Regularization: Enforces discrete functional equation constraints.
+    Zeta Regularization: Enforces functional equation constraints.
 
-    Regularizes neural networks to satisfy Ξ(s) = Ξ(1-s) properties
-    through learned corridor structures.
+    Implements the CE principle that trajectories should satisfy
+    discrete functional equations derived from zeta function structure.
     """
 
-    def __init__(self, embed_dim: int, num_corridors: int = 6):
+    def __init__(self, hidden_size: int, zeta_strength: float = 1.0):
         super().__init__()
-        self.embed_dim = embed_dim
-        self.num_corridors = num_corridors
+        self.hidden_size = hidden_size
+        self.zeta_strength = zeta_strength
 
-        # Learnable corridor weights and parities
-        self.corridor_weights = nn.Parameter(torch.randn(num_corridors))
-        self.corridor_parities = nn.Parameter(torch.randn(num_corridors))
+        # Functional equation layers
+        self.complex_proj = nn.Linear(hidden_size, 2)  # Project to complex plane
+        self.equation_encoder = nn.Sequential(
+            nn.Linear(4, hidden_size),  # Takes 2 complex numbers (4 real values)
+            nn.ReLU(),
+            nn.Linear(hidden_size, 1)
+        )
 
-        # Complex plane projection for zeta evaluation
-        self.complex_proj = nn.Linear(embed_dim, 2)  # Real and imaginary parts
-
-        # Mirror phase characters
-        self.phase_characters = nn.Parameter(torch.randn(num_corridors, 2))  # Complex phases
-
-    def create_corridor_term(self, s: torch.Tensor, corridor_idx: int) -> torch.Tensor:
+    def functional_equation_loss(self, points: torch.Tensor) -> torch.Tensor:
         """
-        Create F_k(s) = 0.5 * (exp(-s * L_k) + ε_k * exp(-(1-s) * L_k))
+        Compute functional equation regularization loss.
 
         Args:
-            s: Complex points in s-plane
-            corridor_idx: Which corridor to evaluate
+            points: Points in complex plane (batch_size, 2) representing (real, imag)
 
         Returns:
-            Complex corridor term value
+            Functional equation loss
         """
-        # Get corridor parameters
-        weight = self.corridor_weights[corridor_idx]
-        parity = torch.sigmoid(self.corridor_parities[corridor_idx])  # ε_k ∈ [0,1]
+        # Simple functional equation: f(z) + f(1-z) = constant
+        # For complex numbers, this becomes a constraint on the representation
 
-        # Simplified length based on corridor index (learned)
-        length = 0.2 + 0.1 * corridor_idx
+        batch_size = points.shape[0]
+        if batch_size < 2:
+            return torch.tensor(0.0, device=points.device)
 
-        # Complex exponential terms
-        s_real, s_imag = s[:, 0], s[:, 1]
-        s_complex = torch.complex(s_real, s_imag)
+        # Sample pairs of points
+        indices = torch.randperm(batch_size, device=points.device)[:min(10, batch_size)]
+        selected_points = points[indices]  # (num_pairs, 2)
 
-        term1 = torch.exp(-s_complex * length)
-        term2 = parity * torch.exp(-(1 - s_complex) * length)
+        # Compute f(z) and f(1-z) proxy
+        z = selected_points
+        one_minus_z = 1.0 - selected_points
 
-        return 0.5 * (term1 + term2)
+        # Encode functional relationship
+        equation_input = torch.cat([z, one_minus_z], dim=-1)  # (num_pairs, 4)
+        equation_output = self.equation_encoder(equation_input)  # (num_pairs, 1)
 
-    def zeta_operator(self, s: torch.Tensor) -> torch.Tensor:
-        """
-        Complete CE zeta operator: Ξ_CE(s) = Σ_k w_k * F_k(s)
+        # Loss: functional equation should be approximately constant
+        if equation_output.shape[0] > 1:
+            equation_variance = torch.var(equation_output, dim=0)
+            loss = equation_variance.mean()
+        else:
+            loss = torch.tensor(0.0, device=points.device)
 
-        Args:
-            s: Complex points [batch, 2] (real, imag)
-
-        Returns:
-            Zeta function values [batch]
-        """
-        total = torch.zeros(s.size(0), dtype=torch.complex64, device=s.device)
-
-        for k in range(self.num_corridors):
-            term = self.create_corridor_term(s, k)
-            weight = torch.sigmoid(self.corridor_weights[k])  # Normalize weights
-            total += weight * term
-
-        return total
-
-    def functional_equation_loss(self, s: torch.Tensor) -> torch.Tensor:
-        """
-        Compute violation of functional equation Ξ(s) = Ξ(1-s)
-
-        Returns L2 distance between Ξ(s) and Ξ(1-s)
-        """
-        zeta_s = self.zeta_operator(s)
-        zeta_1_minus_s = self.zeta_operator(1 - s)
-
-        return torch.mean(torch.abs(zeta_s - zeta_1_minus_s)**2)
+        return loss
 
     def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         """
-        Apply zeta regularization to input tensor.
+        Apply zeta regularization.
 
         Args:
-            x: Input tensor [batch, seq_len, embed_dim]
+            x: Input tensor (batch_size, seq_len, hidden_size) or (batch_size, hidden_size)
 
         Returns:
-            Tuple of (regularized_output, regularization_loss)
+            Tuple of (x, zeta_loss)
         """
+        original_shape = x.shape
+        if len(original_shape) == 2:
+            # Handle (batch_size, hidden_size) case
+            batch_size, hidden_size = original_shape
+            seq_len = 1
+            x_reshaped = x.unsqueeze(1)  # (batch_size, 1, hidden_size)
+        elif len(original_shape) == 3:
+            # Handle (batch_size, seq_len, hidden_size) case
+            batch_size, seq_len, hidden_size = original_shape
+            x_reshaped = x
+        else:
+            # Handle higher dimensional case (flatten extra dimensions)
+            batch_size = original_shape[0]
+            seq_len = int(torch.prod(torch.tensor(original_shape[1:-1])))
+            hidden_size = original_shape[-1]
+            x_reshaped = x.view(batch_size, seq_len, hidden_size)
+
         # Project to complex plane
-        complex_coords = self.complex_proj(x)  # [..., 2]
+        complex_coords = self.complex_proj(x_reshaped.view(-1, hidden_size))  # (batch*seq_len, 2)
+        complex_coords = complex_coords.view(batch_size, seq_len, 2)  # (batch_size, seq_len, 2)
 
-        # Compute zeta regularization loss
-        # Sample points along critical line and nearby
-        original_shape = complex_coords.shape[:-1]
-        batch_size = original_shape[0]
-        seq_len = original_shape[1] if len(original_shape) > 1 else 1
+        # Compute functional equation loss across sequence
+        zeta_loss = 0.0
+        for i in range(seq_len):
+            loss_i = self.functional_equation_loss(complex_coords[:, i])  # (batch_size, 2) -> scalar
+            zeta_loss += loss_i
 
-        # Critical line points: σ + i t
-        t_values = torch.linspace(-2, 2, seq_len, device=x.device)
-        sigma_values = 0.5 * torch.ones_like(t_values)
+        zeta_loss = zeta_loss / seq_len if seq_len > 0 else zeta_loss
+        zeta_loss = zeta_loss * self.zeta_strength
 
-        s_points = torch.stack([sigma_values, t_values], dim=-1)  # [seq_len, 2]
-        s_points = s_points.unsqueeze(0).expand(batch_size, -1, -1)  # [batch, seq_len, 2]
-
-        # Compute functional equation loss
-        reg_loss = self.functional_equation_loss(s_points.reshape(-1, 2))
-        # reg_loss is already a scalar, just return it
-
-        return x, reg_loss
-
-
-class CEAttention(nn.Module):
-    """
-    CE-Enhanced Attention: Mirror-symmetric attention mechanism.
-
-    Combines standard attention with CE symmetry constraints.
-    """
-
-    def __init__(self, embed_dim: int, num_heads: int = 8):
-        super().__init__()
-        self.embed_dim = embed_dim
-        self.num_heads = num_heads
-        self.head_dim = embed_dim // num_heads
-
-        # Standard attention projections
-        self.q_proj = nn.Linear(embed_dim, embed_dim)
-        self.k_proj = nn.Linear(embed_dim, embed_dim)
-        self.v_proj = nn.Linear(embed_dim, embed_dim)
-
-        # CE symmetry projections
-        self.mirror_q = MirrorOperator(embed_dim)
-        self.mirror_k = MirrorOperator(embed_dim)
-
-        # Output projection
-        self.out_proj = nn.Linear(embed_dim, embed_dim)
-
-    def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor,
-                mask: Optional[torch.Tensor] = None) -> torch.Tensor:
-        """
-        CE-enhanced attention with mirror symmetries.
-
-        Args:
-            query, key, value: Input tensors [batch, seq_len, embed_dim]
-            mask: Optional attention mask
-
-        Returns:
-            Attention output [batch, seq_len, embed_dim]
-        """
-        batch_size = query.size(0)
-
-        # Standard attention projections
-        Q = self.q_proj(query).view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2)
-        K = self.k_proj(key).view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2)
-        V = self.v_proj(value).view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2)
-
-        # CE mirror-symmetric projections
-        Q_mirror = self.mirror_q(query).view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2)
-        K_mirror = self.mirror_k(key).view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2)
-
-        # Combine standard and mirror attention
-        # Attention = softmax((Q + Q_mirror) @ (K + K_mirror)^T / sqrt(d_k))
-        Q_combined = Q + Q_mirror
-        K_combined = K + K_mirror
-
-        # Compute attention scores
-        scores = torch.matmul(Q_combined, K_combined.transpose(-2, -1)) / math.sqrt(self.head_dim)
-
-        if mask is not None:
-            scores = scores.masked_fill(mask == 0, float('-inf'))
-
-        attention = F.softmax(scores, dim=-1)
-
-        # Apply attention to values
-        context = torch.matmul(attention, V)
-
-        # Reshape and project output
-        context = context.transpose(1, 2).contiguous().view(batch_size, -1, self.embed_dim)
-        output = self.out_proj(context)
-
-        return output
+        return x, zeta_loss
 
 
 class CEEnhancedLSTM(nn.Module):
     """
-    CE-Enhanced LSTM: Integrates CE components into LSTM architecture.
+    CE-Enhanced LSTM: LSTM with integrated CE regularization.
 
-    Uses standard LSTM with CE post-processing layers.
+    Combines standard LSTM with CE modules for geometry-aware processing.
     """
 
-    def __init__(self, input_size: int, hidden_size: int, chi_feg: float = 0.638,
-                 kappa: float = 0.35, use_zeta_reg: bool = True, num_layers: int = 1):
+    def __init__(self, input_size: int, hidden_size: int, num_layers: int = 1,
+                 dropout: float = 0.1, ce_config: Optional[CEConfig] = None):
         super().__init__()
 
+        self.input_size = input_size
         self.hidden_size = hidden_size
-        self.chi_feg = chi_feg
-        self.kappa = kappa
-        self.use_zeta_reg = use_zeta_reg
+        self.num_layers = num_layers
+        self.dropout = dropout
 
-        # Standard LSTM
-        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
+        # CE configuration
+        self.ce_config = ce_config or CEConfig(hidden_size=hidden_size)
 
-        # CE post-processing layers
+        # Standard LSTM layers
+        self.lstm_layers = nn.ModuleList()
+        for i in range(num_layers):
+            input_dim = input_size if i == 0 else hidden_size
+            self.lstm_layers.append(nn.LSTMCell(input_dim, hidden_size))
+
+        # Dropout
+        self.dropout_layer = nn.Dropout(dropout) if dropout > 0 else nn.Identity()
+
+        # CE enhancement modules
         self.mirror_op = MirrorOperator(hidden_size)
-        self.curvature_layer = CurvatureCouplingLayer(hidden_size, chi_feg)
-        self.guardian_activation = GuardianThreshold(kappa)
+        self.curvature_layer = CurvatureCouplingLayer(hidden_size, self.ce_config.kappa)
+        self.zeta_reg = ZetaRegularization(hidden_size, self.ce_config.zeta_strength)
 
-        if use_zeta_reg:
-            self.zeta_reg = ZetaRegularization(hidden_size)
+        # CE timing
+        self.guardian = GuardianThreshold(self.ce_config.kappa)
 
-    def forward(self, x: torch.Tensor, hidden: Optional[Tuple[torch.Tensor, torch.Tensor]] = None) \
-            -> Tuple[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]:
+    def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, Tuple[torch.Tensor, torch.Tensor], torch.Tensor]:
         """
-        CE-enhanced LSTM forward pass.
+        Forward pass through CE-enhanced LSTM.
 
         Args:
-            x: Input tensor [batch, seq_len, input_size]
-            hidden: Optional initial hidden state
+            x: Input tensor (batch_size, seq_len, input_size)
 
         Returns:
-            Tuple of (output, (h_n, c_n), zeta_loss)
+            Tuple of (outputs, (h_n, c_n), zeta_loss)
         """
-        # Standard LSTM forward pass
-        outputs, (h_n, c_n) = self.lstm(x, hidden)
+        batch_size, seq_len, input_size = x.shape
 
-        # Apply CE post-processing to outputs
-        batch_size, seq_len, hidden_size = outputs.size()
+        # Initialize hidden states
+        h_t = [torch.zeros(batch_size, self.hidden_size, device=x.device) for _ in range(self.num_layers)]
+        c_t = [torch.zeros(batch_size, self.hidden_size, device=x.device) for _ in range(self.num_layers)]
 
-        # Apply mirror operator (expects [batch, seq_len, hidden_size])
-        mirrored = self.mirror_op(outputs)
-        outputs = outputs + 0.1 * mirrored  # Residual connection
+        outputs = []
 
-        # Apply curvature coupling (expects [batch, seq_len, hidden_size])
-        curved = self.curvature_layer(outputs)
-        outputs = outputs + 0.1 * curved  # Residual connection
+        for t in range(seq_len):
+            x_t = x[:, t, :]  # (batch_size, input_size)
 
-        # Apply guardian threshold element-wise
-        thresholded = self.guardian_activation(outputs)
-        outputs = thresholded
+            # Process through LSTM layers
+            for layer_idx, lstm_cell in enumerate(self.lstm_layers):
+                if layer_idx == 0:
+                    h_t[layer_idx], c_t[layer_idx] = lstm_cell(x_t, (h_t[layer_idx], c_t[layer_idx]))
+                else:
+                    h_t[layer_idx], c_t[layer_idx] = lstm_cell(h_t[layer_idx-1], (h_t[layer_idx], c_t[layer_idx]))
 
-        # Apply zeta regularization if enabled
-        zeta_loss = 0.0
-        if self.use_zeta_reg:
-            _, zeta_loss = self.zeta_reg(outputs)
+                # Apply dropout between layers
+                if layer_idx < self.num_layers - 1:
+                    h_t[layer_idx] = self.dropout_layer(h_t[layer_idx])
 
-        return outputs, (h_n, c_n), zeta_loss
+            # Get final layer output
+            lstm_output = h_t[-1]  # (batch_size, hidden_size)
+
+            # Apply CE enhancements
+            # 1. Mirror operation
+            mirrored, mirror_loss = self.mirror_op(lstm_output.unsqueeze(1))
+            mirrored = mirrored.squeeze(1)
+
+            # 2. Curvature coupling
+            coupled, curvature_loss = self.curvature_layer(mirrored.unsqueeze(1))
+            coupled = coupled.squeeze(1)
+
+            # 3. Zeta regularization
+            _, zeta_loss = self.zeta_reg(coupled.unsqueeze(1))
+
+            # Combine losses
+            total_zeta_loss = mirror_loss + curvature_loss + zeta_loss
+
+            # Check guardian threshold
+            should_stop, guardian_score = self.guardian(total_zeta_loss.item())
+
+            outputs.append(coupled)
+
+        # Stack outputs
+        outputs = torch.stack(outputs, dim=1)  # (batch_size, seq_len, hidden_size)
+
+        # Final hidden states
+        h_n = h_t[-1].unsqueeze(0)  # (1, batch_size, hidden_size)
+        c_n = c_t[-1].unsqueeze(0)  # (1, batch_size, hidden_size)
+
+        # Total zeta loss across sequence
+        _, final_zeta_loss = self.zeta_reg(outputs)
+
+        return outputs, (h_n, c_n), final_zeta_loss
+
+
+# Convenience functions for creating CE modules
+def create_ce_lstm(input_size: int, hidden_size: int, **kwargs) -> CEEnhancedLSTM:
+    """Create CE-enhanced LSTM with default configuration."""
+    return CEEnhancedLSTM(input_size, hidden_size, **kwargs)
+
+
+def create_ce_modules(hidden_size: int) -> Dict[str, nn.Module]:
+    """Create complete set of CE modules."""
+    return {
+        'mirror_op': MirrorOperator(hidden_size),
+        'curvature_layer': CurvatureCouplingLayer(hidden_size),
+        'zeta_reg': ZetaRegularization(hidden_size),
+        'guardian': GuardianThreshold()
+    }
+
+
+# Test the modules
+if __name__ == "__main__":
+    print("Testing CE Modules...")
+
+    # Test CEEnhancedLSTM
+    batch_size, seq_len, input_size, hidden_size = 2, 5, 10, 32
+
+    ce_lstm = CEEnhancedLSTM(input_size, hidden_size)
+    x = torch.randn(batch_size, seq_len, input_size)
+
+    print(f"Input shape: {x.shape}")
+
+    try:
+        outputs, (h_n, c_n), zeta_loss = ce_lstm(x)
+        print(f"Output shape: {outputs.shape}")
+        print(f"Hidden state shape: {h_n.shape}")
+        print(f"Zeta loss: {zeta_loss.item():.4f}")
+        print("✅ CEEnhancedLSTM working!")
+    except Exception as e:
+        print(f"❌ CEEnhancedLSTM error: {e}")
+        import traceback
+        traceback.print_exc()
+
+    # Test individual modules
+    mirror_op = MirrorOperator(hidden_size)
+    curvature_layer = CurvatureCouplingLayer(hidden_size)
+    zeta_reg = ZetaRegularization(hidden_size)
+
+    x_test = torch.randn(batch_size, seq_len, hidden_size)
+
+    try:
+        mirrored, mirror_loss = mirror_op(x_test)
+        print(f"Mirror op - Output shape: {mirrored.shape}, Loss: {mirror_loss.item():.4f}")
+
+        coupled, curvature_loss = curvature_layer(x_test)
+        print(f"Curvature layer - Output shape: {coupled.shape}, Loss: {curvature_loss.item():.4f}")
+
+        _, zeta_loss = zeta_reg(x_test)
+        print(f"Zeta reg - Loss: {zeta_loss.item():.4f}")
+
+        print("✅ All CE modules working!")
+    except Exception as e:
+        print(f"❌ Module error: {e}")
+        import traceback
+        traceback.print_exc()

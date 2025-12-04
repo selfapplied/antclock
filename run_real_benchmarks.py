@@ -41,7 +41,7 @@ def run_real_benchmarks():
         from benchmarks.cogs import run_cogs_baseline
         cogs_results = run_cogs_baseline(num_epochs=10)  # Fewer epochs for speed
         results['results']['cogs'] = cogs_results
-        print(f"SCAN: {scan_results.get('test_accuracy', 0):.1%}")
+        print(f"COGS: {cogs_results.get('test_accuracy', 0):.1%}")
     except Exception as e:
         print(f"❌ COGS failed: {e}")
         results['results']['cogs'] = {'error': str(e)}
@@ -52,7 +52,7 @@ def run_real_benchmarks():
         from benchmarks.pcfg import run_pcfg_baseline
         pcfg_results = run_pcfg_baseline(num_epochs=10)
         results['results']['pcfg'] = pcfg_results
-        print(f"SCAN: {scan_results.get('test_accuracy', 0):.1%}")
+        print(f"PCFG: {pcfg_results.get('test_accuracy', 0):.1%}")
     except Exception as e:
         print(f"❌ PCFG failed: {e}")
         results['results']['pcfg'] = {'error': str(e)}
@@ -63,7 +63,7 @@ def run_real_benchmarks():
         from benchmarks.cfq import run_cfq_baseline
         cfq_results = run_cfq_baseline(num_epochs=10)
         results['results']['cfq'] = cfq_results
-        print(f"SCAN: {scan_results.get('test_accuracy', 0):.1%}")
+        print(f"CFQ: {cfq_results.get('test_accuracy', 0):.1%}")
     except Exception as e:
         print(f"❌ CFQ failed: {e}")
         results['results']['cfq'] = {'error': str(e)}
@@ -74,7 +74,7 @@ def run_real_benchmarks():
         from benchmarks.rpm import run_rpm_baseline
         rpm_results = run_rpm_baseline(num_epochs=10)
         results['results']['rpm'] = rpm_results
-        print(f"SCAN: {scan_results.get('test_accuracy', 0):.1%}")
+        print(f"RPM: {rpm_results.get('test_accuracy', 0):.1%}")
     except Exception as e:
         print(f"❌ RPM failed: {e}")
         results['results']['rpm'] = {'error': str(e)}
@@ -85,7 +85,7 @@ def run_real_benchmarks():
         from benchmarks.math_reasoning import run_math_baseline
         math_results = run_math_baseline(num_epochs=10)
         results['results']['math'] = math_results
-        print(f"SCAN: {scan_results.get('test_accuracy', 0):.1%}")
+        print(f"MATH: {math_results.get('test_accuracy', 0):.1%}")
     except Exception as e:
         print(f"❌ Math failed: {e}")
         results['results']['math'] = {'error': str(e)}

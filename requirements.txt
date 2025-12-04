@@ -1,7 +1,7 @@
 numpy
 scipy
 matplotlib
-torch>=2.0.0
+torch
 transformers
 datasets
 scikit-learn
