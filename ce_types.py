@@ -6,6 +6,7 @@ Explicitly encodes CE1/CE2/CE3 layers using Python typing features.
 Provides a strongly-typed category that matches the CE tower structure.
 """
 
+import math
 from typing import NewType, TypedDict, List, Tuple, Protocol, Any
 from abc import abstractmethod
 
@@ -139,6 +140,254 @@ class Functor(Protocol):
     """Protocol for functors between categories."""
     def on_object(self, obj: Any) -> Any: ...
     def on_morphism(self, morphism: Any) -> Any: ...
+
+
+# ============================================================================
+# CONCRETE CE2 OBJECTS
+# ============================================================================
+
+class GaussFlow:
+    """CE2 dynamical system: The Gauss map from continued fractions."""
+
+    def __init__(self):
+        self.space = "[0,1]"  # Phase space description
+        self.initial_condition = 0.123456789  # Irrational seed
+
+    def map(self, x: float) -> float:
+        """Gauss map: x ↦ 1/x - ⌊1/x⌋"""
+        if not (0 < x < 1):
+            return 0.0
+        return 1.0 / x - math.floor(1.0 / x)
+
+    def iterate(self, n_steps: int) -> List[float]:
+        """Generate Gauss map orbit."""
+        orbit = [self.initial_condition]
+        for _ in range(n_steps):
+            orbit.append(self.map(orbit[-1]))
+        return orbit
+
+    def lyapunov_exponent(self, n_samples: int = 1000) -> float:
+        """Estimate Lyapunov exponent for chaos detection."""
+        total = 0.0
+        x = self.initial_condition
+        for _ in range(n_samples):
+            if x != 0:
+                total += math.log(abs(1.0 / (x * x)))  # Derivative of Gauss map
+            x = self.map(x)
+        return total / n_samples
+
+
+class ZetaFlow:
+    """CE2 dynamical system: Simplified zeta zero flow model."""
+
+    def __init__(self, first_zero_imag: float = 14.134725):
+        self.first_zero = complex(0.5, first_zero_imag)
+        self.space = "ℂ (complex plane)"
+
+    def map(self, z: complex) -> complex:
+        """Simplified zeta zero flow (toy model)."""
+        # Very simplified - real zeta zero "attraction"
+        real_part = 0.5 + 0.1 * math.cos(z.imag)
+        imag_part = z.imag + 0.01 * math.sin(z.real)
+        return complex(real_part, imag_part)
+
+    def iterate(self, n_steps: int) -> List[complex]:
+        """Generate zeta flow orbit."""
+        orbit = [self.first_zero]
+        for _ in range(n_steps):
+            orbit.append(self.map(orbit[-1]))
+        return orbit
+
+
+class AntClockFlow:
+    """CE2 dynamical system: The AntClock curvature flow."""
+
+    def __init__(self, chi_feg: float = 0.638):
+        self.chi_feg = chi_feg
+        self.space = "ℝ₊ (positive reals)"
+
+    def map(self, x: float) -> float:
+        """AntClock curvature flow map."""
+        if x <= 0:
+            return 0.0
+
+        # Simplified curvature-driven evolution
+        digit_shell = len(str(int(x))) if x > 0 else 1
+        kappa = self._pascal_curvature(digit_shell)
+        tension = self._digit_tension(x)
+
+        return x + kappa * (1 + tension) * self.chi_feg * 0.01
+
+    def iterate(self, n_steps: int, x0: float = 1.0) -> List[float]:
+        """Generate AntClock flow orbit."""
+        orbit = [x0]
+        for _ in range(n_steps):
+            orbit.append(self.map(orbit[-1]))
+        return orbit
+
+    def _pascal_curvature(self, n: int) -> float:
+        """Simplified Pascal curvature."""
+        if n < 2:
+            return 0.0
+        try:
+            # Very simplified approximation
+            return 1.0 / (n * math.log(n + 1))
+        except:
+            return 0.0
+
+    def _digit_tension(self, x: float) -> float:
+        """Simplified digit tension."""
+        if x <= 0:
+            return 0.0
+        digits = str(int(x))
+        return sum(int(d) / 9.0 for d in digits) / len(digits)
+
+
+# ============================================================================
+# CONCRETE CE3 OBJECTS
+# ============================================================================
+
+class TriangulatedCF:
+    """CE3 simplicial complex: Triangulation from continued fraction convergents."""
+
+    def __init__(self, value: float, depth: int = 5):
+        self.value = value
+        self.depth = depth
+        self.convergents = self._compute_convergents()
+        self.simplices = self._build_simplices()
+
+    def _compute_convergents(self) -> List[Tuple[int, int]]:
+        """Compute continued fraction convergents."""
+        # Simplified continued fraction computation
+        terms = []
+        x = self.value
+        for _ in range(self.depth):
+            if x == 0:
+                break
+            integer_part = int(x)
+            terms.append(integer_part)
+            x = 1.0 / (x - integer_part)
+
+        # Build convergents (simplified)
+        convergents = []
+        if terms:
+            convergents.append((terms[0], 1))
+        for i in range(1, len(terms)):
+            # Simplified convergent computation
+            num = terms[i]
+            den = 1
+            convergents.append((num, den))
+
+        return convergents
+
+    def _build_simplices(self) -> List[List[int]]:
+        """Build simplicial complex from convergents."""
+        simplices = []
+        for i in range(len(self.convergents)):
+            # Each convergent becomes a 0-simplex (point)
+            simplices.append([i])
+            # Connect adjacent convergents with 1-simplices (edges)
+            if i > 0:
+                simplices.append([i-1, i])
+        return simplices
+
+    def betti_numbers(self) -> Tuple[int, int, int]:
+        """Compute Betti numbers (β₀, β₁, β₂)."""
+        # Simplified topological invariants
+        n_vertices = len(self.convergents)
+        n_edges = max(0, n_vertices - 1)
+        n_faces = 0  # No 2-simplices in this simple model
+
+        beta0 = 1 if n_vertices > 0 else 0  # Connected components
+        beta1 = max(0, n_edges - n_vertices + beta0)  # Cycles
+        beta2 = n_faces - n_edges + n_vertices - beta0  # Cavities
+
+        return (beta0, beta1, beta2)
+
+
+class FactorComplex:
+    """CE3 simplicial complex: Prime factorization as simplicial structure."""
+
+    def __init__(self, n: int):
+        self.n = n
+        self.primes = self._factorize()
+        self.simplices = self._build_factor_simplices()
+
+    def _factorize(self) -> List[int]:
+        """Prime factorization."""
+        factors = []
+        temp = self.n
+        for i in range(2, int(math.sqrt(self.n)) + 1):
+            while temp % i == 0:
+                factors.append(i)
+                temp //= i
+        if temp > 1:
+            factors.append(temp)
+        return factors
+
+    def _build_factor_simplices(self) -> List[List[int]]:
+        """Build simplicial complex from factorization."""
+        simplices = []
+        # Each prime factor is a 0-simplex
+        for i, _ in enumerate(self.primes):
+            simplices.append([i])
+
+        # Connect factors with edges (simplified)
+        for i in range(len(self.primes)):
+            for j in range(i + 1, len(self.primes)):
+                simplices.append([i, j])
+
+        return simplices
+
+    def betti_numbers(self) -> Tuple[int, int, int]:
+        """Compute Betti numbers for factorization complex."""
+        n_primes = len(set(self.primes))  # Unique primes
+        n_factors = len(self.primes)      # Total factors
+
+        beta0 = 1 if n_primes > 0 else 0
+        beta1 = max(0, n_factors - n_primes)
+        beta2 = 0  # No 2-simplices
+
+        return (beta0, beta1, beta2)
+
+
+class AntClockSimplicialHistory:
+    """CE3 simplicial complex: AntClock run as simplicial history."""
+
+    def __init__(self, history: List[AntClockStep]):
+        self.history = history
+        self.simplices = self._build_history_simplices()
+
+    def _build_history_simplices(self) -> List[List[int]]:
+        """Build simplicial complex from AntClock trajectory."""
+        simplices = []
+
+        # Each step is a 0-simplex
+        for i in range(len(self.history)):
+            simplices.append([i])
+
+        # Connect sequential steps
+        for i in range(len(self.history) - 1):
+            simplices.append([i, i+1])
+
+        # Add triangles for mirror crossings (3-simplices where topology changes)
+        mirror_indices = [i for i, step in enumerate(self.history) if step['mirror_cross']]
+        for idx in mirror_indices:
+            if idx > 0 and idx < len(self.history) - 1:
+                simplices.append([idx-1, idx, idx+1])
+
+        return simplices
+
+    def betti_numbers(self) -> Tuple[int, int, int]:
+        """Compute Betti numbers for AntClock simplicial history."""
+        n_steps = len(self.history)
+        mirror_crossings = sum(1 for step in self.history if step['mirror_cross'])
+
+        beta0 = 1 if n_steps > 0 else 0
+        beta1 = max(0, mirror_crossings)  # Cycles from mirror crossings
+        beta2 = max(0, mirror_crossings - 1)  # Cavities
+
+        return (beta0, beta1, beta2)
 
 
 # ============================================================================
