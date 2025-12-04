@@ -4,17 +4,22 @@
 
 ![AntClock Geometry](antclock_geometry.png)
 
+## Canonical Specification
+
+📋 **[SPEC.md](SPEC.md)** - Complete mathematical specification and single source of truth for the CE1→CE2→CE3 framework.
+
 ## Overview
 
-AntClock is a mathematical framework that discovers the Riemann hypothesis in integer geometry. Starting from simple curvature patterns in Pascal's triangle, it unfolds into a complete theory of:
+AntClock discovers the Riemann hypothesis in integer geometry through three interconnected layers:
 
-- **Galois covering spaces** on the integers
-- **Discrete tangent singularities** at mirror-phase shells
-- **Branch corridors** between symmetry manifolds
-- **Spectral zeros** as Laplacian eigenvalues
-- **L-functions** from character groups
+- **CE1 (Discrete Grammar)**: Combinatorial structures and digit symmetries
+- **CE2 (Dynamical Flow)**: Continuous flows emerging from discrete dynamics
+- **CE3 (Emergent Simplicial)**: Topological emergence via simplicial complexes
 
-The system walks through integers while carrying a curvature clock, revealing how symmetry breaks in digit shells mirror the critical line structure of ζ(s).
+Three transport mechanisms braid these layers:
+- **Continued Fractions**: CE1 skeletons → CE2 flows → CE3 triangulations
+- **Digital Polynomials**: CE1 coefficients → CE2 spectral operators → CE3 factor graphs
+- **Universal Clock**: CE1 ticks → CE2 flow time → CE3 event index
 
 ## Core Insight: π as Discrete Rotation
 
@@ -37,19 +42,28 @@ Where φ(10) = 4 becomes the discrete analogue of π, and mirror-phase shells ar
 # Install dependencies
 pip install -r requirements.txt
 
-# Run the core walker demo
-python demo.py
+# Core demonstrations (all executable)
+./demo.py                    # Complete CE1→CE2→CE3 walkthrough
+./transport_mechanisms_demo.py    # Transport mechanism details
+./categorical_transport.py        # Formal category theory
 
-# Explore the full theory suite
-python galois_cover_demo.py      # Galois covering space structure
-python corridor_spectrum_demo.py # Laplacian eigenvalues as zeta zeros
-python branch_corridors_demo.py  # Branch cuts and monodromy
-python categorical_shadow_demo.py # Shadow tower functor
-python reflection_half_demo.py   # Discrete functional equation
-python row7_demo.py             # Digit mirror operator
-python ce1_demonstration.py     # Betti numbers & bifurcation homology
-python topology_demo.py         # Persistent homology in digit shells
+# View generated outputs in .out/ directory
 ```
+
+## Core Insight: π as Discrete Rotation
+
+Symmetry breaking in discrete systems behaves like tangent singularities at π intervals:
+
+```
+θ(n) = (π/2) × (n mod 4)
+
+n ≡ 0 → θ = 0
+n ≡ 1 → θ = π/2
+n ≡ 2 → θ = π
+n ≡ 3 → θ = 3π/2  ← mirror-phase shells (tangent singularities)
+```
+
+φ(10) = 4 becomes the discrete analogue of π, with mirror-phase shells as "odd multiples of π/2" where curvature flips and symmetry breaks.
 
 ## Theory Overview
 
