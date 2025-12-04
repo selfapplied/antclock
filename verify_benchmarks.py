@@ -42,8 +42,8 @@ def verify_ce_benchmarks():
     # Check feature ranges
     curvatures = [p.curvature_value for p in inputs]
     entropies = [p.digit_entropy for p in inputs]
-    print(".3f")
-    print(".3f")
+    print(f"Curvature range: {min(curvatures):.3f} to {max(curvatures):.3f}")
+    print(f"Entropy range: {min(entropies):.3f} to {max(entropies):.3f}")
 
     # Test toy solution resistance
     print("\n3. Testing Toy Solution Resistance...")
@@ -73,16 +73,16 @@ def verify_ce_benchmarks():
     results = suite.run_all(output_dir)
     end_time = time.time()
 
-    print(".2f")
+    print(f"Benchmark completed in {end_time - start_time:.2f} seconds")
 
     # Verify results are meaningful
     if benchmark.config.name in results:
         result = results[benchmark.config.name]
         print("\nBenchmark Results:")
-        print(".3f")
-        print(".3f")
-        print(".3f")
-        print(".3f")
+        print(f"Accuracy: {result.accuracy:.3f}")
+        print(f"Convergence speed: {result.convergence_speed:.3f}")
+        print(f"Mathematical consistency: {result.mathematical_consistency:.3f}")
+        print(f"Generalization gap: {result.generalization_gap:.3f}")
 
         # CE benchmarks focus on mathematical consistency, not traditional ML metrics
         # The key metric is mathematical_consistency (how well CE properties are preserved)
@@ -116,7 +116,7 @@ def verify_ce_benchmarks():
                 json.dump(result_data, f, indent=2)
 
             print("✓ Updated archiX/paper_data with CE-verified benchmark results")
-            print(".3f")
+            print(f"Mathematical consistency: {result.mathematical_consistency:.3f}")
 
             return True
         else:
