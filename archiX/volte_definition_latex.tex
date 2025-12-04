@@ -1,0 +1,151 @@
+% ============================================================================
+% Definition 1: Volte System - LaTeX Version for Archiiiv Paper
+% ============================================================================
+%
+% Copy this section directly into your paper draft
+% ============================================================================
+
+\section{Volte Systems}
+\label{sec:volte_systems}
+
+\begin{definition}[Volte System]
+\label{def:volte_system}
+A \emph{Volte System} is a dynamical system with controlled turning capability that preserves core invariants while reorienting flow under stress. Formally, a Volte system consists of:
+
+\begin{itemize}
+    \item \textbf{State space} $M$ (manifold)
+    \item \textbf{Field/Dynamics} $F: M \times U \to TM$ (ordinary flow)
+    \item \textbf{Invariant} $Q: M \to \mathbb{R}^k$ (guardian charge/core identity)
+    \item \textbf{Stress functional} $S: M \times U \to \mathbb{R}_{\geq 0}$ (misalignment/harm)
+    \item \textbf{Coherence functional} $C: M \to \mathbb{R}_{\geq 0}$ (internal fit/stability)
+    \item \textbf{Volte operator} $\mathcal{V}: M \times U \to TM$ (correction operator)
+    \item \textbf{Threshold} $\kappa \geq 0$ (activation threshold)
+\end{itemize}
+
+The system dynamics with Volte correction are:
+
+\begin{equation}
+\label{eq:volte_dynamics}
+\frac{dx}{dt} = F(x, u) + \mathcal{V}(x, u)
+\end{equation}
+
+where $\mathcal{V}(x,u)$ satisfies the Volte axioms:
+\end{definition}
+
+\begin{enumerate}
+    \item[\textbf{(V1) Invariant Preservation}] The Volte operator preserves core identity:
+    \begin{equation}
+    \label{eq:volte_v1}
+    Q(x + \varepsilon\,\mathcal{V}(x,u)) = Q(x)
+    \end{equation}
+    for small $\varepsilon$. Thus $\mathcal{V}(x,u) \in T_x\{ y \in M \mid Q(y) = Q(x)\}$.
+
+    \item[\textbf{(V2) Harm Reduction, Coherence Enhancement}] Volte reduces stress and increases coherence:
+    \begin{align}
+    \label{eq:volte_v2}
+    \left.\frac{d}{d\varepsilon} S(x + \varepsilon\,\mathcal{V}(x,u), u)\right|_{\varepsilon=0} &< 0 \\
+    \left.\frac{d}{d\varepsilon} C(x + \varepsilon\,\mathcal{V}(x,u))\right|_{\varepsilon=0} &> 0
+    \end{align}
+
+    \item[\textbf{(V3) Threshold-Triggered Activation}] Volte activates only under strain:
+    \begin{equation}
+    \label{eq:volte_v3}
+    \mathcal{V}(x,u) = \begin{cases}
+    0 & S(x,u) \leq \kappa \\
+    \text{nonzero vector obeying (V1)--(V2)} & S(x,u) > \kappa
+    \end{cases}
+    \end{equation}
+
+    With smooth gating function $\sigma \in [0,1]$:
+    \begin{equation}
+    \label{eq:volte_smooth}
+    \frac{dx}{dt} = F(x,u) + \sigma\big(S(x,u) - \kappa\big)\,\mathcal{V}(x,u)
+    \end{equation}
+    where $\sigma(z) \approx 0$ for $z \ll 0$ and $\sigma(z) \approx 1$ for $z \gg 0$.
+\end{enumerate}
+
+\begin{definition}[Discrete Volte System]
+\label{def:discrete_volte}
+The discrete-time analogue of a Volte system is:
+
+\begin{equation}
+\label{eq:discrete_volte}
+x_{t+1} = x_t + F_\Delta(x_t, u_t) + \mathcal{V}_\Delta(x_t, u_t)
+\end{equation}
+
+where $\mathcal{V}_\Delta(x_t, u_t)$ is chosen to minimize the correction distance subject to the constraints:
+
+\begin{enumerate}
+    \item $Q(x_{t+1}) = Q(x_t)$ (invariant preservation)
+    \item $S(x_{t+1}, u_t) < S(x_t, u_t)$ (stress reduction)
+    \item $C(x_{t+1}) > C(x_t)$ (coherence increase)
+    \item $\mathcal{V}_\Delta(x_t, u_t) = \arg\min_v \{ D(v, 0) \mid \text{constraints 1--3 hold}\}$
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[CE1 Volte Mapping]
+\label{def:ce1_volte}
+A Volte system maps to CE1 brackets as:
+
+\begin{itemize}
+    \item \textbf{[ ] memory}: history of $(x_t, S_t, C_t, Q_t)$
+    \item \textbf{\{ \} domain}: manifold, chart, and $Q$-constraints
+    \item \textbf{( ) flow}: $x_{t+1} = x_t + F_\Delta(x_t, u_t) + \mathcal{V}_\Delta(x_t, u_t)$
+    \item \textbf{$<>$ invariants}: $Q(x_{t+1}) = Q(x_t)$, $S_{t+1} < S_t$, $C_{t+1} > C_t$
+\end{itemize}
+
+With Volte trigger condition: $<>$trigger: $S_t > \kappa \implies$ () includes $\mathcal{V}_\Delta$
+\end{definition}
+
+\begin{remark}
+A Volte represents a controlled turn that maintains ``who I am'' ($Q$) while changing ``which way is forward'' under intolerable stress. It is not a catastrophic break but a coherence-preserving reorientation: same manifold, new chart; same self, new framing; same field, new flow.
+\end{remark}
+
+% ============================================================================
+% Example Specializations (can be separate section)
+% ============================================================================
+
+\subsection{Volte System Specializations}
+\label{subsec:volte_examples}
+
+The general Volte schema specializes to concrete domains:
+
+\begin{example}[Evolution and Endogenous Retroviruses]
+\label{ex:evolution_ervs}
+\begin{itemize}
+    \item $x$: state of a lineage's genomic architecture
+    \item $Q$: species identity / conserved core genes
+    \item $S$: maladaptive load / genomic instability
+    \item $\mathcal{V}$: exaptation - viral element turned into function while preserving lineage identity
+\end{itemize}
+\end{example}
+
+\begin{example}[Immune Fields under ART]
+\label{ex:immune_art}
+\begin{itemize}
+    \item $x$: immune cell population + signaling architecture
+    \item $Q$: ``self'' recognition / tolerance constraints
+    \item $S$: viral load + tissue damage markers
+    \item $\mathcal{V}$: treatment-induced shift to new stable attractor without breaking self-recognition
+\end{itemize}
+\end{example}
+
+\begin{example}[Psychological Volte]
+\label{ex:psychological}
+\begin{itemize}
+    \item $x$: narrative / identity state
+    \item $Q$: core values / dignity / agency
+    \item $S$: stigma pressure / shame / self-harm risk
+    \item $\mathcal{V}$: the moment of reorientation - ``I am the guardian'' - preserving core self while changing flow direction
+\end{itemize}
+\end{example}
+
+% ============================================================================
+% For the paper's main text
+% ============================================================================
+
+The Volte equation provides a unifying mathematical framework for coherence-preserving transformations across biological, immunological, and psychological domains. Each specialization maintains the same formal structure while adapting the specific interpretations of state, invariant, and stress.
+
+% ============================================================================
+% End of Volte System Definition
+% ============================================================================
