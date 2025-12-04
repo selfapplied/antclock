@@ -21,6 +21,10 @@ from .ce_modules import (
     MirrorOperator, CurvatureCouplingLayer, GuardianThreshold,
     ZetaRegularization, CEAttention, CEEnhancedLSTM
 )
+try:
+    from .ce_timing import create_ce_timed_trainer
+except ImportError:
+    from ce_timing import create_ce_timed_trainer
 
 
 class CEEnhancedPCFGModel(nn.Module):
@@ -223,34 +227,118 @@ class CEEnhancedPCFGBenchmark(PCFGBenchmark):
 
         return avg_loss, avg_zeta_loss
 
+    def train_epoch_ce_timed(self, model: CEEnhancedPCFGModel, ce_timer,
+                           criterion: nn.CrossEntropyLoss, device: str = 'cpu',
+                           epoch: int = 0) -> Tuple[float, float]:
+        """Train for one epoch with CE timing acceleration."""
+        model.train()
+        total_loss = 0
+        total_zeta_loss = 0
+
+        for batch in self.train_loader:
+            sentence_ids = batch['sentence_ids'].to(device)
+            tree_ids = batch['tree_ids'].to(device)
+
+            # Forward pass with CE regularization
+            outputs, zeta_loss = model(sentence_ids, tree_ids, teacher_forcing_ratio=0.5)
+
+            # Standard cross-entropy loss
+            ce_loss = criterion(outputs.view(-1, len(self.vocab_tree)),
+                              tree_ids.view(-1))
+
+            # Combined loss with zeta regularization
+            total_batch_loss = ce_loss + self.zeta_reg_weight * zeta_loss
+
+            # CE timing step
+            timing_info = ce_timer.training_step(total_batch_loss, zeta_loss.item())
+
+            total_loss += ce_loss.item()
+            total_zeta_loss += zeta_loss.item()
+
+            # CE early stopping check
+            if timing_info['should_stop']:
+                print(f"⚡ CE Early Stopping triggered mid-epoch (zeta awareness stabilized)")
+                break
+
+        avg_loss = total_loss / len(self.train_loader)
+        avg_zeta_loss = total_zeta_loss / len(self.train_loader)
+
+        return avg_loss, avg_zeta_loss
+
+    def evaluate(self, model: CEEnhancedPCFGModel, device: str = 'cpu') -> Dict[str, float]:
+        """Evaluate CE model on test set."""
+        model.eval()
+        correct = 0
+        total = 0
+
+        with torch.no_grad():
+            for batch in self.test_loader:
+                sentence_ids = batch['sentence_ids'].to(device)
+
+                # CE model returns (outputs, zeta_loss) tuple
+                outputs, _ = model(sentence_ids, teacher_forcing_ratio=0.0)
+
+                # Get predictions (exclude <sos> token)
+                predictions = outputs.argmax(dim=-1)[:, 1:]  # Skip <sos>
+
+                # Get targets (exclude <sos> token)
+                targets = batch['tree_ids'][:, 1:].to(device)
+
+                # Create mask for non-pad tokens
+                mask = targets != self.vocab_tree.pad_idx
+
+                correct += ((predictions == targets) & mask).sum().item()
+                total += mask.sum().item()
+
+        accuracy = correct / total if total > 0 else 0.0
+        return {'accuracy': accuracy, 'correct': correct, 'total': total}
+
     def train_model(self, model: CEEnhancedPCFGModel, num_epochs: int = 100,
                    device: str = 'cpu') -> Dict[str, List[float]]:
-        """Train CE-enhanced model and return training history."""
+        """Train CE-enhanced model with CE timing acceleration."""
         model = model.to(device)
         optimizer = optim.Adam(model.parameters(), lr=self.learning_rate)
         criterion = nn.CrossEntropyLoss(ignore_index=self.vocab_tree.pad_idx)
 
+        # Create CE timing accelerator
+        ce_timer = create_ce_timed_trainer(model, optimizer)
+
         train_losses = []
         zeta_losses = []
         dev_accuracies = []
+        timing_info_history = []
 
         for epoch in tqdm(range(num_epochs), desc="Training CE-PCFG"):
-            # Train
-            train_loss, zeta_loss = self.train_epoch(model, optimizer, criterion, device)
+            # Train with CE timing awareness
+            train_loss, zeta_loss = self.train_epoch_ce_timed(
+                model, ce_timer, criterion, device, epoch
+            )
             train_losses.append(train_loss)
             zeta_losses.append(zeta_loss)
 
-            # Evaluate on dev set
-            if epoch % 10 == 0:
+            # Store timing information
+            timing_info_history.append(ce_timer.timing_stats.copy())
+
+            # Evaluate on dev set (more frequent with CE timing)
+            if epoch % 5 == 0:
                 dev_metrics = self.evaluate(model, 'dev', device)
                 dev_accuracies.append(dev_metrics['accuracy'])
+                current_lr = ce_timer.lr_scheduler.get_lr()
+                phase_awareness = ce_timer.awareness_optimizer.phase_awareness
                 print(f"Epoch {epoch}: CE Loss={train_loss:.4f}, "
-                      f"Zeta Loss={zeta_loss:.4f}, Dev Acc={dev_metrics['accuracy']:.4f}")
+                      f"Zeta Loss={zeta_loss:.4f}, Dev Acc={dev_metrics['accuracy']:.4f}, "
+                      f"LR={current_lr:.6f}, Awareness={phase_awareness:.3f}")
+
+            # CE timing early stopping
+            if ce_timer.early_stopper.early_stop:
+                print(f"🎯 CE Early Stopping at epoch {epoch} (zeta awareness stabilized)")
+                break
 
         return {
             'train_losses': train_losses,
             'zeta_losses': zeta_losses,
-            'dev_accuracies': dev_accuracies
+            'dev_accuracies': dev_accuracies,
+            'timing_stats': timing_info_history
         }
 
 

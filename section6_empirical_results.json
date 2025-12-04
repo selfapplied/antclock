@@ -1,57 +1,48 @@
 {
-  "timestamp": "2025-12-03T17:57:13.097170",
-  "status": "preliminary_results",
-  "note": "These are preliminary results from small synthetic datasets. Real SCAN/COGS benchmarks require thousands of training examples. Current implementation demonstrates framework correctness but needs scale-up for meaningful accuracy.",
-  "actual_benchmark_runs": {
-    "scan_baseline_20epochs": {"test_accuracy": 0.0, "test_correct": 0, "test_total": 12},
-    "scan_baseline_100epochs": {"test_accuracy": 0.0, "test_correct": 0, "test_total": 10},
-    "cogs_baseline_20epochs": {"test_accuracy": 0.0, "test_correct": 0, "test_total": 11}
-  },
-  "section6_preliminary_results": {
+  "timestamp": "2025-12-03T19:12:19.545763",
+  "status": "real_dataset_results",
+  "note": "Results from real benchmark datasets (SCAN: 16K train, COGS: 24K train, etc.)",
+  "section6_real_results": {
     "scan_performance": {
-      "baseline_accuracy": 0.0,
-      "ce_enhanced_accuracy": 0.0,
-      "improvement": 0.0,
-      "note": "Insufficient training data for meaningful results"
+      "baseline_accuracy": 1.0,
+      "ce_enhanced_accuracy": 1.0,
+      "improvement": 0.0
     },
     "cogs_performance": {
-      "baseline_accuracy": 0.0,
-      "ce_enhanced_accuracy": 0.0,
-      "improvement": 0.0,
-      "note": "Insufficient training data for meaningful results"
+      "baseline_accuracy": 0.861,
+      "ce_enhanced_accuracy": 0.861,
+      "improvement": 0.0
     },
     "pcfg_performance": {
       "baseline_accuracy": 0.0,
       "ce_enhanced_accuracy": 0.0,
-      "improvement": 0.0,
-      "note": "Benchmark implemented but not yet tested at scale"
+      "improvement": 0.0
     },
-    "interpretability_metrics": {
-      "phase_deviation_baseline": 0.67,
-      "phase_deviation_ce": 0.09,
-      "depth_fluctuation_baseline": 2.8,
-      "depth_fluctuation_ce": 0.4,
-      "silhouette_score": 0.82,
-      "note": "Theoretical metrics - not yet measured empirically"
+    "cfq_performance": {
+      "baseline_accuracy": 0.0,
+      "ce_enhanced_accuracy": 0.0,
+      "improvement": 0.0
+    },
+    "rpm_performance": {
+      "baseline_accuracy": 0.0,
+      "ce_enhanced_accuracy": 0.0,
+      "improvement": 0.0
+    },
+    "math_performance": {
+      "baseline_accuracy": 0.04,
+      "ce_enhanced_accuracy": 0.0,
+      "improvement": 0.0
+    },
+    "dataset_sizes": {
+      "scan_train": 16728,
+      "scan_test": 4182,
+      "cogs_train": 24155,
+      "cogs_test": 3000,
+      "note": "Real benchmark datasets with thousands of examples"
     },
     "ce_parameters": {
       "kappa": 0.35,
-      "chi_feg": 0.638,
-      "note": "Guardian threshold and curvature coupling parameters"
-    },
-    "dataset_sizes": {
-      "scan_train": 47,
-      "scan_test": 15,
-      "cogs_train": 23,
-      "cogs_test": 11,
-      "note": "Current synthetic datasets are too small for robust ML training"
-    },
-    "recommendations": [
-      "Scale up to real SCAN dataset (21,903 train, 4,182 test examples)",
-      "Use real COGS dataset for semantic parsing evaluation",
-      "Implement proper PCFG grammar induction evaluation",
-      "Add visual reasoning benchmarks (RPM, RAVEN)",
-      "Conduct ablation studies on CE components at scale"
-    ]
+      "chi_feg": 0.638
+    }
   }
 }

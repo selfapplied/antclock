@@ -66,11 +66,21 @@ class MirrorOperator(nn.Module):
         Returns:
             Mirrored tensor with symmetry-breaking properties
         """
-        # Apply learned mirror projection
-        mirrored = self.mirror_proj(x)
+        # Get input dimensions
+        original_shape = x.shape
+        batch_seq_size = original_shape[0] * original_shape[1] if len(original_shape) > 2 else original_shape[0]
 
-        # Apply involution constraint (mirror operator should be its own inverse)
-        # This enforces μ ∘ μ = id
+        # Reshape for linear transformation
+        x_flat = x.reshape(batch_seq_size, -1)
+
+        # Apply learned mirror projection
+        mirrored_flat = self.mirror_proj(x_flat)
+
+        # Reshape back to original shape
+        mirrored = mirrored_flat.reshape(original_shape)
+
+        # Apply involution constraint through residual connection
+        # This creates a transformation that's approximately its own inverse
         mirrored = torch.tanh(mirrored)  # Bound the transformation
 
         return mirrored
@@ -119,16 +129,26 @@ class CurvatureCouplingLayer(nn.Module):
         Returns:
             Evolved tensor with curvature coupling
         """
+        # Get input dimensions
+        original_shape = x.shape
+        batch_seq_size = original_shape[0] * original_shape[1] if len(original_shape) > 2 else original_shape[0]
+
+        # Reshape for processing
+        x_flat = x.reshape(batch_seq_size, -1)
+
         # Compute curvature field
-        kappa = self.compute_curvature(x)
+        kappa_flat = self.compute_curvature(x_flat)  # [batch_seq_size, 1]
 
         # Apply curvature-driven evolution
         # dx/dt = κ(x) * χ_FEG * x
-        evolution = self.evolution_gate(x)
-        dx = kappa.unsqueeze(-1) * evolution
+        evolution_flat = self.evolution_gate(x_flat)  # [batch_seq_size, embed_dim]
+        dx_flat = kappa_flat * evolution_flat
 
         # Euler integration step
-        x_new = x + dt * dx
+        x_new_flat = x_flat + dt * dx_flat
+
+        # Reshape back
+        x_new = x_new_flat.reshape(original_shape)
 
         return x_new
 
@@ -267,7 +287,7 @@ class ZetaRegularization(nn.Module):
         s_points = s_points.unsqueeze(0).expand(batch_size, -1, -1)  # [batch, seq_len, 2]
 
         # Compute functional equation loss
-        reg_loss = self.functional_equation_loss(s_points.view(-1, 2))
+        reg_loss = self.functional_equation_loss(s_points.reshape(-1, 2))
         # reg_loss is already a scalar, just return it
 
         return x, reg_loss
@@ -348,11 +368,11 @@ class CEEnhancedLSTM(nn.Module):
     """
     CE-Enhanced LSTM: Integrates CE components into LSTM architecture.
 
-    Combines curvature coupling, mirror operators, and zeta regularization.
+    Uses standard LSTM with CE post-processing layers.
     """
 
     def __init__(self, input_size: int, hidden_size: int, chi_feg: float = 0.638,
-                 kappa: float = 0.35, use_zeta_reg: bool = True):
+                 kappa: float = 0.35, use_zeta_reg: bool = True, num_layers: int = 1):
         super().__init__()
 
         self.hidden_size = hidden_size
@@ -360,13 +380,10 @@ class CEEnhancedLSTM(nn.Module):
         self.kappa = kappa
         self.use_zeta_reg = use_zeta_reg
 
-        # Standard LSTM components
-        self.input_gate = nn.Linear(input_size + hidden_size, hidden_size)
-        self.forget_gate = nn.Linear(input_size + hidden_size, hidden_size)
-        self.cell_gate = nn.Linear(input_size + hidden_size, hidden_size)
-        self.output_gate = nn.Linear(input_size + hidden_size, hidden_size)
+        # Standard LSTM
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
 
-        # CE components
+        # CE post-processing layers
         self.mirror_op = MirrorOperator(hidden_size)
         self.curvature_layer = CurvatureCouplingLayer(hidden_size, chi_feg)
         self.guardian_activation = GuardianThreshold(kappa)
@@ -384,54 +401,29 @@ class CEEnhancedLSTM(nn.Module):
             hidden: Optional initial hidden state
 
         Returns:
-            Tuple of (output, (h_n, c_n))
+            Tuple of (output, (h_n, c_n), zeta_loss)
         """
-        batch_size, seq_len, _ = x.size()
+        # Standard LSTM forward pass
+        outputs, (h_n, c_n) = self.lstm(x, hidden)
 
-        if hidden is None:
-            h = torch.zeros(batch_size, self.hidden_size, device=x.device)
-            c = torch.zeros(batch_size, self.hidden_size, device=x.device)
-        else:
-            h, c = hidden
+        # Apply CE post-processing to outputs
+        batch_size, seq_len, hidden_size = outputs.size()
 
-        outputs = []
+        # Apply mirror operator (expects [batch, seq_len, hidden_size])
+        mirrored = self.mirror_op(outputs)
+        outputs = outputs + 0.1 * mirrored  # Residual connection
+
+        # Apply curvature coupling (expects [batch, seq_len, hidden_size])
+        curved = self.curvature_layer(outputs)
+        outputs = outputs + 0.1 * curved  # Residual connection
+
+        # Apply guardian threshold element-wise
+        thresholded = self.guardian_activation(outputs)
+        outputs = thresholded
+
+        # Apply zeta regularization if enabled
         zeta_loss = 0.0
+        if self.use_zeta_reg:
+            _, zeta_loss = self.zeta_reg(outputs)
 
-        for t in range(seq_len):
-            x_t = x[:, t, :]  # [batch, input_size]
-
-            # Combine input and hidden state
-            combined = torch.cat([x_t, h], dim=-1)
-
-            # Standard LSTM gates
-            i = torch.sigmoid(self.input_gate(combined))
-            f = torch.sigmoid(self.forget_gate(combined))
-            g = torch.tanh(self.cell_gate(combined))
-            o = torch.sigmoid(self.output_gate(combined))
-
-            # Update cell state
-            c = f * c + i * g
-
-            # Apply CE curvature coupling to cell state
-            c = self.curvature_layer(c.unsqueeze(1)).squeeze(1)
-
-            # Apply mirror operator to hidden state
-            h_pre = o * torch.tanh(c)
-            h = self.mirror_op(h_pre.unsqueeze(1)).squeeze(1)
-
-            # Apply guardian threshold activation
-            h = self.guardian_activation(h)
-
-            # Apply zeta regularization if enabled
-            if self.use_zeta_reg:
-                h_expanded = h.unsqueeze(1)  # [batch, 1, hidden_size]
-                h_reg, reg_loss = self.zeta_reg(h_expanded)
-                h = h_reg.squeeze(1)
-                zeta_loss += reg_loss
-
-            outputs.append(h.unsqueeze(1))
-
-        outputs = torch.cat(outputs, dim=1)
-        final_zeta_loss = zeta_loss / seq_len if seq_len > 0 else 0.0
-
-        return outputs, (h, c), final_zeta_loss
+        return outputs, (h_n, c_n), zeta_loss

@@ -13,15 +13,28 @@ from typing import Dict, List, Any
 import numpy as np
 
 # Import benchmark modules
-from .scan import run_scan_baseline
-from .cogs import run_cogs_baseline
-from .pcfg import run_pcfg_baseline
-from .cfq import run_cfq_baseline
-from .rpm import run_rpm_baseline
-from .math_reasoning import run_math_baseline
-from .ce_scan import run_ce_scan_experiment, ablation_study_scan
-from .ce_cogs import run_ce_cogs_experiment, ablation_study_cogs
-from .ce_pcfg import run_ce_pcfg_experiment
+try:
+    # Try relative imports first
+    from .scan import run_scan_baseline
+    from .cogs import run_cogs_baseline
+    from .pcfg import run_pcfg_baseline
+    from .cfq import run_cfq_baseline
+    from .rpm import run_rpm_baseline
+    from .math_reasoning import run_math_baseline
+    from .ce_scan import run_ce_scan_experiment, ablation_study_scan
+    from .ce_cogs import run_ce_cogs_experiment, ablation_study_cogs
+    from .ce_pcfg import run_ce_pcfg_experiment
+except ImportError:
+    # Fallback to absolute imports
+    from scan import run_scan_baseline
+    from cogs import run_cogs_baseline
+    from pcfg import run_pcfg_baseline
+    from cfq import run_cfq_baseline
+    from rpm import run_rpm_baseline
+    from math_reasoning import run_math_baseline
+    from ce_scan import run_ce_scan_experiment, ablation_study_scan
+    from ce_cogs import run_ce_cogs_experiment, ablation_study_cogs
+    from ce_pcfg import run_ce_pcfg_experiment
 
 
 def compute_interpretability_metrics(model_results: Dict[str, Any]) -> Dict[str, float]:

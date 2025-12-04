@@ -21,6 +21,10 @@ from .ce_modules import (
     MirrorOperator, CurvatureCouplingLayer, GuardianThreshold,
     ZetaRegularization, CEAttention, CEEnhancedLSTM
 )
+try:
+    from .ce_timing import create_ce_timed_trainer
+except ImportError:
+    from ce_timing import create_ce_timed_trainer
 
 
 class CEEnhancedCOGSModel(nn.Module):
@@ -37,11 +41,12 @@ class CEEnhancedCOGSModel(nn.Module):
     def __init__(self, vocab_sentence: COGSVocab, vocab_lf: COGSVocab,
                  embed_dim: int = 128, hidden_dim: int = 256, num_layers: int = 2,
                  chi_feg: float = 0.638, kappa: float = 0.35,
-                 use_ce_attention: bool = True, use_zeta_reg: bool = True):
+                 use_ce_attention: bool = False, use_zeta_reg: bool = True):
         super().__init__()
 
         self.vocab_sentence = vocab_sentence
         self.vocab_lf = vocab_lf
+        self.hidden_dim = hidden_dim
         self.chi_feg = chi_feg
         self.kappa = kappa
         self.use_ce_attention = use_ce_attention
@@ -64,9 +69,10 @@ class CEEnhancedCOGSModel(nn.Module):
         # Decoder
         self.decoder_embed = nn.Embedding(len(vocab_lf), embed_dim)
 
-        # CE-enhanced decoder with attention
+        # CE-enhanced decoder (input size depends on attention usage)
+        decoder_input_size = embed_dim + (hidden_dim if use_ce_attention else 0)
         self.decoder_lstm = CEEnhancedLSTM(
-            embed_dim + hidden_dim, hidden_dim, chi_feg, kappa, use_zeta_reg  # +hidden_dim for attention
+            decoder_input_size, hidden_dim, chi_feg, kappa, use_zeta_reg
         )
 
         # Output projection with guardian threshold
@@ -122,12 +128,11 @@ class CEEnhancedCOGSModel(nn.Module):
             context = self.encoder_attention(
                 hidden.unsqueeze(1), encoder_outputs, encoder_outputs
             ).squeeze(1)
+            # Concatenate embedding and context
+            decoder_input = torch.cat([embed.squeeze(1), context], dim=-1).unsqueeze(1)
         else:
-            # Simple average pooling as fallback
-            context = encoder_outputs.mean(dim=1)
-
-        # Concatenate embedding and context
-        decoder_input = torch.cat([embed.squeeze(1), context], dim=-1).unsqueeze(1)
+            # No attention: just use embedding
+            decoder_input = embed
 
         # CE-enhanced LSTM decoding
         decoder_output, new_hidden, zeta_loss = self.decoder_lstm(decoder_input, (hidden, hidden))
@@ -151,6 +156,10 @@ class CEEnhancedCOGSModel(nn.Module):
 
         # Encode with CE components
         encoder_outputs, hidden, zeta_loss_enc = self.encode(sentence_ids)
+
+        # Reduce bidirectional hidden state for unidirectional decoder
+        # Take average of forward and backward directions
+        hidden = (hidden[:, :self.hidden_dim] + hidden[:, self.hidden_dim:]) / 2
 
         # Decode
         outputs = []
@@ -190,7 +199,7 @@ class CEEnhancedCOGSBenchmark(COGSBenchmark):
     def __init__(self, embed_dim: int = 128, hidden_dim: int = 256, num_layers: int = 2,
                  learning_rate: float = 1e-3, batch_size: int = 32,
                  chi_feg: float = 0.638, kappa: float = 0.35,
-                 use_ce_attention: bool = True, use_zeta_reg: bool = True,
+                 use_ce_attention: bool = False, use_zeta_reg: bool = True,
                  zeta_reg_weight: float = 0.1):
         super().__init__(embed_dim, hidden_dim, num_layers, learning_rate, batch_size)
 
@@ -242,34 +251,123 @@ class CEEnhancedCOGSBenchmark(COGSBenchmark):
 
         return avg_loss, avg_zeta_loss
 
+    def train_epoch_ce_timed(self, model: CEEnhancedCOGSModel, ce_timer,
+                           criterion: nn.CrossEntropyLoss, device: str = 'cpu',
+                           epoch: int = 0) -> Tuple[float, float]:
+        """Train for one epoch with CE timing acceleration."""
+        model.train()
+        total_loss = 0
+        total_zeta_loss = 0
+        steps_this_epoch = 0
+
+        for batch in self.train_loader:
+            sentence_ids = batch['sentence_ids'].to(device)
+            lf_ids = batch['lf_ids'].to(device)
+
+            # Forward pass with CE regularization
+            outputs, zeta_loss = model(sentence_ids, lf_ids, teacher_forcing_ratio=0.5)
+
+            # Standard cross-entropy loss
+            ce_loss = criterion(outputs.view(-1, len(self.vocab_lf)),
+                              lf_ids.view(-1))
+
+            # Combined loss with zeta regularization
+            total_batch_loss = ce_loss + self.zeta_reg_weight * zeta_loss
+
+            # CE timing step
+            timing_info = ce_timer.training_step(total_batch_loss, zeta_loss.item())
+
+            # Only count as a step if CE timing actually performed optimization
+            if timing_info['step_taken']:
+                steps_this_epoch += 1
+
+            total_loss += ce_loss.item()
+            total_zeta_loss += zeta_loss.item()
+
+            # CE early stopping check
+            if timing_info['should_stop']:
+                print(f"⚡ CE Early Stopping triggered mid-epoch (zeta awareness stabilized)")
+                break
+
+        avg_loss = total_loss / len(self.train_loader)
+        avg_zeta_loss = total_zeta_loss / len(self.train_loader)
+
+        return avg_loss, avg_zeta_loss
+
+    def evaluate(self, model: CEEnhancedCOGSModel, device: str = 'cpu') -> Dict[str, float]:
+        """Evaluate CE model on test set."""
+        model.eval()
+        correct = 0
+        total = 0
+
+        with torch.no_grad():
+            for batch in self.test_loader:
+                sentence_ids = batch['sentence_ids'].to(device)
+
+                # CE model returns (outputs, zeta_loss) tuple
+                outputs, _ = model(sentence_ids, teacher_forcing_ratio=0.0)
+
+                # Get predictions (exclude <sos> token)
+                predictions = outputs.argmax(dim=-1)[:, 1:]  # Skip <sos>
+
+                # Get targets (exclude <sos> token)
+                targets = batch['lf_ids'][:, 1:].to(device)
+
+                # Create mask for non-pad tokens
+                mask = targets != self.vocab_lf.pad_idx
+
+                correct += ((predictions == targets) & mask).sum().item()
+                total += mask.sum().item()
+
+        accuracy = correct / total if total > 0 else 0.0
+        return {'accuracy': accuracy, 'correct': correct, 'total': total}
+
     def train_model(self, model: CEEnhancedCOGSModel, num_epochs: int = 100,
                    device: str = 'cpu') -> Dict[str, List[float]]:
-        """Train CE-enhanced model and return training history."""
+        """Train CE-enhanced model with CE timing acceleration."""
         model = model.to(device)
         optimizer = optim.Adam(model.parameters(), lr=self.learning_rate)
         criterion = nn.CrossEntropyLoss(ignore_index=self.vocab_lf.pad_idx)
 
+        # Create CE timing accelerator
+        ce_timer = create_ce_timed_trainer(model, optimizer)
+
         train_losses = []
         zeta_losses = []
         dev_accuracies = []
+        timing_info_history = []
 
         for epoch in tqdm(range(num_epochs), desc="Training CE-COGS"):
-            # Train
-            train_loss, zeta_loss = self.train_epoch(model, optimizer, criterion, device)
+            # Train with CE timing awareness
+            train_loss, zeta_loss = self.train_epoch_ce_timed(
+                model, ce_timer, criterion, device, epoch
+            )
             train_losses.append(train_loss)
             zeta_losses.append(zeta_loss)
 
-            # Evaluate on dev set
-            if epoch % 10 == 0:
+            # Store timing information
+            timing_info_history.append(ce_timer.timing_stats.copy())
+
+            # Evaluate on dev set (more frequent with CE timing)
+            if epoch % 5 == 0:
                 dev_metrics = self.evaluate(model, 'dev', device)
                 dev_accuracies.append(dev_metrics['accuracy'])
+                current_lr = ce_timer.lr_scheduler.get_lr()
+                phase_awareness = ce_timer.awareness_optimizer.phase_awareness
                 print(f"Epoch {epoch}: CE Loss={train_loss:.4f}, "
-                      f"Zeta Loss={zeta_loss:.4f}, Dev Acc={dev_metrics['accuracy']:.4f}")
+                      f"Zeta Loss={zeta_loss:.4f}, Dev Acc={dev_metrics['accuracy']:.4f}, "
+                      f"LR={current_lr:.6f}, Awareness={phase_awareness:.3f}")
+
+            # CE timing early stopping
+            if ce_timer.early_stopper.early_stop:
+                print(f"🎯 CE Early Stopping at epoch {epoch} (zeta awareness stabilized)")
+                break
 
         return {
             'train_losses': train_losses,
             'zeta_losses': zeta_losses,
-            'dev_accuracies': dev_accuracies
+            'dev_accuracies': dev_accuracies,
+            'timing_stats': timing_info_history
         }
 
 

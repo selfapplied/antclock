@@ -117,33 +117,53 @@ class SCANDataLoader:
     def load_scan_data() -> Dict[str, List[SCANCommand]]:
         """Load the SCAN dataset with predefined train/test splits."""
 
-        # Try to load comprehensive dataset first
+        # Try to load real SCAN dataset first
         try:
-            import json
-            with open('benchmarks/comprehensive_scan_dataset.json', 'r') as f:
-                data = json.load(f)
+            train_commands = []
+            test_commands = []
 
-            train_commands = [SCANCommand(ex['command'], ex['actions']) for ex in data['train']]
-            test_commands = [SCANCommand(ex['command'], ex['actions']) for ex in data['test']]
+            # Load the main simple split
+            train_file = 'benchmarks/real_data/scan/simple_split/tasks_train_simple.txt'
+            test_file = 'benchmarks/real_data/scan/simple_split/tasks_test_simple.txt'
 
-            print(f"Loaded comprehensive SCAN dataset: {len(train_commands)} train, {len(test_commands)} test")
+            # Parse training data
+            with open(train_file, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith('IN: ') and ' OUT: ' in line:
+                        parts = line.split(' OUT: ')
+                        command = parts[0].replace('IN: ', '')
+                        actions = parts[1]
+                        train_commands.append(SCANCommand(command, actions))
+
+            # Parse test data
+            with open(test_file, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith('IN: ') and ' OUT: ' in line:
+                        parts = line.split(' OUT: ')
+                        command = parts[0].replace('IN: ', '')
+                        actions = parts[1]
+                        test_commands.append(SCANCommand(command, actions))
+
+            print(f"Loaded REAL SCAN dataset: {len(train_commands)} train, {len(test_commands)} test")
             return {'train': train_commands, 'test': test_commands}
 
         except FileNotFoundError:
-            # Try enhanced dataset
+            # Fallback to synthetic datasets
             try:
                 import json
-                with open('benchmarks/enhanced_scan_dataset.json', 'r') as f:
+                with open('benchmarks/comprehensive_scan_dataset.json', 'r') as f:
                     data = json.load(f)
 
                 train_commands = [SCANCommand(ex['command'], ex['actions']) for ex in data['train']]
                 test_commands = [SCANCommand(ex['command'], ex['actions']) for ex in data['test']]
 
-                print(f"Loaded enhanced SCAN dataset: {len(train_commands)} train, {len(test_commands)} test")
+                print(f"Loaded comprehensive SCAN dataset: {len(train_commands)} train, {len(test_commands)} test")
                 return {'train': train_commands, 'test': test_commands}
 
             except FileNotFoundError:
-                print("No enhanced dataset found, using original small dataset")
+                print("No datasets found, using original small dataset")
 
         except FileNotFoundError:
             # Fallback to original small dataset

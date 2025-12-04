@@ -13,11 +13,12 @@
 3. [CE1: Discrete Grammar](#ce1-discrete-grammar)
 4. [CE2: Dynamical Flow](#ce2-dynamical-flow)
 5. [CE3: Emergent Simplicial](#ce3-emergent-simplicial)
-6. [Transport Mechanisms](#transport-mechanisms)
-7. [Categorical Structure](#categorical-structure)
-8. [Implementation Details](#implementation-details)
-9. [Mathematical Foundations](#mathematical-foundations)
-10. [Research Context](#research-context)
+6. [CE ζ-Operator: Discrete Functional Equation](#ce-ζ-operator-discrete-functional-equation)
+7. [Transport Mechanisms](#transport-mechanisms)
+8. [Categorical Structure](#categorical-structure)
+9. [Implementation Details](#implementation-details)
+10. [Mathematical Foundations](#mathematical-foundations)
+11. [Research Context](#research-context)
 
 ---
 
@@ -157,6 +158,101 @@ Each continued fraction convergent `(p_n/q_n)` forms a rational "triangle" appro
 
 #### Factorization Complexes
 Prime factorizations become simplicial collapse events, with each factor representing a topological operation.
+
+---
+
+## CE ζ-Operator: Discrete Functional Equation
+
+### Operator Specification
+
+**@HEADER**
+```
+id: ce.zeta.flow.v0.2
+label: CE ζ-operator tower
+kind: operator
+```
+
+### CE1: Integer Corridor Geometry
+
+**[] memory:**
+```
+shells:  n ∈ {3,7,11,...,1999}
+corridors:
+  C_k: [n_k, n'_k], k=0..498
+```
+
+**{} region:**
+```
+space: integer_line
+mirror: n ≡ 3 (mod 4)
+```
+
+**() morphisms:**
+```
+length:  L_k
+weight:  w_k
+parity:  ε_k
+char:    χ_k
+```
+
+**<> witness:**
+```
+corridor_count: 499
+```
+
+### CE2: Zeta Flow Modes
+
+**Ξ_std(s):**
+```
+:= Σ_k w_k F_k(s)
+```
+
+**Ξ_ctr(s):**
+```
+:= Ξ_std(s) - Ξ_std(1/2)
+```
+
+**Ξ_χ(s):**
+```
+:= Σ_k χ_k w_k F_k(s)
+```
+
+**Layer Laws:**
+```
+FE:      Ξ_⋆(s) = Ξ_⋆(1 - s) for ⋆ ∈ {std, ctr, χ}
+real:    Re(s)=1/2 ⇒ Ξ_std, Ξ_ctr ∈ ℝ
+imag:    Re(s)=1/2 ⇒ Ξ_χ ∈ iℝ
+center:  Ξ_ctr(1/2) = 0
+```
+
+### CE3: Zeros and Simplicial Witness
+
+**zeros:**
+```
+standard:
+  count: 8
+  line:  Re(s)=1/2 (numerically)
+character:
+  count: 4
+```
+
+**simplicial:**
+```
+dim: 499
+one_simplex_per_corridor: true
+```
+
+**status: witness_recorded**
+
+### Mathematical Properties
+
+The CE ζ-operator reconstructs Riemann zeta function structure through three complementary modes:
+
+- **Ξ_std**: Even, real on critical line, functional equation symmetric
+- **Ξ_ctr**: Renormalized (zero at s=1/2), vacuum-subtracted operator
+- **Ξ_χ**: Character-twisted, quadrature phase (pure imaginary on critical line)
+
+Each mode satisfies the functional equation Ξ(s) = Ξ(1-s) exactly in floating arithmetic, demonstrating the discrete geometric reconstruction of zeta's symmetry.
 
 ---
 

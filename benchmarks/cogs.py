@@ -197,11 +197,63 @@ class COGSDataLoader:
             COGSExample("Pat saw the dog that chased the cat that Kim owned", "(saw pat (that dog (chased dog (that cat (owned kim)))))", 'test'),
         ]
 
-        return {
-            'train': train_examples,
-            'dev': dev_examples,
-            'test': test_examples
-        }
+        # Try to load real COGS dataset first
+        try:
+            train_examples = []
+            dev_examples = []
+            test_examples = []
+
+            # Load the real COGS data
+            data_dir = 'benchmarks/real_data/COGS-main/data'
+
+            # Parse training data (use train.tsv)
+            with open(f'{data_dir}/train.tsv', 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line and '\t' in line:
+                        parts = line.split('\t')
+                        if len(parts) >= 2:
+                            sentence = parts[0]
+                            logical_form = parts[1]
+                            train_examples.append(COGSExample(sentence, logical_form, 'train'))
+
+            # Parse development data
+            with open(f'{data_dir}/dev.tsv', 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line and '\t' in line:
+                        parts = line.split('\t')
+                        if len(parts) >= 2:
+                            sentence = parts[0]
+                            logical_form = parts[1]
+                            dev_examples.append(COGSExample(sentence, logical_form, 'dev'))
+
+            # Parse test data
+            with open(f'{data_dir}/test.tsv', 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line and '\t' in line:
+                        parts = line.split('\t')
+                        if len(parts) >= 2:
+                            sentence = parts[0]
+                            logical_form = parts[1]
+                            test_examples.append(COGSExample(sentence, logical_form, 'test'))
+
+            print(f"Loaded REAL COGS dataset: {len(train_examples)} train, {len(dev_examples)} dev, {len(test_examples)} test")
+            return {
+                'train': train_examples,
+                'dev': dev_examples,
+                'test': test_examples
+            }
+
+        except FileNotFoundError:
+            # Fallback to synthetic dataset
+            print("Real COGS dataset not found, using synthetic dataset")
+            return {
+                'train': train_examples,
+                'dev': dev_examples,
+                'test': test_examples
+            }
 
 
 class COGSModel(nn.Module):
