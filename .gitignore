@@ -107,6 +107,7 @@ dmypy.json
 
 # Plots and outputs
 *.png
+!antclock.png
 *.jpg
 *.jpeg
 *.pdf

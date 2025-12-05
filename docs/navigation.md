@@ -46,6 +46,14 @@ Complete guide to AntClock's coherence engine applications:
 - **Research Context**: Connections between combinatorial curvature and real-world applications
 - **Implementation Status**: Current capabilities and future extension opportunities
 
+### [citation.md](citation.md) - Citation Guide
+How to cite AntClock in research:
+
+- **BibTeX Entries**: Ready-to-use citation formats for the framework and components
+- **Component-Specific Citations**: CE1, CE2, CE3 individual citations
+- **Attribution Requirements**: CC BY-SA 4.0 license requirements
+- **Acknowledgement**: Framework philosophical foundations
+
 ### Key Concepts
 - **Unified Agent Interface**: All components use the same execution model
 - **Conservative Permissions**: Only tested, working scripts become executable
