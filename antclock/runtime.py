@@ -54,6 +54,21 @@ class AntRuntime:
         self.A: int = 0
         self.log: List[Dict[str, Any]] = []
 
+    @staticmethod
+    def _compute_digit_shell(x: float) -> int:
+        """
+        Compute digit shell index for a position.
+
+        Uses the same logic as CurvatureClockWalker.clock_rate to ensure consistency.
+
+        Args:
+            x: Position value
+
+        Returns:
+            Digit shell index (number of digits in integer part)
+        """
+        return len(str(int(x))) if x > 0 else 1
+
     def tick(
         self,
         dt: float = 0.01,
@@ -88,8 +103,8 @@ class AntRuntime:
         a_increment = self.walker.universal_clock_increment(event_type, layer)
         self.A += a_increment
 
-        # Compute current digit shell and clock rate
-        digit_shell = len(str(int(self.x))) if self.x > 0 else 1
+        # Compute current digit shell using the same logic as CurvatureClockWalker.clock_rate
+        digit_shell = self._compute_digit_shell(self.x)
         clock_rate = self.walker.clock_rate(self.x)
 
         # Build log entry
@@ -181,8 +196,8 @@ def _make_layer_decorator(
                 if metadata_fn is not None:
                     try:
                         extra_metadata = metadata_fn(result, args, kwargs)
-                    except Exception:
-                        # Fail closed: if metadata_fn raises, don't add metadata
+                    except (TypeError, ValueError, AttributeError, KeyError):
+                        # Fail closed: if metadata_fn raises expected errors, don't add metadata
                         extra_metadata = None
 
                 # Tick the runtime
