@@ -115,6 +115,9 @@ dmypy.json
 
 # Dataset files
 .data/
+benchmarks/real_data/
+*.pth
+*.zip
 
 # Pip cache (for local development)
 .pip_cache/
