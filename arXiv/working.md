@@ -112,6 +112,16 @@ Work on emergent languages in multi-agent systems [7] demonstrates that composit
 
 The CE Tower generalizes this insight: CE3 treats every compositional discrepancy as communicative pressure, continuously evolving grammatical structure rather than converging to fixed conventions.
 
+## 2.7 Connections to Dynamical Systems Theory
+
+The CE Tower's mathematical substrate connects to established traditions in nonlinear dynamics:
+
+**Symbolic Dynamics**: The memory-history interaction encoded by antclock iterates exhibits structural parallels to kneading sequences and shift spaces [13, 14]: both systems encode trajectory information through symbolic sequences with well-defined topological properties. The bracket topology of CE1 provides a natural symbolic encoding where compositional depth corresponds to shift-space cylinder sets.
+
+**Renormalization and Universality**: The ratio-stability observations (χ_FEG ≈ 0.638, threshold κ ≈ 0.35) echo Feigenbaum's universality in period-doubling cascades [11, 12]. The CE Tower's phase transitions at discrete scales suggest connections to renormalization group theory [15].
+
+**State-Space Models**: The antclock mechanism shares structural kinship with selective state-space models [16], reservoir computing, and delay-differential equations. These systems all implement memory-dependent dynamics, though the CE Tower's closed-loop grammar evolution distinguishes it from fixed-architecture approaches.
+
 ---
 
 # 3. CE Tower Architecture
@@ -227,8 +237,6 @@ This creates natural hierarchical compression: deeper brackets are exponentially
 2. Re-combinability via bracket operations
 
 3. Simple semantics via morphism composition
-
-*Proof sketch*: Each operator provides orthogonal compositional capacity (memory/time, domain/space, transform/function, witness/invariant). Their closure under composition guarantees expressivity. Bracket syntax ensures discrete symbolic re-combination. Morphism algebra provides compositional semantics. □
 
 *Proof sketch*: Each operator provides orthogonal compositional capacity (memory/time, domain/space, transform/function, witness/invariant). Their closure under composition guarantees expressivity. Bracket syntax ensures discrete symbolic re-combination. Morphism algebra provides compositional semantics. □
 
@@ -372,8 +380,6 @@ This addresses a blind spot in current architectures: temporal compositionality 
 
 *Proof*: Follows directly from Theorem 3.2 by noting that phase coherence implies preservation of the witness fingerprints (Section 3.1.2), which encode CE1 invariants. □
 
-*Proof*: Follows directly from Theorem 3.2 by noting that phase coherence implies preservation of the witness fingerprints (Section 3.1.2), which encode CE1 invariants. □
-
 **Connection to Section 2**: The guardian threshold κ = 0.35 is not arbitrary—it directly addresses Valvoda et al.'s learnability limit (Section 2.3): ~400 examples per transition. Below this threshold, compositional operations lack sufficient training coverage and would degrade coherence. The Nash equilibrium attention (Proposition 3.2.2) provides theoretical grounding for the sparse compositionality pattern Sathe et al. [3] observed empirically (Section 2.4): language use gravitates toward safe compositional regions above the Nash threshold, naturally producing sparse but structured coverage.
 
 ## 3.3 CE3: Emergent Simplicial Category
@@ -471,8 +477,6 @@ The complete CE123 loop at each antclock tick A:
 This cycle never terminates—the system continuously evolves its own compositional structure.
 
 **Theorem 3.3** (Grammar Evolution): Under CE3 error-lift dynamics, the compositional grammar G_t evolves such that expressivity E(G_t) is monotonically non-decreasing in antclock time A.
-
-*Proof sketch*: Each error-lift operation adds structural capacity without removing existing operations (CE1 closure). Therefore expressivity can only increase or remain constant. Practical systems exhibit strict increase except at attractor fixed points. □
 
 *Proof sketch*: Each error-lift operation adds structural capacity without removing existing operations (CE1 closure). Therefore expressivity can only increase or remain constant. Practical systems exhibit strict increase except at attractor fixed points. □
 
@@ -742,17 +746,17 @@ The CE Tower implements Volte dynamics:
 
 This connection reveals why the CE Tower achieves systematic compositional generalization: it implements coherence-preserving reorientation at the architectural level. Rather than treating compositional discrepancies as errors to minimize, the system treats them as triggers for Volte turns-expanding grammatical structure while preserving compositional invariants.
 
-## 6. Theoretical Analysis
+# 6. Theoretical Analysis
 
 ## 6.1 Completeness Properties
 
 **Question**: Can the CE Tower express any compositional function?
 
-**Conjecture 6.4** (Compositional Completeness): For any compositional function f: X → Y satisfying Elmoznino's requirements [4], there exists a CE Tower configuration (operators, guardians, thresholds) that implements f.
+**Conjecture 6.1** (Compositional Completeness): For any compositional function f: X → Y satisfying Elmoznino's requirements [4], there exists a CE Tower configuration (operators, guardians, thresholds) that implements f.
 
 **Partial result**: We have proven completeness for regular grammars and context-free grammars through explicit construction. Extension to context-sensitive grammars is ongoing work.
 
-**Theorem 6.5** (Regular Grammar Completeness): The CE Tower can implement any regular grammar.
+**Theorem 6.2** (Regular Grammar Completeness): The CE Tower can implement any regular grammar.
 
 *Proof*: Regular grammars correspond to finite-state automata. CE1's bracket operations implement state transitions. CE2's ℛ operator implements state memory. CE3 is not required for regular languages. □
 
@@ -775,14 +779,6 @@ $$sum_i d_i(t+1) = sum_i d_i(t) + Delta d_{mathcal{E}}$$
 where Δd_𝔈 is depth added by CE3 error-lift.
 
 *Proof*: CE1 and CE2 operations preserve bracket structure. Only CE3 adds or removes brackets. Depth changes are explicitly tracked in witness fingerprints. □
-
-**Theorem 6.4** (Phase Coherence Damping): For |E| < κ, phase deviation decays exponentially:
-
-$$|theta(t+n) - theta(t)| leq |theta(1) - theta(0)| cdot e^{-lambda n}$$
-
-where λ > 0 is the phaselock damping rate.
-
-*Proof*: ℛ operator implements attractive dynamics toward mirror shells. Below threshold κ, guardian gradient creates restoring force proportional to phase deviation. Standard stability analysis yields exponential relaxation. □
 
 ## 6.3 Volte Theorems
 
@@ -1004,7 +1000,24 @@ Beyond empirical results, the CE Tower provides:
 
 **Category theory formalization**: Connections to topos theory and HoTT are preliminary. Full formalization requires additional work.
 
-## 8.4 Broader Impact
+## 8.4 Foundational Assumptions
+
+The CE Tower framework rests on several foundational assumptions that should be made explicit:
+
+**Assumption 1** (Deterministic Dynamics): The CE Tower operates deterministically. All state transitions are fully determined by current state and input; no stochastic elements enter the core dynamics. Randomness, if present, is confined to initialization or external perturbation.
+
+**Assumption 2** (Finite Memory Buffer): The memory operator []_a maintains a finite but extensible memory buffer. Older states may decay in influence but are not deleted. Memory growth is logarithmic in antclock time under typical operations.
+
+**Assumption 3** (Observable Stability): Curvature κ and coherence C are assumed stable under:
+- Scaling transformations of the state space
+- Normalization of intermediate computations
+- Perturbations of initial conditions within basin of attraction
+
+**Assumption 4** (Universality Hypothesis): Antclock trajectories exhibit behavior consistent with known universal constants (Feigenbaum δ ≈ 4.669, χ_FEG ≈ 0.638). This is currently an empirical observation, not a proven theorem. We hypothesize but do not claim that these patterns reflect universal dynamical behavior.
+
+These assumptions bound the framework's applicability and highlight areas requiring further theoretical development.
+
+## 8.5 Broader Impact
 
 **AI Safety**: Interpretable compositional structure enables verification of system behavior. Computable invariants facilitate monitoring and auditing.
 
@@ -1012,9 +1025,9 @@ Beyond empirical results, the CE Tower provides:
 
 **Transfer Learning**: CE Tower's grammar evolution provides natural mechanism for adapting compositional knowledge across domains.
 
-## 8.5 Future Directions
+## 8.6 Future Directions
 
-### 8.5.1 Quantum CE123
+### 8.6.1 Quantum CE123
 
 **Question**: How does the CE Tower behave in quantum superposition?
 
@@ -1026,13 +1039,13 @@ The ℏ invariant suggests natural connections to quantum mechanics. Preliminary
 
 - CE3 evolution might relate to measurement and collapse
 
-### 8.5.2 Multi-Agent Compositional Systems
+### 8.6.2 Multi-Agent Compositional Systems
 
 **Question**: How do multiple CE Towers interact?
 
 The witness operator <>g provides a natural communication mechanism through 4D fingerprints. Guardian coupling β could extend to multi-agent coordination.
 
-### 8.5.3 Large-Scale Language Models
+### 8.6.3 Large-Scale Language Models
 
 **Question**: Can CE Tower principles enhance transformer architectures?
 
@@ -1044,7 +1057,7 @@ The CE Tower's integration constants and guardian dynamics suggest natural integ
 
 - Enable runtime grammar evolution through meta-learning
 
-### 8.5.4 Formal Verification
+### 8.6.4 Formal Verification
 
 **Question**: Can we prove compositional correctness?
 
@@ -1103,6 +1116,18 @@ The field consensus [1] identified compositional learning as an unsolved challen
 [9] Hao, Y., et al. (2022). Compositional Attention Networks for Machine Reasoning. *ICLR 2022*.
 
 [10] Kim, Y., et al. (2019). Unsupervised Recurrent Neural Network Grammars. *NAACL 2019*.
+
+[11] Feigenbaum, M. J. (1978). Quantitative universality for a class of nonlinear transformations. *Journal of Statistical Physics*, 19(1), 25-52.
+
+[12] Feigenbaum, M. J. (1979). The universal metric properties of nonlinear transformations. *Journal of Statistical Physics*, 21(6), 669-706.
+
+[13] Devaney, R. L. (2003). *An Introduction to Chaotic Dynamical Systems* (2nd ed.). Westview Press.
+
+[14] Lind, D., & Marcus, B. (1995). *An Introduction to Symbolic Dynamics and Coding*. Cambridge University Press.
+
+[15] Collet, P., & Eckmann, J.-P. (1980). *Iterated Maps on the Interval as Dynamical Systems*. Birkhäuser.
+
+[16] Gu, A., & Dao, T. (2023). Mamba: Linear-Time Sequence Modeling with Selective State Spaces. *arXiv:2312.00752*.
 
 ---
 
@@ -1288,7 +1313,7 @@ Category laws guarantee simple compositional semantics. ✓
 
 All three requirements satisfied. □
 
-## Proof of Theorem 6.6 (Bracket Depth Conservation)
+## Proof of Theorem 6.4 (Bracket Depth Conservation)
 
 **Statement**: Total bracket depth conserved modulo error-lift: Σᵢ dᵢ(t+1) = Σᵢ dᵢ(t) + Δd_𝔈
 
