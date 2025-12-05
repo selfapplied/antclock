@@ -1,4 +1,3 @@
-#!run.sh
 """
 Type system demonstration for AntClock
 Shows how the type system is leveraged throughout the codebase.

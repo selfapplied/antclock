@@ -138,7 +138,7 @@ is_python_file() {
 
 has_main_block() {
     local file="$1"
-    grep -q 'if __name__ == "__main__"' "$file" 2>/dev/null
+    grep -q "if __name__ == ['\"']__main__['\"]" "$file" 2>/dev/null
 }
 
 is_foreign_identity() {
@@ -168,9 +168,15 @@ execute_script() {
     fi
 
     print_info "Running as script: $script"
+
+    # Always set PYTHONPATH to include project root for consistent imports
+    export PYTHONPATH="$(pwd):$PYTHONPATH"
+
     EXEC_CMD="python3 $script"
     $EXEC_CMD "$@"
-    return $?
+    local exit_code=$?
+    unset PYTHONPATH 2>/dev/null || true  # Clean up
+    return $exit_code
 }
 
 # Handle script execution with identity recognition
@@ -223,6 +229,7 @@ $marker
         local exit_code=$?
         if [ $exit_code -eq 0 ]; then
             print_info "Proto-Self runs successfully as-is"
+            return 0
         else
             print_info "Proto-Self failed as-is, trying with run.sh scaffolding..."
             # Try with full environment setup
@@ -233,12 +240,14 @@ $marker
                 print_info "Proto-Self succeeds with scaffolding - upgrading to Direct Self"
                 # Upgrade to Direct Self
                 sed -i '' '1i\
-#!/run.sh
+#!run.sh
 ' "$script"
                 chmod +x "$script"
                 print_status "Upgraded $script to Direct Self identity"
+                return 0
             else
                 print_info "Proto-Self fails even with scaffolding - not claiming"
+                return $scaffold_exit
             fi
         fi
     elif is_foreign_identity "$script"; then
@@ -248,7 +257,39 @@ $marker
         first_line="$(head -1 "$script")"
         local interpreter="${first_line#\#\!}"
         print_info "Executing with: $interpreter $script"
+
+        # Set PYTHONPATH for consistent imports
+        export PYTHONPATH="$(pwd):$PYTHONPATH"
         $interpreter "$script" "$@"
+        local exit_code=$?
+        unset PYTHONPATH 2>/dev/null || true  # Clean up
+
+        if [ $exit_code -eq 0 ]; then
+            return 0
+        fi
+
+        # Script failed - check if interpreter exists
+        if command -v "$interpreter" >/dev/null 2>&1; then
+            print_warning "Script failed with shebang interpreter, trying direct execution..."
+            $interpreter "$script" "$@"
+            exit_code=$?
+            if [ $exit_code -eq 0 ]; then
+                print_info "Direct execution with $interpreter succeeded"
+                return 0
+            fi
+        else
+            print_warning "Interpreter '$interpreter' not found"
+        fi
+
+        # Still failed - try replacing with run.sh and running again
+        print_info "Attempting fallback to run.sh interpreter..."
+        if [[ "$first_line" != "#!run.sh" ]]; then
+            sed -i '' "s|^$first_line|#!run.sh|" "$script"
+            print_info "Replaced shebang with '#!run.sh', attempting execution..."
+        else
+            print_info "Script already has '#!run.sh' shebang, retrying execution..."
+        fi
+        handle_script_execution "$script" "$@"
         return $?
     else
         print_info "Unclaimed file detected"
@@ -261,7 +302,7 @@ $marker
             if [ $test_exit -eq 0 ]; then
                 print_info "Unclaimed file succeeds with scaffolding - claiming as Direct Self"
                 sed -i '' '1i\
-#!/run.sh
+#!run.sh
 ' "$script"
                 chmod +x "$script"
                 print_status "Claimed $script as Direct Self"

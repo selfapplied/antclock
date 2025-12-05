@@ -1,4 +1,3 @@
-#!run.sh
 """
 AntClock: Complete CE1 Framework Demonstration
 Consolidated demo covering all CE1 framework components.

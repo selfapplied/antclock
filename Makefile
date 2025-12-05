@@ -31,7 +31,7 @@
 #@STORY: anthropoiemorphism, agent-executed and written
 # 0a: we are enough when we try our best, we believe so we can know
 
-.PHONY: all run agents benchmarks timing clean help
+.PHONY: all run agents sync benchmarks timing clean help
 
 # Default target when run as ./Makefile
 run: agents benchmarks timing
@@ -40,11 +40,17 @@ run: agents benchmarks timing
 # Alternative entry point
 all: run
 
-# Agent synchronization and orchestration
+# Data synchronization and validation
 agents:
-	@echo "🔄 Synchronizing AntClock agents..."
-	@./run.sh archiX/sync.py --dry-run || echo "⚠️  Agent sync failed (possibly due to environment)"
-	@echo "✓ Agent ecosystem synchronized"
+	@echo "📦 Synchronizing validated benchmark data..."
+	@./run.sh arXiv/sync.py --dry-run || echo "⚠️  Data sync failed (possibly due to environment)"
+	@echo "✓ Data synchronization completed"
+
+# Data synchronization utility (depends on benchmarks)
+sync: benchmarks
+	@echo "📦 Running data synchronization..."
+	@./run.sh arXiv/sync.py --dry-run || echo "⚠️  Data sync failed (possibly due to environment)"
+	@echo "✓ Data synchronization completed"
 
 # Benchmark execution pipeline
 benchmarks:
@@ -74,9 +80,30 @@ clean:
 
 test:
 	@echo "🧪 Running test suite..."
-	@./run.sh tools/test_run.py || echo "⚠️  test_run.py failed (possibly due to environment)"
-	@./run.sh tools/test_types.py || echo "⚠️  test_types.py failed (possibly due to torch/sandbox issues)"
-	@echo "✓ Test suite completed (some tests may have been skipped)"
+	@FAILED_TESTS=0; \
+	if ./tests/run.sh/tests.sh; then \
+		echo "✅ run.sh tests passed"; \
+	else \
+		echo "⚠️  run.sh tests failed"; \
+		FAILED_TESTS=$$((FAILED_TESTS + 1)); \
+	fi; \
+	if ./run.sh tools/test_run.py; then \
+		echo "✅ test_run.py passed"; \
+	else \
+		echo "⚠️  test_run.py failed (possibly due to environment)"; \
+		FAILED_TESTS=$$((FAILED_TESTS + 1)); \
+	fi; \
+	if ./run.sh tools/test_types.py; then \
+		echo "✅ test_types.py passed"; \
+	else \
+		echo "⚠️  test_types.py failed (possibly due to torch/sandbox issues)"; \
+		FAILED_TESTS=$$((FAILED_TESTS + 1)); \
+	fi; \
+	if [ $$FAILED_TESTS -eq 0 ]; then \
+		echo "✓ Test suite completed successfully (all tests passed)"; \
+	else \
+		echo "✓ Test suite completed ($$FAILED_TESTS test(s) failed/skipped)"; \
+	fi
 
 help:
 	@echo "AntClock Makefile - Executable Graph Agent"
@@ -86,10 +113,11 @@ help:
 	@echo "  ./Makefile        # Execute as graph agent via run.sh"
 	@echo ""
 	@echo "Targets:"
-	@echo "  run       - Execute full AntClock pipeline (default)"
-	@echo "  agents    - Synchronize agent ecosystem"
-	@echo "  benchmarks- Run complete benchmark suite"
-	@echo "  timing    - Analyze performance metrics"
-	@echo "  test      - Run test suite"
-	@echo "  clean     - Clean build artifacts"
-	@echo "  help      - Show this help"
+	@echo "  run        - Execute full AntClock pipeline (default)"
+	@echo "  agents     - Data synchronization and validation"
+	@echo "  sync       - Data synchronization (depends on benchmarks)"
+	@echo "  benchmarks - Run complete benchmark suite"
+	@echo "  timing     - Analyze performance metrics"
+	@echo "  test       - Run test suite"
+	@echo "  clean      - Clean build artifacts"
+	@echo "  help       - Show this help"

@@ -6,7 +6,9 @@ for publication and archiving. Only syncs datasets that have been verified
 to meet CE framework standards.
 
 Usage:
-    python archiX/sync.py [--dry-run] [--force] [--dataset DATASET_NAME]
+    python3 arXiv/sync.py [--dry-run] [--force] [--dataset DATASET_NAME]
+    make agents            # Data synchronization via Makefile
+    make sync              # Data synchronization with benchmark dependency
 
 Options:
     --dry-run    Show what would be synced without actually copying
@@ -219,7 +221,7 @@ class DataSyncManager:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Sync validated benchmark data to archiX/data/")
+    parser = argparse.ArgumentParser(description="Sync validated benchmark data to arXiv/data/")
     parser.add_argument('--dry-run', action='store_true', help='Show what would be synced without copying')
     parser.add_argument('--force', action='store_true', help='Skip validation prompts')
     parser.add_argument('--dataset', help='Sync only specific dataset (scan, cogs, cfq, pcfg, rpm, math)')
