@@ -230,8 +230,6 @@ This creates natural hierarchical compression: deeper brackets are exponentially
 
 *Proof sketch*: Each operator provides orthogonal compositional capacity (memory/time, domain/space, transform/function, witness/invariant). Their closure under composition guarantees expressivity. Bracket syntax ensures discrete symbolic re-combination. Morphism algebra provides compositional semantics. □
 
-*Proof sketch*: Each operator provides orthogonal compositional capacity (memory/time, domain/space, transform/function, witness/invariant). Their closure under composition guarantees expressivity. Bracket syntax ensures discrete symbolic re-combination. Morphism algebra provides compositional semantics. □
-
 **Connection to Section 2**: Theorem 3.1 directly satisfies Elmoznino et al.'s framework (Section 2.1), providing the formal foundation that existing neural architectures lack. The ultrametric topology (Lemma 3.1.1) makes explicit the geometric signature Lee et al. [5] observed empirically (Section 2.2): hierarchical compression as a primitive architectural feature rather than an emergent training phenomenon.
 
 ## 3.2 CE2: Dynamical Flow Category
@@ -372,8 +370,6 @@ This addresses a blind spot in current architectures: temporal compositionality 
 
 *Proof*: Follows directly from Theorem 3.2 by noting that phase coherence implies preservation of the witness fingerprints (Section 3.1.2), which encode CE1 invariants. □
 
-*Proof*: Follows directly from Theorem 3.2 by noting that phase coherence implies preservation of the witness fingerprints (Section 3.1.2), which encode CE1 invariants. □
-
 **Connection to Section 2**: The guardian threshold κ = 0.35 is not arbitrary—it directly addresses Valvoda et al.'s learnability limit (Section 2.3): ~400 examples per transition. Below this threshold, compositional operations lack sufficient training coverage and would degrade coherence. The Nash equilibrium attention (Proposition 3.2.2) provides theoretical grounding for the sparse compositionality pattern Sathe et al. [3] observed empirically (Section 2.4): language use gravitates toward safe compositional regions above the Nash threshold, naturally producing sparse but structured coverage.
 
 ## 3.3 CE3: Emergent Simplicial Category
@@ -471,8 +467,6 @@ The complete CE123 loop at each antclock tick A:
 This cycle never terminates—the system continuously evolves its own compositional structure.
 
 **Theorem 3.3** (Grammar Evolution): Under CE3 error-lift dynamics, the compositional grammar G_t evolves such that expressivity E(G_t) is monotonically non-decreasing in antclock time A.
-
-*Proof sketch*: Each error-lift operation adds structural capacity without removing existing operations (CE1 closure). Therefore expressivity can only increase or remain constant. Practical systems exhibit strict increase except at attractor fixed points. □
 
 *Proof sketch*: Each error-lift operation adds structural capacity without removing existing operations (CE1 closure). Therefore expressivity can only increase or remain constant. Practical systems exhibit strict increase except at attractor fixed points. □
 
@@ -742,17 +736,17 @@ The CE Tower implements Volte dynamics:
 
 This connection reveals why the CE Tower achieves systematic compositional generalization: it implements coherence-preserving reorientation at the architectural level. Rather than treating compositional discrepancies as errors to minimize, the system treats them as triggers for Volte turns-expanding grammatical structure while preserving compositional invariants.
 
-## 6. Theoretical Analysis
+# 6. Theoretical Analysis
 
 ## 6.1 Completeness Properties
 
 **Question**: Can the CE Tower express any compositional function?
 
-**Conjecture 6.4** (Compositional Completeness): For any compositional function f: X → Y satisfying Elmoznino's requirements [4], there exists a CE Tower configuration (operators, guardians, thresholds) that implements f.
+**Conjecture 6.1** (Compositional Completeness): For any compositional function f: X → Y satisfying Elmoznino's requirements [4], there exists a CE Tower configuration (operators, guardians, thresholds) that implements f.
 
 **Partial result**: We have proven completeness for regular grammars and context-free grammars through explicit construction. Extension to context-sensitive grammars is ongoing work.
 
-**Theorem 6.5** (Regular Grammar Completeness): The CE Tower can implement any regular grammar.
+**Theorem 6.2** (Regular Grammar Completeness): The CE Tower can implement any regular grammar.
 
 *Proof*: Regular grammars correspond to finite-state automata. CE1's bracket operations implement state transitions. CE2's ℛ operator implements state memory. CE3 is not required for regular languages. □
 
@@ -775,14 +769,6 @@ $$sum_i d_i(t+1) = sum_i d_i(t) + Delta d_{mathcal{E}}$$
 where Δd_𝔈 is depth added by CE3 error-lift.
 
 *Proof*: CE1 and CE2 operations preserve bracket structure. Only CE3 adds or removes brackets. Depth changes are explicitly tracked in witness fingerprints. □
-
-**Theorem 6.4** (Phase Coherence Damping): For |E| < κ, phase deviation decays exponentially:
-
-$$|theta(t+n) - theta(t)| leq |theta(1) - theta(0)| cdot e^{-lambda n}$$
-
-where λ > 0 is the phaselock damping rate.
-
-*Proof*: ℛ operator implements attractive dynamics toward mirror shells. Below threshold κ, guardian gradient creates restoring force proportional to phase deviation. Standard stability analysis yields exponential relaxation. □
 
 ## 6.3 Volte Theorems
 
@@ -1288,7 +1274,7 @@ Category laws guarantee simple compositional semantics. ✓
 
 All three requirements satisfied. □
 
-## Proof of Theorem 6.6 (Bracket Depth Conservation)
+## Proof of Theorem 6.4 (Bracket Depth Conservation)
 
 **Statement**: Total bracket depth conserved modulo error-lift: Σᵢ dᵢ(t+1) = Σᵢ dᵢ(t) + Δd_𝔈
 
