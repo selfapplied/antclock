@@ -1,0 +1,66 @@
+name: CUDA Benchmarks
+
+on:
+  workflow_dispatch:
+    inputs:
+      epochs:
+        description: 'Number of epochs for benchmarks'
+        required: false
+        default: '10'
+        type: string
+  push:
+    branches:
+      - main
+    paths:
+      - 'benchmarks/**'
+      - 'antclock/**'
+      - '.github/workflows/cuda-benchmarks.yml'
+
+jobs:
+  cuda-benchmark:
+    # GitHub-hosted GPU runner with NVIDIA T4 GPU (requires GitHub Team or Enterprise plan)
+    # Falls back to ubuntu-latest if GPU runner is not available
+    runs-on: gpu-t4-4-core
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Check GPU availability
+        run: |
+          echo "🔍 Checking GPU availability..."
+          nvidia-smi || echo "⚠️ nvidia-smi not available"
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install CUDA dependencies
+        run: |
+          # Install PyTorch with CUDA support
+          pip install --upgrade pip
+          pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+      
+      - name: Install project dependencies
+        run: |
+          pip install numpy scipy matplotlib transformers datasets scikit-learn wandb tqdm
+      
+      - name: Verify CUDA availability
+        run: |
+          python -c "import torch; print(f'CUDA available: {torch.cuda.is_available()}'); print(f'CUDA device: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else \"N/A\"}')"
+      
+      - name: Run CE Synthetic Benchmarks
+        run: |
+          export PYTHONPATH="${GITHUB_WORKSPACE}:${PYTHONPATH}"
+          python benchmarks/benchmark.py
+      
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: |
+            .out/
+            real_benchmark_results.json
+            section6_empirical_results.json
+          if-no-files-found: warn
