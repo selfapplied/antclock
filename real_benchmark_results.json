@@ -1,0 +1,24 @@
+{
+  "timestamp": "2025-12-04T19:03:50.296302",
+  "datasets": "real",
+  "results": {
+    "scan": {
+      "error": "[Errno 1] Operation not permitted: '/Users/joelstover/antclock/.venv/lib/python3.14/site-packages/torch/_environment.py'"
+    },
+    "cogs": {
+      "error": "[Errno 1] Operation not permitted: '/Users/joelstover/antclock/.venv/lib/python3.14/site-packages/torch/_environment.py'"
+    },
+    "cfq": {
+      "error": "[Errno 1] Operation not permitted: '/Users/joelstover/antclock/.venv/lib/python3.14/site-packages/torch/_environment.py'"
+    },
+    "pcfg": {
+      "error": "[Errno 1] Operation not permitted: '/Users/joelstover/antclock/.venv/lib/python3.14/site-packages/torch/_environment.py'"
+    },
+    "rpm": {
+      "error": "[Errno 1] Operation not permitted: '/Users/joelstover/antclock/.venv/lib/python3.14/site-packages/torch/_environment.py'"
+    },
+    "math": {
+      "error": "[Errno 1] Operation not permitted: '/Users/joelstover/antclock/.venv/lib/python3.14/site-packages/torch/_environment.py'"
+    }
+  }
+}

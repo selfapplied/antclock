@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional
 
 # Import CE modules
-from .modules import CEEnhancedLSTM, CEConfig, MirrorOperator, CurvatureCouplingLayer
+from ..modules import CEEnhancedLSTM, CEConfig, MirrorOperator, CurvatureCouplingLayer
 from ..definitions import BenchmarkResult
 
 
@@ -398,7 +398,9 @@ def run_ce_pcfg_experiment(num_epochs: int = 5, batch_size: int = 32,
         ]
     }
 
-    print(".2f"    print(".1%"    return results
+    print(".2f")
+    print(".1%")
+    return results
 
 
 # Quick test

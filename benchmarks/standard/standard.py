@@ -6,6 +6,7 @@ Run real benchmark datasets for CE framework evaluation.
 import sys
 import os
 import json
+import time
 from datetime import datetime
 
 # Add paths
@@ -24,71 +25,70 @@ def run_real_benchmarks():
         'results': {}
     }
 
-    # Import and run SCAN
-    print("\n1️⃣ SCAN Benchmark")
-    try:
-        from .scan import run_ce_scan_experiment
-        scan_results = run_ce_scan_experiment(num_epochs=20)
-        results['results']['scan'] = scan_results
-        print(f"SCAN: {scan_results.get('test_accuracy', 0):.1%}")
-    except Exception as e:
-        print(f"❌ SCAN failed: {e}")
-        results['results']['scan'] = {'error': str(e)}
+    benchmarks = [
+        ('scan', 'SCAN', 20),
+        ('cogs', 'COGS', 10),
+        ('cfq', 'CFQ', 10),
+        ('pcfg', 'PCFG', 10),
+        ('rpm', 'RPM', 10),
+        ('math', 'Math', 10),
+    ]
 
-    # Import and run COGS
-    print("\n2️⃣ COGS Benchmark")
-    try:
-        from .cogs import run_ce_cogs_experiment
-        cogs_results = run_ce_cogs_experiment(num_epochs=10)  # Fewer epochs for speed
-        results['results']['cogs'] = cogs_results
-        print(f"COGS: {cogs_results.get('test_accuracy', 0):.1%}")
-    except Exception as e:
-        print(f"❌ COGS failed: {e}")
-        results['results']['cogs'] = {'error': str(e)}
+    total_benchmarks = len(benchmarks)
+    overall_start = time.time()
 
-    # Import and run CFQ
-    print("\n4️⃣ CFQ Benchmark")
-    try:
-        from .cfq import run_ce_cfq_experiment
-        cfq_results = run_ce_cfq_experiment(num_epochs=10)
-        results['results']['cfq'] = cfq_results
-        print(f"CFQ: {cfq_results.get('evaluation', {}).get('test_accuracy', 0):.1%}")
-    except Exception as e:
-        print(f"❌ CFQ failed: {e}")
-        results['results']['cfq'] = {'error': str(e)}
+    for idx, (benchmark_key, benchmark_name, epochs) in enumerate(benchmarks, 1):
+        print(f"\n[{idx}/{total_benchmarks}] {benchmark_name} Benchmark ({epochs} epochs)")
+        print("─" * 60)
+        
+        benchmark_start = time.time()
+        try:
+            print(f"   🏃 Starting {benchmark_name}...")
+            
+            # Import and run the appropriate benchmark
+            if benchmark_key == 'scan':
+                from .scan import run_ce_scan_experiment
+                benchmark_results = run_ce_scan_experiment(num_epochs=epochs)
+            elif benchmark_key == 'cogs':
+                from .cogs import run_ce_cogs_experiment
+                benchmark_results = run_ce_cogs_experiment(num_epochs=epochs)
+            elif benchmark_key == 'cfq':
+                from .cfq import run_ce_cfq_experiment
+                benchmark_results = run_ce_cfq_experiment(num_epochs=epochs)
+            elif benchmark_key == 'pcfg':
+                from .pcfg import run_ce_pcfg_experiment
+                benchmark_results = run_ce_pcfg_experiment(num_epochs=epochs)
+            elif benchmark_key == 'rpm':
+                from .rpm import run_ce_rpm_experiment
+                benchmark_results = run_ce_rpm_experiment(num_epochs=epochs)
+            elif benchmark_key == 'math':
+                from .math import run_ce_math_experiment
+                benchmark_results = run_ce_math_experiment(num_epochs=epochs)
+            results['results'][benchmark_key] = benchmark_results
+            
+            elapsed = time.time() - benchmark_start
+            acc = benchmark_results.get('test_accuracy', benchmark_results.get('evaluation', {}).get('test_accuracy', 0))
+            if isinstance(acc, (int, float)):
+                print(f"   ✅ {benchmark_name} completed: {acc:.1%} accuracy ({elapsed:.1f}s)")
+            else:
+                print(f"   ✅ {benchmark_name} completed ({elapsed:.1f}s)")
+                
+        except Exception as e:
+            elapsed = time.time() - benchmark_start
+            print(f"   ❌ {benchmark_name} failed after {elapsed:.1f}s: {e}")
+            results['results'][benchmark_key] = {'error': str(e)}
+        
+        # Show overall progress
+        overall_elapsed = time.time() - overall_start
+        remaining = total_benchmarks - idx
+        if remaining > 0:
+            avg_time = overall_elapsed / idx
+            eta = avg_time * remaining
+            print(f"   📊 Progress: {idx}/{total_benchmarks} complete | Elapsed: {overall_elapsed:.1f}s | ETA: {eta:.1f}s")
 
-    # Import and run PCFG
-    print("\n5️⃣ PCFG Benchmark")
-    try:
-        from .pcfg import run_ce_pcfg_experiment
-        pcfg_results = run_ce_pcfg_experiment(num_epochs=10)
-        results['results']['pcfg'] = pcfg_results
-        print(f"PCFG: {pcfg_results.get('evaluation', {}).get('test_accuracy', 0):.1%}")
-    except Exception as e:
-        print(f"❌ PCFG failed: {e}")
-        results['results']['pcfg'] = {'error': str(e)}
-
-    # Import and run RPM
-    print("\n6️⃣ RPM Benchmark")
-    try:
-        from .rpm import run_ce_rpm_experiment
-        rpm_results = run_ce_rpm_experiment(num_epochs=10)
-        results['results']['rpm'] = rpm_results
-        print(f"RPM: {rpm_results.get('evaluation', {}).get('test_accuracy', 0):.1%}")
-    except Exception as e:
-        print(f"❌ RPM failed: {e}")
-        results['results']['rpm'] = {'error': str(e)}
-
-    # Import and run Math
-    print("\n7️⃣ Math Reasoning Benchmark")
-    try:
-        from .math import run_ce_math_experiment
-        math_results = run_ce_math_experiment(num_epochs=10)
-        results['results']['math'] = math_results
-        print(f"MATH: {math_results.get('evaluation', {}).get('test_accuracy', 0):.1%}")
-    except Exception as e:
-        print(f"❌ Math failed: {e}")
-        results['results']['math'] = {'error': str(e)}
+    # Final summary
+    total_elapsed = time.time() - overall_start
+    print(f"\n⏱️  Total time: {total_elapsed:.1f}s ({total_elapsed/60:.1f} minutes)")
 
     # Save results
     with open('real_benchmark_results.json', 'w') as f:

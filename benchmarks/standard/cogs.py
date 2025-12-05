@@ -19,7 +19,7 @@ from typing import Dict, List, Tuple, Any, Optional, Union
 from dataclasses import dataclass
 
 # Import CE modules
-from .modules import CEEnhancedLSTM, CEConfig, MirrorOperator, CurvatureCouplingLayer
+from ..modules import CEEnhancedLSTM, CEConfig, MirrorOperator, CurvatureCouplingLayer
 from ..definitions import BenchmarkResult
 
 

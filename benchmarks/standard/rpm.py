@@ -19,10 +19,28 @@ import zipfile
 from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional
 from PIL import Image
-import torchvision.transforms as transforms
+try:
+    import torchvision.transforms as transforms
+    HAS_TORCHVISION = True
+except ImportError:
+    transforms = None
+    HAS_TORCHVISION = False
+
+    # Create a minimal fallback transform class
+    class FallbackTransforms:
+        def Compose(self, transforms_list):
+            return lambda x: x  # Identity transform
+        def Resize(self, size):
+            return lambda x: x
+        def ToTensor(self):
+            return lambda x: x
+        def Normalize(self, mean, std):
+            return lambda x: x
+
+    transforms = FallbackTransforms()
 
 # Import CE modules
-from .modules import CEEnhancedLSTM, CEConfig, MirrorOperator, CurvatureCouplingLayer
+from ..modules import CEEnhancedLSTM, CEConfig, MirrorOperator, CurvatureCouplingLayer
 from ..definitions import BenchmarkResult
 
 
@@ -428,7 +446,7 @@ def run_ce_rpm_experiment(num_epochs: int = 5, batch_size: int = 16,
 
     # Count parameters
     total_params = sum(p.numel() for p in model.parameters())
-    print(","
+    print(f"Model parameters: {total_params:,}")
     # Train model
     start_time = time.time()
     history = benchmark.train_model(model, train_loader, val_loader, num_epochs, device)

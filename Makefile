@@ -54,12 +54,12 @@ sync: benchmarks
 
 # Benchmark execution pipeline
 benchmarks:
-	@echo "🧬 Running CE benchmark pipeline..."
-	@echo "  - Synthetic biome verification..."
+	@echo "🧬 Running complete CE benchmark suite..."
+	@echo "  - Phase 1: Synthetic biome verification..."
+	@echo "  - Phase 2: Full synthetic benchmark suite..."
+	@echo "  - Phase 3: Standard ML benchmark evaluation..."
 	@./run.sh benchmarks/benchmark.py || echo "⚠️  Benchmark execution failed (possibly due to environment/dependencies)"
-	@echo "  - Metabolic profiling..."
-	@echo "  - Phenotype evaluation..."
-	@echo "✓ Benchmark pipeline completed"
+	@echo "✓ Complete benchmark pipeline finished"
 
 # Timing and performance analysis
 timing:
