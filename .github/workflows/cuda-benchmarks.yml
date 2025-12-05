@@ -21,6 +21,9 @@ on:
       - 'antclock/**'
       - '.github/workflows/cuda-benchmarks.yml'
 
+permissions:
+  contents: read
+
 jobs:
   cuda-benchmark:
     # GitHub-hosted GPU runner with NVIDIA T4 GPU (requires GitHub Team or Enterprise plan)
