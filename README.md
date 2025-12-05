@@ -47,7 +47,7 @@ the humble hashbang as a well-formed, recognized, and tool-able way to designate
 
 Instead of trying to save the world, self immunity markers honor autonomy and self-determination. `run.sh` is our best attempt at recognizing and acknowledging this concept. Although this way of understanding the self is not new to biology or any of the automated processes the universe uses to honor a sacred contract between self and guardian, as far as the authors know, this is the first time it has been explicitly named and applied to the execution of software.
 
-The power of this model is that it is an inevitable consequence of the universe's own self-organization and self-governance. Emergent complexity would not be possible otherwise. See [Self-Organization and Self-Governance](https://www.youtube.com/watch?v=dQw4w9WgXcQ) for more general information, and [run.md](docs/run.md) for project-specific information.
+The power of this model is that it is an inevitable consequence of the universe's own self-organization and self-governance. Emergent complexity would not be possible otherwise. See [Self-Organization (Wikipedia)](https://en.wikipedia.org/wiki/Self-organization) for more general information, and [run.md](docs/run.md) for project-specific information.
 
 # Theory Overview
 
