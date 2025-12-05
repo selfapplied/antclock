@@ -116,7 +116,7 @@ The CE Tower generalizes this insight: CE3 treats every compositional discrepanc
 
 The CE Tower's mathematical substrate connects to established traditions in nonlinear dynamics:
 
-**Symbolic Dynamics**: The memory-history interaction encoded by antclock iterates resembles kneading sequences and shift spaces studied in symbolic dynamics [13, 14]. The bracket topology of CE1 provides a natural symbolic encoding of compositional trajectories.
+**Symbolic Dynamics**: The memory-history interaction encoded by antclock iterates exhibits structural parallels to kneading sequences and shift spaces [13, 14]: both systems encode trajectory information through symbolic sequences with well-defined topological properties. The bracket topology of CE1 provides a natural symbolic encoding where compositional depth corresponds to shift-space cylinder sets.
 
 **Renormalization and Universality**: The ratio-stability observations (χ_FEG ≈ 0.638, threshold κ ≈ 0.35) echo Feigenbaum's universality in period-doubling cascades [11, 12]. The CE Tower's phase transitions at discrete scales suggest connections to renormalization group theory [15].
 
@@ -1010,10 +1010,10 @@ The CE Tower framework rests on several foundational assumptions that should be 
 
 **Assumption 3** (Observable Stability): Curvature κ and coherence C are assumed stable under:
 - Scaling transformations of the state space
-- Normalization of intermediate computations  
+- Normalization of intermediate computations
 - Perturbations of initial conditions within basin of attraction
 
-**Assumption 4** (Universality Hypothesis): AntClock trajectories exhibit behavior consistent with known universal constants (Feigenbaum δ ≈ 4.669, χ_FEG ≈ 0.638). This is currently an empirical observation, not a proven theorem. We hypothesize but do not claim that these patterns reflect universal dynamical behavior.
+**Assumption 4** (Universality Hypothesis): Antclock trajectories exhibit behavior consistent with known universal constants (Feigenbaum δ ≈ 4.669, χ_FEG ≈ 0.638). This is currently an empirical observation, not a proven theorem. We hypothesize but do not claim that these patterns reflect universal dynamical behavior.
 
 These assumptions bound the framework's applicability and highlight areas requiring further theoretical development.
 
