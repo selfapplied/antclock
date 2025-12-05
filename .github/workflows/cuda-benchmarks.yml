@@ -8,6 +8,11 @@ on:
         required: false
         default: '10'
         type: string
+      cuda_version:
+        description: 'CUDA version for PyTorch (e.g., cu121, cu118)'
+        required: false
+        default: 'cu121'
+        type: string
   push:
     branches:
       - main
@@ -19,7 +24,6 @@ on:
 jobs:
   cuda-benchmark:
     # GitHub-hosted GPU runner with NVIDIA T4 GPU (requires GitHub Team or Enterprise plan)
-    # Falls back to ubuntu-latest if GPU runner is not available
     runs-on: gpu-t4-4-core
     
     steps:
@@ -40,11 +44,12 @@ jobs:
         run: |
           # Install PyTorch with CUDA support
           pip install --upgrade pip
-          pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+          CUDA_VERSION="${{ inputs.cuda_version || 'cu121' }}"
+          pip install torch torchvision torchaudio --index-url "https://download.pytorch.org/whl/${CUDA_VERSION}"
       
       - name: Install project dependencies
         run: |
-          pip install numpy scipy matplotlib transformers datasets scikit-learn wandb tqdm
+          pip install -r requirements.txt
       
       - name: Verify CUDA availability
         run: |

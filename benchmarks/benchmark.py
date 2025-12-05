@@ -31,14 +31,13 @@ def setup_device():
     return device_info
 
 
-# Configure hardware acceleration
-DEVICE_INFO = setup_device()
-
 from benchmarks.ce.synthetic import main as run_synthetic
 from benchmarks.standard.standard import run_real_benchmarks
 
 if __name__ == "__main__":
-    print(f"🔧 Device: {DEVICE_INFO['name']} ({DEVICE_INFO['device']})")
+    # Configure hardware acceleration when running as main script
+    device_info = setup_device()
+    print(f"🔧 Device: {device_info['name']} ({device_info['device']})")
     print("🧬 Running CE synthetic benchmarks...")
     try:
         run_synthetic()
