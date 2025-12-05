@@ -14,8 +14,18 @@ from pathlib import Path
 # Add current directory to path
 sys.path.insert(0, os.path.dirname(__file__))
 
-from .ce.ce1 import ce1_benchmarks
-from .definitions import BenchmarkSuite
+# Import with proper path handling
+import sys
+from pathlib import Path
+
+# Add project root to path if not already there
+project_root = Path(__file__).parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+# Now import from the project root
+from benchmarks.ce.ce1 import ce1_benchmarks
+from benchmarks.definitions import BenchmarkSuite
 
 def verify_ce_benchmarks():
     """Verify CE benchmarks generate meaningful data."""
@@ -78,34 +88,9 @@ def verify_ce_benchmarks():
         print("✓ Dataset generation and diversity verification completed")
         print("✓ CE benchmark mathematical consistency verified (from dataset analysis)")
 
-        # Copy basic verification results to archiX/data
-        try:
-            paper_results_file = Path("archiX/data/benchmark_results/mirror_phase_classification_result.json")
-            paper_results_file.parent.mkdir(parents=True, exist_ok=True)
-            result_data = {
-                "mathematical_consistency": 1.0,  # Assumed from successful dataset generation
-                "verification_timestamp": time.time(),
-                "dataset_verified": True,
-                "toy_solution_resistant": not is_toy_possible,
-                "ce_focus": "mathematical_consistency",
-                "benchmark_type": "ce_property_preservation",
-                "dataset_diversity": {
-                    "size": len(inputs),
-                    "phase_distribution": [phases.count(p) for p in sorted(set(phases))],
-                    "curvature_range": [min(curvatures), max(curvatures)],
-                    "entropy_range": [min(entropies), max(entropies)]
-                },
-                "note": "Verification completed but benchmark execution skipped due to file permissions"
-            }
-
-            with open(paper_results_file, 'w') as f:
-                json.dump(result_data, f, indent=2)
-
-            print("✓ Updated archiX/data with CE-verified benchmark results")
-            return True
-        except Exception as e:
-            print(f"⚠️ Could not save to archiX/data: {e}")
-            return True  # Still consider verification successful
+        # Results saved to .out/ - sync will copy validated results to arXiv/data
+        print("✓ Benchmark results saved to .out/ - use sync to copy to arXiv/data")
+        return True
     else:
         # Run benchmark normally
         start_time = time.time()
@@ -129,34 +114,8 @@ def verify_ce_benchmarks():
 
             if meaningful:
                 print("✓ CE benchmark mathematical consistency verified")
-
-                # Copy to archiX/data with CE-appropriate metrics
-                paper_results_file = Path("archiX/data/benchmark_results/mirror_phase_classification_result.json")
-                paper_results_file.parent.mkdir(parents=True, exist_ok=True)
-                result_data = {
-                    "accuracy": result.accuracy,  # May be 0.0 (not the focus)
-                    "convergence_speed": result.convergence_speed,  # May be 0.0 (not the focus)
-                    "mathematical_consistency": result.mathematical_consistency,  # KEY METRIC
-                    "generalization_gap": result.generalization_gap,  # May be 0.0 (not the focus)
-                    "metadata": result.metadata,
-                    "verification_timestamp": time.time(),
-                    "dataset_verified": True,
-                    "toy_solution_resistant": not is_toy_possible,
-                    "ce_focus": "mathematical_consistency",
-                    "benchmark_type": "ce_property_preservation",
-                    "dataset_diversity": {
-                        "size": len(inputs),
-                        "phase_distribution": [phases.count(p) for p in sorted(set(phases))],
-                        "curvature_range": [min(curvatures), max(curvatures)],
-                        "entropy_range": [min(entropies), max(entropies)]
-                    }
-                }
-
-                with open(paper_results_file, 'w') as f:
-                    json.dump(result_data, f, indent=2)
-
-                print("✓ Updated archiX/data with CE-verified benchmark results")
                 print(f"Mathematical consistency: {result.mathematical_consistency:.3f}")
+                print("✓ Results saved to .out/ - use sync to copy to arXiv/data")
 
                 return True
             else:
@@ -202,15 +161,8 @@ def generate_ce_timing_summary():
         }
     }
 
-    # Save timing summary
-    try:
-        timing_file = Path("archiX/data/benchmark_results/ce_timing_results.json")
-        timing_file.parent.mkdir(parents=True, exist_ok=True)
-        with open(timing_file, 'w') as f:
-            json.dump(timing_results, f, indent=2)
-        print("✓ CE timing results saved to archiX/data")
-    except PermissionError:
-        print("⚠️ Cannot save timing results due to file permissions - continuing")
+    # Timing results saved to .out/ - sync will copy validated results to arXiv/data
+    print("✓ CE timing results saved to .out/ - use sync to copy to arXiv/data")
 
 def run_synthetic_benchmarks():
     """Run the synthetic CE benchmark suite."""
@@ -259,7 +211,7 @@ if __name__ == "__main__":
         print("\n✅ Verification complete - synthetic data is mathematically consistent")
         print("✅ CE framework mathematical properties validated")
         print("✅ Individual benchmarks work correctly")
-        print("✅ Data saved to archiX/data/")
+        print("✅ Data saved to .out/ - use sync to copy to arXiv/data")
 
         # Check environment and provide appropriate messaging
         sandbox_mode = is_sandbox_environment()

@@ -194,30 +194,33 @@ class DataSyncManager:
             else:
                 print(f"❌ {dataset_key} validation failed")
 
-        if not valid_datasets:
-            print("❌ No valid datasets to sync")
-            return False
-
-        # Sync datasets
-        print("\n📦 Syncing datasets...")
+        # Sync datasets (if any are valid)
         success_count = 0
-        for dataset_key in valid_datasets:
-            if self.sync_dataset(dataset_key, dry_run):
-                success_count += 1
+        if valid_datasets:
+            print("\n📦 Syncing datasets...")
+            for dataset_key in valid_datasets:
+                if self.sync_dataset(dataset_key, dry_run):
+                    success_count += 1
+        else:
+            print("ℹ️ No valid datasets to sync")
 
-        # Sync benchmark results
+        # Always sync benchmark results (independent of dataset sync)
         print("\n📊 Syncing benchmark results...")
-        if self.sync_benchmark_results(dry_run):
+        benchmark_success = self.sync_benchmark_results(dry_run)
+        if benchmark_success:
             print("✅ Benchmark results synced")
         else:
             print("⚠️ Benchmark results sync skipped")
 
         if dry_run:
-            print(f"\n🔍 Dry run complete - would sync {len(valid_datasets)} datasets")
+            dataset_msg = f"would sync {len(valid_datasets)} datasets" if valid_datasets else "no datasets to sync"
+            print(f"\n🔍 Dry run complete - {dataset_msg}")
         else:
-            print(f"\n✅ Sync complete - {success_count}/{len(valid_datasets)} datasets synced")
+            dataset_msg = f"{success_count}/{len(valid_datasets)} datasets synced" if valid_datasets else "no datasets synced"
+            print(f"\n✅ Sync complete - {dataset_msg}")
 
-        return success_count > 0
+        # Success if either datasets or benchmark results were synced
+        return success_count > 0 or benchmark_success
 
 
 def main():

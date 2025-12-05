@@ -1,5 +1,5 @@
 #!run.sh
-# AntClock-Self: 1764888527
+# AntClock-Self: 1764888527 BE ACCOUNTABLE
 #@ ζ-card
 # antclock@[local] / Makefile
 #κ: 0.35 τ: now ζ: self
