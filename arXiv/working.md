@@ -112,6 +112,16 @@ Work on emergent languages in multi-agent systems [7] demonstrates that composit
 
 The CE Tower generalizes this insight: CE3 treats every compositional discrepancy as communicative pressure, continuously evolving grammatical structure rather than converging to fixed conventions.
 
+## 2.7 Connections to Dynamical Systems Theory
+
+The CE Tower's mathematical substrate connects to established traditions in nonlinear dynamics:
+
+**Symbolic Dynamics**: The memory-history interaction encoded by antclock iterates resembles kneading sequences and shift spaces studied in symbolic dynamics [13, 14]. The bracket topology of CE1 provides a natural symbolic encoding of compositional trajectories.
+
+**Renormalization and Universality**: The ratio-stability observations (χ_FEG ≈ 0.638, threshold κ ≈ 0.35) echo Feigenbaum's universality in period-doubling cascades [11, 12]. The CE Tower's phase transitions at discrete scales suggest connections to renormalization group theory [15].
+
+**State-Space Models**: The antclock mechanism shares structural kinship with selective state-space models [16], reservoir computing, and delay-differential equations. These systems all implement memory-dependent dynamics, though the CE Tower's closed-loop grammar evolution distinguishes it from fixed-architecture approaches.
+
 ---
 
 # 3. CE Tower Architecture
@@ -990,7 +1000,24 @@ Beyond empirical results, the CE Tower provides:
 
 **Category theory formalization**: Connections to topos theory and HoTT are preliminary. Full formalization requires additional work.
 
-## 8.4 Broader Impact
+## 8.4 Foundational Assumptions
+
+The CE Tower framework rests on several foundational assumptions that should be made explicit:
+
+**Assumption 1** (Deterministic Dynamics): The CE Tower operates deterministically. All state transitions are fully determined by current state and input; no stochastic elements enter the core dynamics. Randomness, if present, is confined to initialization or external perturbation.
+
+**Assumption 2** (Finite Memory Buffer): The memory operator []_a maintains a finite but extensible memory buffer. Older states may decay in influence but are not deleted. Memory growth is logarithmic in antclock time under typical operations.
+
+**Assumption 3** (Observable Stability): Curvature κ and coherence C are assumed stable under:
+- Scaling transformations of the state space
+- Normalization of intermediate computations  
+- Perturbations of initial conditions within basin of attraction
+
+**Assumption 4** (Universality Hypothesis): AntClock trajectories exhibit behavior consistent with known universal constants (Feigenbaum δ ≈ 4.669, χ_FEG ≈ 0.638). This is currently an empirical observation, not a proven theorem. We hypothesize but do not claim that these patterns reflect universal dynamical behavior.
+
+These assumptions bound the framework's applicability and highlight areas requiring further theoretical development.
+
+## 8.5 Broader Impact
 
 **AI Safety**: Interpretable compositional structure enables verification of system behavior. Computable invariants facilitate monitoring and auditing.
 
@@ -998,9 +1025,9 @@ Beyond empirical results, the CE Tower provides:
 
 **Transfer Learning**: CE Tower's grammar evolution provides natural mechanism for adapting compositional knowledge across domains.
 
-## 8.5 Future Directions
+## 8.6 Future Directions
 
-### 8.5.1 Quantum CE123
+### 8.6.1 Quantum CE123
 
 **Question**: How does the CE Tower behave in quantum superposition?
 
@@ -1012,13 +1039,13 @@ The ℏ invariant suggests natural connections to quantum mechanics. Preliminary
 
 - CE3 evolution might relate to measurement and collapse
 
-### 8.5.2 Multi-Agent Compositional Systems
+### 8.6.2 Multi-Agent Compositional Systems
 
 **Question**: How do multiple CE Towers interact?
 
 The witness operator <>g provides a natural communication mechanism through 4D fingerprints. Guardian coupling β could extend to multi-agent coordination.
 
-### 8.5.3 Large-Scale Language Models
+### 8.6.3 Large-Scale Language Models
 
 **Question**: Can CE Tower principles enhance transformer architectures?
 
@@ -1030,7 +1057,7 @@ The CE Tower's integration constants and guardian dynamics suggest natural integ
 
 - Enable runtime grammar evolution through meta-learning
 
-### 8.5.4 Formal Verification
+### 8.6.4 Formal Verification
 
 **Question**: Can we prove compositional correctness?
 
@@ -1089,6 +1116,18 @@ The field consensus [1] identified compositional learning as an unsolved challen
 [9] Hao, Y., et al. (2022). Compositional Attention Networks for Machine Reasoning. *ICLR 2022*.
 
 [10] Kim, Y., et al. (2019). Unsupervised Recurrent Neural Network Grammars. *NAACL 2019*.
+
+[11] Feigenbaum, M. J. (1978). Quantitative universality for a class of nonlinear transformations. *Journal of Statistical Physics*, 19(1), 25-52.
+
+[12] Feigenbaum, M. J. (1979). The universal metric properties of nonlinear transformations. *Journal of Statistical Physics*, 21(6), 669-706.
+
+[13] Devaney, R. L. (2003). *An Introduction to Chaotic Dynamical Systems* (2nd ed.). Westview Press.
+
+[14] Lind, D., & Marcus, B. (1995). *An Introduction to Symbolic Dynamics and Coding*. Cambridge University Press.
+
+[15] Collet, P., & Eckmann, J.-P. (1980). *Iterated Maps on the Interval as Dynamical Systems*. Birkhäuser.
+
+[16] Gu, A., & Dao, T. (2023). Mamba: Linear-Time Sequence Modeling with Selective State Spaces. *arXiv:2312.00752*.
 
 ---
 
