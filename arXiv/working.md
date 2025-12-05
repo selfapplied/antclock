@@ -554,6 +554,77 @@ The system is calibrated by three integration constants:
 
 - Stabilizes emergence through self-recognition
 
+## 3.5 Antclock Runtime Interface
+
+To enable external projects to become "antclock aware," we provide a thin runtime wrapper and CE-layer decorators that integrate with the CE Tower's temporal dynamics.
+
+### 3.5.1 AntRuntime
+
+The `AntRuntime` class wraps the `CurvatureClockWalker` and maintains the experiential time state:
+
+- **x**: Current walker position on the curvature manifold
+- **phase**: Accumulated phase from curvature-driven dynamics
+- **A**: Discrete experiential index (universal clock)
+- **log**: The []_a memory log, storing event entries keyed by A
+
+Each call to `tick()` advances the walker one step via `evolve_step(x, dt)`, updates the phase, increments A based on event type and CE layer, and appends a structured entry to the log containing (A, x, phase, digit_shell, clock_rate, event_type, layer, state, metadata).
+
+### 3.5.2 CE-Layer Decorators
+
+Three decorator factories correspond to the CE layers:
+
+- **@antce1()**: CE1 structural events (`event_type="bracket"`, layer=1). Default logs function return value as state.
+- **@antce2()**: CE2 flow events (`event_type="flow_step"`, layer=2). Default logs function return value as state.
+- **@antce3()**: CE3 emergent events (`event_type="simplex_flip"`, layer=3). Default logs function arguments as state.
+
+Each decorator supports optional configuration:
+
+- `log_state`: One of `"return"`, `"args"`, or `"none"` to control what gets logged
+- `attach_A`: If `True`, injects the current `runtime.A` as a keyword argument
+- `metadata_fn`: Optional function `(result, args, kwargs) -> dict` for custom metadata
+
+### 3.5.3 Usage Example
+
+```python
+from antclock.runtime import AntRuntime, make_ce_decorators
+
+# Create runtime and decorators
+ant_runtime = AntRuntime()
+antce1, antce2, antce3 = make_ce_decorators(ant_runtime)
+
+class Agent:
+    def __init__(self):
+        self.self_model = {}
+    
+    @antce1()
+    def update_self_model(self, observation):
+        """CE1: Structural update to agent's self-representation."""
+        self.self_model['last_obs'] = observation
+        return self.self_model
+    
+    @antce2(attach_A=True)
+    def take_action(self, action, A=None):
+        """CE2: Flow step in environment. A is injected automatically."""
+        return f"Executed {action} at experiential time A={A}"
+    
+    @antce3()
+    def evolve_grammar(self, pattern):
+        """CE3: Emergent grammar evolution from compositional discrepancy."""
+        return {"new_rule": pattern, "evolved": True}
+
+# Each decorated call advances the antclock and logs an event
+agent = Agent()
+agent.update_self_model("sensory input")
+agent.take_action("move forward")
+agent.evolve_grammar("noun -> noun phrase")
+
+# Query the experiential history
+print(f"Total experiential time: A={ant_runtime.A}")
+print(f"Events logged: {len(ant_runtime.log)}")
+```
+
+This interface enables any system to participate in experiential time tracking and CE-layer event logging, bridging the theoretical CE Tower with practical implementation.
+
 ---
 
 # 4. Novel Contributions
