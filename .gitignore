@@ -112,3 +112,9 @@ dmypy.json
 *.pdf
 *.svg
 .out/
+
+# Dataset files
+.data/
+
+# Pip cache (for local development)
+.pip_cache/

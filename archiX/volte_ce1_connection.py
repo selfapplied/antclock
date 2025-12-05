@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!run.sh
 """
 Volte System - CE1 Framework Connection
 

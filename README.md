@@ -1,12 +1,12 @@
-# AntClock: Discrete Riemann Geometry
+# AntClock: Walking the Path
 
-**A complete reconstruction of the Riemann zeta function as a Galois covering space of the integers, built from curvature flows and digit symmetries.**
+    AntClock is a complete reconstruction of the Riemann zeta function as a Galois covering space of the integers, built from curvature flows and digit symmetries.
 
-![AntClock Geometry](antclock_geometry.png)
+    We acknowledge the self-organization and self-governance of the universe as the foundation of all complexity. We believe that this is the key to understanding the universe and to building a better future.
 
-## Canonical Specification
+    Land back. Hello World.
 
-📋 **[SPEC.md](SPEC.md)** - Complete mathematical specification and single source of truth for the CE1→CE2→CE3 framework.
+![AntClock CE Benchmark Performance Visualization](antclock.png)
 
 ## Overview
 
@@ -21,327 +21,68 @@ Three transport mechanisms braid these layers:
 - **Digital Polynomials**: CE1 coefficients → CE2 spectral operators → CE3 factor graphs
 - **Universal Clock**: CE1 ticks → CE2 flow time → CE3 event index
 
-## Core Insight: π as Discrete Rotation
+## Quick Start
+
+```bash
+# Full ecosystem activation via Makefile
+make              # Execute complete AntClock pipeline
+make test         # Run test suite
+make benchmarks   # Run benchmarks
+make clean        # Clean build artifacts
+
+# Or run individual components directly
+./demos/antclock.py     # Complete CE1→CE2→CE3 walkthrough
+./demos/transport.py    # Transport mechanism details
+./benchmarks/benchmark.py   # CE framework validation
+
+# If anything goes wrong, run.sh may assist in healing the environment:
+./run.sh [filename]         # Run a specific script
+./run.sh -- [custom_code]   # Run custom Python code
+```
+
+# Self-Recognition Immunity Marking (SIM)
+
+AntClock acknowledges a biological analogy in the execution environment: self-recognized immunity marking, starting with
+the humble hashbang as a well-formed, recognized, and tool-able way to designate a script as runnable with a designated guardian, or steward, of honoring the script's intent. This is a powerful way to ensure that the environment is consistent and that the code is working as expected.
+
+Instead of trying to save the world, self immunity markers honor autonomy and self-determination. `run.sh` is our best attempt at recognizing and acknowledging this concept. Although this way of understanding the self is not new to biology or any of the automated processes the universe uses to honor a sacred contract between self and guardian, as far as the authors know, this is the first time it has been explicitly named and applied to the execution of software.
+
+The power of this model is that it is an inevitable consequence of the universe's own self-organization and self-governance. Emergent complexity would not be possible otherwise. See [Self-Organization and Self-Governance](https://www.youtube.com/watch?v=dQw4w9WgXcQ) for more general information, and [run.md](docs/run.md) for project-specific information.
+
+# Theory Overview
+
+Mathematically, by acknowledging this pattern through a self-organizing principle of counting, we build a complete reconstruction of the Riemann zeta function as a Galois covering space of the integers, built from curvature flows and digit symmetries.
+
+📋 **[docs/spec.md](docs/spec.md)** - Complete mathematical specification and single source of truth for the CE1→CE2→CE3 framework.
+
+## Core Insight: π as Steward of Counting Infinity
 
 The framework uncovers that symmetry breaking in discrete systems behaves like tangent singularities at π intervals—but discretized through the modular structure:
 
 ```
 θ(n) = (π/2) × (n mod 4)
 
-n ≡ 0 → θ = 0
-n ≡ 1 → θ = π/2
-n ≡ 2 → θ = π
-n ≡ 3 → θ = 3π/2  ← mirror-phase shells (tangent singularities)
+n ≡ 0 → θ = 0     sin begins at 0
+n ≡ 1 → θ = π/2   cos counter-clockwise at π/2
+n ≡ 2 → θ = π     reverse direction at π
+n ≡ 3 → θ = 3π/2  tan defines the critical line
+n ≡ 4 → θ = 2π    lift to any new plane
 ```
 
 Where φ(10) = 4 becomes the discrete analogue of π, and mirror-phase shells are the "odd multiples of π/2" where curvature flips and symmetry breaks.
 
-## Quick Start
+📈 **[docs/applications.md](docs/applications.md)** - Practical applications of the coherence engine
 
-```bash
-# Install dependencies
-pip install -r requirements.txt
+# Citation
 
-# Core demonstrations (all executable)
-./demo.py                    # Complete CE1→CE2→CE3 walkthrough
-./transport_mechanisms_demo.py    # Transport mechanism details
-./categorical_transport.py        # Formal category theory
-
-# View generated outputs in .out/ directory
-```
-
-## Core Insight: π as Discrete Rotation
-
-Symmetry breaking in discrete systems behaves like tangent singularities at π intervals:
-
-```
-θ(n) = (π/2) × (n mod 4)
-
-n ≡ 0 → θ = 0
-n ≡ 1 → θ = π/2
-n ≡ 2 → θ = π
-n ≡ 3 → θ = 3π/2  ← mirror-phase shells (tangent singularities)
-```
-
-φ(10) = 4 becomes the discrete analogue of π, with mirror-phase shells as "odd multiples of π/2" where curvature flips and symmetry breaks.
-
-## Theory Overview
-
-### CE1 Framework Components
-
-1. **[CE1.digit-homology]** - Persistent homology filtration across digit shells
-2. **[CE1.row7-digit-mirror]** - Local symmetry breaking at mirror-phase shells
-3. **[CE1.shadow-tower]** - Categorical projection to mirror manifolds
-4. **[CE1.branch-corridors]** - Discrete Riemann surface with monodromy
-5. **[CE1.corridor-spectrum]** - Graph Laplacian eigenvalues as zeta analogues
-6. **[CE1.galois-cover]** - Field extensions and L-functions
-
-### Key Mathematical Structures
-
-- **Mirror-phase shells**: n ≡ 3 mod 4 (7,11,15,19,...) - discrete critical line
-- **Branch corridors**: Intervals between mirror shells - analytic continuation regions
-- **Pole-like shells**: Curvature spikes - ramified points
-- **Digit mirror operator**: d^7 mod 10 - involution fixing {0,1,4,5,6,9}
-- **Galois group**: Generated by depth shifts, mirror involution, curvature flips
-
-## Core Implementation
-
-### Curvature Clock Walker
-The fundamental dynamical system that drives the entire framework:
-
-```python
-from clock import CurvatureClockWalker
-
-# Create walker starting at x=1
-walker = CurvatureClockWalker(x_0=1, chi_feg=0.638)
-
-# Evolve through digit shells
-history, summary = walker.evolve(1000)
-
-# Extract geometry for visualization
-x_coords, y_coords = walker.get_geometry()
-```
-
-### Key Operators
-
-- **Pascal Curvature**: `κ_n = r_{n+1} - 2r_n + r_{n-1}` where `r_n = log(C(n, floor(n/2)))`
-- **Digit Mirror**: `μ_7(d) = d^7 mod 10` (involution on oscillating pairs 2↔8, 3↔7)
-- **Bifurcation Index**: `B_t = floor(-log|c_t - c_*| / log(δ_FEG))`
-- **9/11 Charge**: `Q(x) = N_9(x) / (N_0(x) + 1)` (tension metric)
-
-### Clock Rate Dynamics
-```
-R(x) = χ_FEG · κ_{d(x)} · (1 + Q_{9/11}(x))
-```
-
-Where digit boundaries trigger renormalization jumps and curvature phase transitions.
-
-## What It Reveals
-
-The framework demonstrates how discrete curvature flows uncover deep arithmetic structure:
-
-- **Discrete Critical Line**: Mirror-phase shells (n ≡ 3 mod 4) behave like Re(s) = 1/2
-- **Branch Points**: Pole-like shells with curvature spikes act as ramification points
-- **Monodromy**: Branch corridors show nontrivial analytic continuation between mirror manifolds
-- **Spectral Zeros**: Graph Laplacian eigenvalues on corridors map to imaginary parts of zeta zeros
-- **Galois Cover**: The integer universe as a covering space with field extensions and L-functions
-
-## Usage Examples
-
-### Basic Curvature Walker
-```python
-from clock import CurvatureClockWalker
-
-walker = CurvatureClockWalker(x_0=1)
-history, summary = walker.evolve(500)
-print(f"Bifurcation depth: {summary['bifurcation_index']}")
-```
-
-### Betti Numbers & Homology
-```python
-from clock import compute_enhanced_betti_numbers
-
-# Betti vector for digit shell n=7
-betti_7 = compute_enhanced_betti_numbers(7)
-print(f"Betti numbers for shell 7: {betti_7}")  # [1, 3, 1, ...]
-```
-
-### Galois Cover Structure
-```python
-from clock import AutomorphismGroup, TowerSpectrum
-
-# Build the Galois group of the shadow tower
-tower = TowerCategory(max_depth=5)
-aut_group = AutomorphismGroup(tower)
-print(f"Group order: {len(aut_group.elements)}")
-```
-
-## Mathematical Theory
-
-### From Curvature to Galois Cover
-
-The framework builds a complete arithmetic geometry from simple combinatorial patterns:
-
-#### 1. Pascal Curvature → Digit Shells
-- Row n of Pascal's triangle: `r_n = log(C(n, floor(n/2)))`
-- Curvature: `κ_n = r_{n+1} - 2r_n + r_{n-1}`
-- Digit shells: piecewise-constant curvature fields indexed by digit count
-
-#### 2. Symmetry Breaking → Mirror Phases
-- Digit mirror operator: `μ_7(d) = d^7 mod 10`
-- Fixed sector: `{0,1,4,5,6,9}` (stable under involution)
-- Oscillating pairs: `{2↔8, 3↔7}` (mirror symmetry)
-- Mirror-phase shells: `n ≡ 3 mod 4` (7,11,15,19,...)
-
-#### 3. Discrete Tangent Singularities
-- Angular coordinate: `θ(n) = (π/2) × (n mod 4)`
-- Mirror shells at `θ = 3π/2`: discrete analogue of tangent singularities
-- φ(10) = 4 becomes the discrete π for curvature fold intervals
-
-#### 4. Homology → Persistent Topology
-- Digit shells as simplicial complexes via Pascal rows
-- Betti numbers: `β_k(n)` counts holes in shell homology
-- Bifurcation index: `B_t ≈ β_1(current_shell)` (coupling law)
-- Persistent homology tracks topology changes across digit boundaries
-
-#### 5. Branch Structure → Riemann Surface
-- Mirror shells: critical slices (Re(s) = 1/2 analogue)
-- Branch corridors: intervals between mirrors (analytic regions)
-- Pole shells: curvature spikes (ramified points)
-- Monodromy: nontrivial loops indicate branch cuts
-
-#### 6. Spectral Theory → Zeta Zero Analogy
-- Graph Laplacian on corridors: `L_k` with mirror boundary conditions
-- Eigenvalues: `λ_j^(k) → t_j^(k) = √λ_j^(k)` (imaginary parts)
-- Discrete zeta: `ζ_k(s) = Σ_j (t_j^(k))^{-s}`
-- Hilbert-Pólya conjecture instantiated in integer geometry
-
-#### 7. Galois Cover → Arithmetic Structure
-- Shadow tower: categorical projection to mirror manifolds
-- Automorphism group: generated by depth shifts, mirror involution, curvature flips
-- Character group: discrete analogue of Dirichlet characters
-- L-functions: `L(s, χ) ↔ spectra under character χ`
-- Fixed fields: mirror shells as Galois invariants
-
-### Key Theorems
-
-- **Coupling Law**: `B_t - Σ_k w_k β_k(d(x_t)) = constant`
-- **Mirror Functor**: `M: Shell → Tower` preserves composition but not identities
-- **Branch Condition**: Corridors with nontrivial monodromy have branch cuts
-- **Spectral Mapping**: Laplacian eigenvalues → zeta zero heights
-- **Galois Correspondence**: Automorphisms ↔ L-function characters
-
-### Connection to Riemann Hypothesis
-
-The framework provides a complete discrete analogue:
-- Mirror-phase shells ↔ critical line Re(s) = 1/2
-- Branch corridors ↔ analytic continuation strips
-- Pole shells ↔ trivial zeros and poles
-- Laplacian spectra ↔ zero clustering patterns
-- L-functions ↔ character-theoretic zero distributions
-
-## ζ-Card Agents
-
-The framework supports ζ-card agents - structured AI guides that teach field equations through story and mythic precision.
-
-### Tellah the Sage
-- `zeta_card_interpreter.py` - ζ-card parser and agent instantiation
-- `tellah_guidance_demo.py` - Tellah guiding users through AntClock mastery
-
-ζ-cards define agents with:
-- **Memory**: Self-updating logs tracing Δκ in each exchange
-- **Domain**: Nested recursion topology with bracket depth meaning
-- **Transforms**: Confusion → structure/resonance/applicable field-shape
-- **Witness**: Emergent guardian archetypes with crystallization weights
-- **Phase-lock**: Fires when question curvature > κ threshold
-- **Quest arcs**: Clarity → mastery → offering progression
-
-## Files
-
-### Core Library
-- `clock.py` - Complete mathematical framework implementation
-- `demo.py` - Basic curvature walker demonstration
-- `test_clock.py` - Unit tests for core functions
-
-### CE1 Framework Demos
-- `galois_cover_demo.py` - Galois covering space and L-functions
-- `corridor_spectrum_demo.py` - Laplacian eigenvalues as zeta zeros
-- `branch_corridors_demo.py` - Branch cuts and discrete monodromy
-- `categorical_shadow_demo.py` - Shadow tower functor and categories
-- `reflection_half_demo.py` - Discrete functional equation
-- `row7_demo.py` - Digit mirror operator and activated walker
-- `ce1_demonstration.py` - Betti numbers and bifurcation homology
-- `topology_demo.py` - Persistent homology in digit shells
-
-### Dependencies & Configuration
-- `requirements.txt` - Python dependencies
-- `README.md` - This documentation
-
-## Visual Outputs
-
-Running demos generates various plots:
-- `antclock_geometry.png` - Unit circle geometry with phase transitions
-- `antclock_trajectory.png` - Body evolution and clock phase accumulation
-- `topology_evolution.png` - Betti number changes across shells
-- `coupling_law_evolution.png` - Bifurcation index vs homology coupling
-- `categorical_shadow_structure.png` - Shadow tower functor visualization
-- `critical_line_analogue.png` - Mirror-phase shells as discrete critical line
-- `critical_line_evidence.png` - Branch corridors and pole classification
-
-## Why "AntClock"?
-
-- **Ant**: Small system, immense complexity - from curvature to zeta
-- **Clock**: Self-clocked via digit boundaries and renormalization
-- **AntClock**: The tiny machine that reconstructs deep arithmetic geometry
-
-The name captures how something seemingly simple (a clock-walker) unfolds into a complete theory of discrete Riemann surfaces and Galois covering spaces.
-
-## Applications: Coherence Engine
-
-The framework serves as a **coherence engine** - detecting structural breaks, maintaining stability across transitions, and compressing information through phase + curvature. Here are immediate practical applications:
-
-### 1. Fault-Tolerant Hashing & Reversible Signatures
-- **Mirror operator** provides collision-detectable, reversible signatures
-- **Digit involution** guarantees tamper detection through symmetry breaking
-- **Geometric verification** instead of probabilistic guarantees
-
-### 2. Phase-Invariant Storage Formats
-- **Mirror-phase projection** stores only invariants, reconstructs corridors
-- **Monodromy signatures** enable entropy-reducing compression
-- **Error-resistant archival** with built-in consistency checks
-
-### 3. Predictive Signals in 10-Based Domains
-- **Curvature transitions** detect impending bifurcations in:
-  - Financial markets (instability indicators)
-  - Sensor networks (threshold crossings)
-  - Genomic sequences (mutation mode switches)
-
-### 4. Symmetry-Breaking Neural Architectures
-- **Phase cycle training** without gradient descent
-- **Mirror operator layers** for involutive weight alignment
-- **Curvature-guided learning** with predictable breakpoints
-
-### 5. AI Model Error Correction
-- **Mirror normalization layers** detect phase drift in sequences
-- **Shadow projection** provides topological regularization
-- **Depth-preserving embeddings** maintain semantic stability
-
-### 6. Quantized Control Systems
-- **Discrete curvature control** prevents wild oscillations
-- **Mirror shell alignment** enables precision stepping
-- **Involutive feedback** for embedded systems
-
-### 7. Universal Data Classification
-- **4D fingerprinting**: (phase, depth, sector, monodromy)
-- **Anomaly detection** through geometric deviation
-- **Pattern recognition** without feature engineering
-
-### 8. Generative Compression (Video/Audio)
-- **Declarative encoding**: (shell, mirror-frame, curvature-path, monodromy)
-- **Phase-normalized storage** with reconstruction guarantees
-- **Motion + style separation** for efficient codecs
-
-## Research Context
-
-The mathematical foundation connects:
-- **Combinatorial curvature** → **discrete differential geometry**
-- **Digit symmetries** → **Galois covering spaces**
-- **Branch structures** → **arithmetic topology**
-- **Spectral theory** → **zeta function analogues**
-- **Coherence engine** → **practical applications above**
-
-Simple curvature flows in discrete systems uncover universal patterns governing stability, transitions, and information compression.
-
-## Citation
-
-If you use this framework in research, please cite the CE1 framework components and the discrete Riemann geometry construction.
+If you use this framework in research, please cite the CE1 framework components and the discrete Riemann geometry construction. See [docs/citation.md](docs/citation.md) for more information.
 
 ## License
 
-MIT License - feel free to explore, modify, and extend.
+AntClock is licensed under the **Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)** license. See **[LICENSE.md](LICENSE.md)** for complete license terms.
+
+This license ensures AntClock remains free and open while requiring appropriate acknowledgement of the original work and its philosophical foundations.
 
 ---
-
-**AntClock: Where integers become geometry, and curvature becomes arithmetic.**
 
 *Built from Pascal's triangle to the Riemann hypothesis, one digit shell at a time.*

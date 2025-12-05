@@ -1,0 +1,56 @@
+{
+  "timestamp": "2025-12-04T13:10:30.213983",
+  "status": "real_dataset_results",
+  "note": "Results from real benchmark datasets (SCAN: 16K train, COGS: 24K train, etc.)",
+  "section6_real_results": {
+    "scan_performance": {
+      "baseline_accuracy": 0.0,
+      "ce_enhanced_accuracy": 0.0,
+      "improvement": 0.0
+    },
+    "cogs_performance": {
+      "baseline_accuracy": 0.0,
+      "ce_enhanced_accuracy": 0.0,
+      "improvement": 0.0
+    },
+    "pcfg_performance": {
+      "baseline_accuracy": 0.0,
+      "ce_enhanced_accuracy": 0.0,
+      "improvement": 0.0
+    },
+    "cfq_performance": {
+      "baseline_accuracy": 0.0,
+      "ce_enhanced_accuracy": 0.0,
+      "improvement": 0.0
+    },
+    "rpm_performance": {
+      "baseline_accuracy": 0.0,
+      "ce_enhanced_accuracy": 0.0,
+      "improvement": 0.0
+    },
+    "math_performance": {
+      "baseline_accuracy": 0.0,
+      "ce_enhanced_accuracy": 0.0,
+      "improvement": 0.0
+    },
+    "dataset_sizes": {
+      "scan_train": 16728,
+      "scan_test": 4182,
+      "cogs_train": 24155,
+      "cogs_test": 3000,
+      "cfq_train": 10000,
+      "cfq_test": 2000,
+      "pcfg_train": 1000,
+      "pcfg_test": 200,
+      "rpm_train": 10000,
+      "rpm_test": 1000,
+      "math_train": 1000,
+      "math_test": 200,
+      "note": "Real benchmark datasets with thousands of examples"
+    },
+    "ce_parameters": {
+      "kappa": 0.35,
+      "chi_feg": 0.638
+    }
+  }
+}

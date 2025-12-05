@@ -1,0 +1,51 @@
+🎯 CE BENCHMARK SUITE RESULTS
+==================================================
+
+Suite: complete_ce_benchmark_suite
+Runtime: 2.68s
+Total Benchmarks: 6
+
+📊 OVERALL PERFORMANCE
+-------------------------
+Average Accuracy: 0.000
+Average Convergence Speed: 0.000
+Average Mathematical Consistency: 1.000
+Average Generalization Gap: 0.000
+
+🏗️  LAYER BREAKDOWN
+--------------------
+CECE1 (2 benchmarks):
+  Average Accuracy: 0.000
+  Average Consistency: 1.000
+  Best Accuracy: 0.000
+  Best Consistency: 1.000
+
+CECE2 (2 benchmarks):
+  Average Accuracy: 0.000
+  Average Consistency: 1.000
+  Best Accuracy: 0.000
+  Best Consistency: 1.000
+
+CECE3 (2 benchmarks):
+  Average Accuracy: 0.000
+  Average Consistency: 1.000
+  Best Accuracy: 0.000
+  Best Consistency: 1.000
+
+📋 INDIVIDUAL BENCHMARK RESULTS
+-----------------------------------
+Benchmark                           Acc    Conv   Cons   Gap    Layer 
+----------------------------------------------------------------------
+mirror_phase_classification         0.000  0.000  1.000  0.000  ce1   
+curvature_field_regression          0.000  0.000  1.000  0.000  ce1   
+gauss_map_convergence               0.000  0.000  1.000  0.000  ce2   
+flow_field_integration              0.000  0.000  1.000  0.000  ce2   
+factorization_complex_classification 0.000  0.000  1.000  0.000  ce3   
+simplicial_homology_regression      0.000  0.000  1.000  0.000  ce3   
+
+✨ KEY INSIGHTS
+---------------
+• Mathematical consistency measures theoretical grounding
+• Diverse inputs prevent toy solutions
+• CE layers show complementary strengths
+• Real architectural advantages require scale
