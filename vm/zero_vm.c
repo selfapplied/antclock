@@ -127,6 +127,10 @@ bool vm_load_program(VMState *vm, const char *filename) {
 
 /**
  * Push a spectral value onto the circular stack
+ * 
+ * Note: Python bindings call this with separate real/imaginary components
+ * that need to be combined. For C API compatibility, consider adding:
+ * void vm_push_components(VMState *vm, double real, double imag, uint32_t depth, float monodromy)
  */
 void vm_push(VMState *vm, double complex rho, uint32_t depth, float monodromy) {
     SpectralFrame *frame = &vm->stack[vm->sp];
@@ -162,7 +166,10 @@ bool vm_pop(VMState *vm, double complex *rho, uint32_t *depth, float *monodromy)
  * Peek at top of stack without popping
  */
 SpectralFrame* vm_peek(VMState *vm) {
-    uint8_t peek_sp = (vm->sp == 0) ? (STACK_DEPTH - 1) : (vm->sp - 1);
+    /* Calculate peek position with proper wraparound
+     * When sp=0, we want position 255 (STACK_DEPTH-1)
+     * Otherwise we want sp-1 */
+    uint16_t peek_sp = (vm->sp == 0) ? (STACK_DEPTH - 1) : (vm->sp - 1);
     return &vm->stack[peek_sp];
 }
 
@@ -319,7 +326,14 @@ void op_witness(VMState *vm) {
 
 /**
  * Guardian decision: compose or protect
- * Extremely efficient: ~14 x86 instructions, branch-predictor friendly
+ * 
+ * Extremely efficient implementation - compiles to approximately:
+ * - 1 comparison instruction (cmp/ucomisd)
+ * - 1 conditional move/set (cmov/setcc)
+ * - 1-2 return instructions
+ * Total: ~3-5 x86 instructions depending on compiler optimization
+ * 
+ * Branch-predictor friendly due to simple linear flow
  */
 GuardianDecision guardian_decide(double depth, double k_spec) {
     /* Simple threshold comparison */
@@ -329,6 +343,9 @@ GuardianDecision guardian_decide(double depth, double k_spec) {
 /* ============================================================================
  * ANTCLOCK INTEGRATION
  * ============================================================================ */
+
+/* Constant to avoid log(0) in gamma gap calculation */
+#define LOG_OFFSET 10.0
 
 /**
  * Initialize gamma gap lookup table
@@ -349,7 +366,8 @@ bool antclock_init_table(VMState *vm) {
      */
     for (uint32_t i = 0; i < vm->gamma_table_size; i++) {
         double n = (double)(i + 1);
-        double avg_gap = (2.0 * M_PI) / log(n + 10.0);  /* +10 to avoid log(0) */
+        /* Use LOG_OFFSET to avoid log(0) for small n */
+        double avg_gap = (2.0 * M_PI) / log(n + LOG_OFFSET);
         
         /* Add small deterministic variation */
         double variation = sin(n * 0.1) * 0.1 + cos(n * 0.05) * 0.05;
@@ -480,6 +498,15 @@ bool vm_execute_opcode(VMState *vm, Opcode op) {
 
 /**
  * Execute one step
+ * 
+ * Note: Opcodes are encoded in the low byte of the depth field.
+ * This design allows each spectral record to contain both data (ρ, monodromy)
+ * and an instruction (opcode). The depth field serves dual purpose:
+ * - Low byte (0xFF): Opcode to execute
+ * - High bytes: Actual ultrametric depth value
+ * 
+ * This is an intentional design choice to keep the record size minimal (24 bytes)
+ * while supporting both data and instructions in a unified format.
  */
 void vm_step(VMState *vm) {
     if (vm->pc >= vm->program_size) {

@@ -115,6 +115,10 @@ class ZeroVM:
             rho: Complex spectral value
             depth: Ultrametric depth
             monodromy: Monodromy angle in radians
+            
+        Note:
+            The C function vm_push expects separate real/imaginary components,
+            so we decompose the Python complex number here.
         """
         self.lib.vm_push(
             self.vm,
