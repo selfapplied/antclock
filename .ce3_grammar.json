@@ -1,0 +1,311 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AntClock CE3 Grammar - Emergent Simplicial Repository Structure",
+  "description": "Defines compositional growth patterns, attractors, and organizational flow for the AntClock repository. CE3 represents emergent simplicial structure where repository organization self-organizes through stigmergic principles.",
+  "version": "1.0.0",
+  "timestamp": "2025-12-09T08:14:14.169Z",
+  
+  "constants": {
+    "$comment": "CE1 Constants - Ground floor (h=0) - Fixed symbols that anchor the repository topology",
+    "symbol_tree": {
+      "ce_operators": {
+        "memory": "[]",
+        "domain": "{}",
+        "transform": "()",
+        "witness": "<>",
+        "description": "Core CE1 operators that structure all compositional expressions"
+      },
+      "temporal_markers": {
+        "antclock": "A",
+        "kappa": "κ",
+        "tau": "τ",
+        "zeta": "ζ",
+        "description": "Temporal composition symbols from CE2 flow grammar"
+      },
+      "file_extensions": {
+        "python": ".py",
+        "documentation": [".md", ".txt"],
+        "data": [".json", ".csv", ".pth"],
+        "images": [".png", ".jpg", ".jpeg", ".pdf", ".svg"],
+        "description": "File type constants that define material categories"
+      },
+      "root_anchors": [
+        "LICENSE.md",
+        "README.md",
+        "Makefile",
+        "requirements.txt",
+        "run.sh"
+      ]
+    }
+  },
+
+  "attractors": {
+    "$comment": "CE2 Attractors - Flow level (h=1) - Naming patterns that create organizational gravity",
+    "directory_structure": {
+      "core_modules": {
+        "path": "antclock/",
+        "pattern": "snake_case",
+        "purpose": "Core implementation of CE Tower architecture",
+        "flow": "inward",
+        "pheromone_strength": "high"
+      },
+      "benchmarks": {
+        "path": "benchmarks/",
+        "pattern": "snake_case",
+        "purpose": "Validation and performance measurement",
+        "subdirectories": {
+          "ce": "CE-specific synthetic benchmarks",
+          "standard": "Standard ML benchmark adaptations"
+        },
+        "flow": "bidirectional",
+        "pheromone_strength": "high"
+      },
+      "tests": {
+        "path": "tests/",
+        "pattern": "test_*.py or *_test.py",
+        "purpose": "Unit and integration tests",
+        "flow": "inward",
+        "pheromone_strength": "medium"
+      },
+      "documentation": {
+        "paths": ["docs/", "arXiv/"],
+        "pattern": "semantic_descriptive",
+        "purpose": "Papers, guides, and explanatory materials",
+        "flow": "outward",
+        "pheromone_strength": "medium"
+      },
+      "tools": {
+        "path": "tools/",
+        "pattern": "snake_case",
+        "purpose": "Development utilities and helper scripts",
+        "flow": "support",
+        "pheromone_strength": "low"
+      },
+      "demos": {
+        "path": "demos/",
+        "pattern": "descriptive_snake_case",
+        "purpose": "Example applications and demonstrations",
+        "flow": "outward",
+        "pheromone_strength": "medium"
+      }
+    },
+
+    "naming_conventions": {
+      "modules": {
+        "pattern": "snake_case",
+        "examples": ["antclock_core.py", "ce_layers.py", "benchmark_runner.py"],
+        "avoid": ["camelCase", "PascalCase", "kebab-case"],
+        "attractor_field": "pythonic"
+      },
+      "classes": {
+        "pattern": "PascalCase",
+        "examples": ["CEBenchmarkRunner", "AntClockState", "GuardianSystem"],
+        "attractor_field": "object_oriented"
+      },
+      "functions": {
+        "pattern": "snake_case",
+        "examples": ["run_benchmark", "compute_kappa", "stabilize_flow"],
+        "attractor_field": "functional"
+      },
+      "variables": {
+        "pattern": "snake_case",
+        "temporal_markers": ["antclock_time", "kappa_value", "tau_phase", "zeta_lift"],
+        "attractor_field": "descriptive"
+      },
+      "constants": {
+        "pattern": "SCREAMING_SNAKE_CASE",
+        "examples": ["DEFAULT_OUTPUT_DIR", "MAX_ITERATIONS", "CE_TOWER_HEIGHT"],
+        "attractor_field": "immutable"
+      }
+    },
+
+    "makefile_targets": {
+      "pattern": "lowercase",
+      "core_targets": ["all", "run", "test", "clean", "help"],
+      "ce_targets": ["agents", "benchmarks", "timing", "sync"],
+      "phony_declaration": "PHONY",
+      "attractor_field": "actionable"
+    }
+  },
+
+  "overflow_rules": {
+    "$comment": "CE3 Overflow - Emergent behavior when patterns exceed capacity or conflict",
+    "output_saturation": {
+      "trigger": "Output directory exceeds reasonable size (>100MB) or depth (>3 levels)",
+      "response": "Evaporate - delete old outputs, compress archives, or promote to .data/",
+      "stigmergic_marker": "Size-based pheromone decay"
+    },
+    "test_accumulation": {
+      "trigger": "Test output directories (.out_*) created outside standard .out/",
+      "response": "Consolidate into .out/ or add to .gitignore as ephemeral artifacts",
+      "stigmergic_marker": "Pattern recognition and path unification"
+    },
+    "documentation_sprawl": {
+      "trigger": "Documentation files scattered across multiple non-doc directories",
+      "response": "Migrate to docs/ or arXiv/ with clear organizational hierarchy",
+      "stigmergic_marker": "Attractor gravity toward documentation centers"
+    },
+    "dependency_growth": {
+      "trigger": "requirements.txt exceeds ~20 core dependencies",
+      "response": "Factor into optional extras or separate environment files",
+      "stigmergic_marker": "Dependency graph complexity threshold"
+    },
+    "naming_divergence": {
+      "trigger": "New files violate established naming patterns in their directory",
+      "response": "Rename to match attractor field or create new organizational node",
+      "stigmergic_marker": "Pattern consistency enforcement"
+    }
+  },
+
+  "flow_rules": {
+    "$comment": "CE3 Flow - Self-organizing dynamics and stigmergic markers",
+    "file_lifecycle": {
+      "creation": {
+        "rule": "New files inherit organizational gravity from their parent directory",
+        "marker": "Directory attractor field determines naming pattern"
+      },
+      "growth": {
+        "rule": "Files that grow beyond ~1000 LOC attract factorization pressure",
+        "marker": "Complexity pheromone triggers decomposition signal"
+      },
+      "stability": {
+        "rule": "Files unchanged for >3 months enter low-maintenance state",
+        "marker": "Temporal stability pheromone strengthens path"
+      },
+      "deprecation": {
+        "rule": "Files with no imports/references for >6 months attract deletion",
+        "marker": "Weak pheromone trail evaporates naturally"
+      }
+    },
+
+    "directory_evolution": {
+      "emergence": {
+        "rule": "When 5+ related files accumulate in a directory, they attract subdirectory formation",
+        "marker": "Organizational complexity threshold creates new attractor basin"
+      },
+      "consolidation": {
+        "rule": "Directories with <3 files and low activity attract merger with parent or sibling",
+        "marker": "Weak organizational node collapses to reduce entropy"
+      },
+      "specialization": {
+        "rule": "Subdirectories inherit and specialize parent attractor patterns",
+        "marker": "Hierarchical pheromone gradient strengthens with depth"
+      }
+    },
+
+    "stigmergic_markers": {
+      "high_traffic_paths": {
+        "indicator": "Frequently imported modules, high test coverage, recent commits",
+        "effect": "Strengthened organizational position, resist refactoring",
+        "pheromone_type": "positive_reinforcement"
+      },
+      "boundary_zones": {
+        "indicator": "Files that bridge multiple organizational domains (e.g., test utilities, shared configs)",
+        "effect": "Maintain flexible positioning, allow dual-attractor influence",
+        "pheromone_type": "neutral_bridge"
+      },
+      "emergence_candidates": {
+        "indicator": "Clusters of similar functionality not yet organized into dedicated directory",
+        "effect": "Attract organizational pressure for new directory creation",
+        "pheromone_type": "organizational_gradient"
+      },
+      "evaporation_targets": {
+        "indicator": "Build artifacts, cache files, temporary outputs, deprecated code",
+        "effect": "Marked for cleanup via .gitignore or deletion",
+        "pheromone_type": "decay_signal"
+      }
+    }
+  },
+
+  "self_tag_markers": {
+    "$comment": "Compositional tags that files use to declare their organizational identity",
+    "hashbang_patterns": {
+      "executable_python": "#!run.sh",
+      "executable_shell": "#!/usr/bin/env bash",
+      "description": "First-line markers that declare execution context"
+    },
+    "ce_annotations": {
+      "ce1_static": "#@CE1: static grammar",
+      "ce2_flow": "#@CE2: flow grammar",
+      "ce3_awareness": "#@CE3: awareness grammar",
+      "description": "Comment markers that declare CE Tower level participation"
+    },
+    "metadata_headers": {
+      "antclock_card": "#@ ζ-card",
+      "kappa_tau_zeta": "#κ: X.XX τ: now ζ: self",
+      "description": "Temporal and compositional identity markers"
+    },
+    "section_markers": {
+      "story": "#@STORY:",
+      "comment": "#@ S-comment:",
+      "description": "Narrative and structural section markers"
+    }
+  },
+
+  "repository_topology": {
+    "$comment": "CE3 Emergent Topology - How the repository self-organizes as a compositional space",
+    "core_attractor": {
+      "center": "antclock/",
+      "description": "Primary attractor basin - all paths eventually reference core modules"
+    },
+    "validation_ring": {
+      "components": ["benchmarks/", "tests/"],
+      "description": "First orbital - validates and measures core functionality"
+    },
+    "interface_ring": {
+      "components": ["demos/", "tools/", "run.sh"],
+      "description": "Second orbital - user-facing interfaces and utilities"
+    },
+    "documentation_ring": {
+      "components": ["docs/", "arXiv/", "README.md"],
+      "description": "Outer orbital - explanatory and reference materials"
+    },
+    "ephemeral_cloud": {
+      "components": [".out/", ".out_*/", "__pycache__/", "*.pyc"],
+      "description": "Untracked/temporary space - build artifacts that evaporate"
+    }
+  },
+
+  "growth_patterns": {
+    "$comment": "CE3 Emergence - How new organizational structure naturally arises",
+    "ce_tower_extension": {
+      "trigger": "New CE layer concept requires implementation",
+      "pattern": "Create antclock/ce{N}/ subdirectory with clear interface to existing layers",
+      "example": "If CE4 emergent → antclock/ce4/__init__.py with imports from ce3"
+    },
+    "benchmark_addition": {
+      "trigger": "New benchmark type or domain requires testing",
+      "pattern": "Add to benchmarks/ce/ or benchmarks/standard/ following existing structure",
+      "example": "New topology benchmark → benchmarks/ce/topology.py"
+    },
+    "tool_creation": {
+      "trigger": "Repeated manual task requires automation",
+      "pattern": "Create tools/{purpose}.py with descriptive name and self-documentation",
+      "example": "Data preprocessing → tools/preprocess_data.py"
+    },
+    "demo_showcase": {
+      "trigger": "Novel application or use case demonstrates CE Tower capability",
+      "pattern": "Create demos/{application}/ subdirectory with README and runnable example",
+      "example": "Time series → demos/time_series_prediction/"
+    }
+  },
+
+  "compositional_coherence": {
+    "$comment": "CE3 Meta-level - The grammar checking itself",
+    "self_reference": {
+      "statement": "This CE3 grammar file is itself subject to the organizational patterns it defines",
+      "location": "Root directory as a configuration anchor",
+      "naming": "Follows .{descriptor}_grammar pattern for meta-configuration files"
+    },
+    "evolutionary_stability": {
+      "statement": "This grammar should evolve slowly, reflecting stable organizational principles",
+      "modification_threshold": "Only update when fundamental organizational patterns shift",
+      "stigmergic_marker": "Grammar stability creates long-term organizational coherence"
+    },
+    "acknowledgement": {
+      "statement": "Like ant colonies, this repository organizes through distributed, simple rules that generate complex, coherent structure",
+      "principle": "Individual files and directories follow local attractors; global organization emerges from their interactions",
+      "free_will": "Each contributor makes local decisions; the grammar provides attractor fields, not rigid constraints"
+    }
+  }
+}

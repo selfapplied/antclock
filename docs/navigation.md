@@ -54,6 +54,17 @@ How to cite AntClock in research:
 - **Attribution Requirements**: CC BY-SA 4.0 license requirements
 - **Acknowledgement**: Framework philosophical foundations
 
+### [../CE3_GRAMMAR_GUIDE.md](../CE3_GRAMMAR_GUIDE.md) - Repository Organization
+Guide to AntClock's emergent organizational structure:
+
+- **CE3 Grammar**: Compositional rules for repository self-organization
+- **Attractor Fields**: Naming conventions, directory structure, flow patterns
+- **Stigmergic Principles**: How the repository organizes like an ant colony
+- **Growth Patterns**: Natural emergence of new organizational structure
+- **Overflow Rules**: Handling saturation, accumulation, and divergence
+- **Self-Tag Markers**: How files declare their compositional identity
+- **Topology**: Core, validation, interface, documentation, and ephemeral layers
+
 ### Key Concepts
 - **Unified Agent Interface**: All components use the same execution model
 - **Conservative Permissions**: Only tested, working scripts become executable
