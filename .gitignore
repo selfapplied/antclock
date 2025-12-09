@@ -113,6 +113,7 @@ dmypy.json
 *.pdf
 *.svg
 .out/
+.out_*/
 
 # Dataset files
 .data/
