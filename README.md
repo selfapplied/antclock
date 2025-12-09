@@ -35,10 +35,28 @@ make clean        # Clean build artifacts
 ./demos/transport.py    # Transport mechanism details
 ./benchmarks/benchmark.py   # CE framework validation
 
+# Zero-image μVM (minimum shippable kernel)
+cd vm && make     # Build the VM (~18 kB binary)
+cd vm && make test    # Run VM test suite
+cd vm/examples && make run  # Run example programs
+
 # If anything goes wrong, run.sh may assist in healing the environment:
 ./run.sh [filename]         # Run a specific script
 ./run.sh -- [custom_code]   # Run custom Python code
 ```
+
+## Zero-image μVM
+
+AntClock now includes a **Zero-image μVM** - a minimal executable kernel (~400 lines of C, ~18 kB binary) that operationalizes CE1 bracket algebra into a concrete, shippable artifact. The VM runs on standard hardware (Docker, WASM compatible) without requiring quantum infrastructure.
+
+**Key Features:**
+- 4-opcode ISA mapping directly to CE1 bracket algebra: `{}` (Project), `[]` (Depth), `()` (Morph), `<>` (Witness)
+- 16 KB circular stack (L1 cache friendly)
+- Guardian logic (~14 x86 instructions) for compose/protect decisions
+- Antclock integration with gamma gap lookup table
+- Zero dependencies (standard C library only)
+
+See [vm/README.md](vm/README.md) for complete documentation.
 
 # Self-Recognition Immunity Marking (SIM)
 

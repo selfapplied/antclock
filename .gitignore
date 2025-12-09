@@ -6,6 +6,17 @@ __pycache__/
 # C extensions
 *.so
 
+# C build artifacts
+*.o
+*.a
+vm/zero_vm
+vm/test_vm
+vm/examples/simple_projection
+vm/examples/distance_computation
+vm/examples/morphism_chain
+vm/examples/witness_extraction
+vm/examples/guardian_demo
+
 # Distribution / packaging
 .Python
 build/
