@@ -63,10 +63,11 @@ The framework is evaluated on six standard systematic generalization benchmarks:
 
 Standard benchmark results are displayed automatically in GitHub Actions:
 
-1. Navigate to the [Actions tab](../../actions/workflows/cuda-benchmarks.yml)
-2. Click on any workflow run (triggered on push to main or manually via workflow_dispatch)
-3. View the **"🎯 Standard AntClock Benchmark Results"** section in the run summary
-4. Download full results as artifacts for detailed analysis
+1. Navigate to the **Actions** tab in this repository
+2. Select the **"CUDA Benchmarks"** workflow
+3. Click on any workflow run (triggered on push to main or manually via workflow_dispatch)
+4. View the **"🎯 Standard AntClock Benchmark Results"** section in the run summary
+5. Download full results as artifacts for detailed analysis
 
 You can also run benchmarks locally:
 ```bash
