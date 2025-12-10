@@ -40,6 +40,11 @@ cd vm && make     # Build the VM (~18 kB binary)
 cd vm && make test    # Run VM test suite
 cd vm/examples && make run  # Run example programs
 
+# Run VM in Docker container
+./docker_run.sh build       # Build Docker image
+./docker_run.sh run --help  # Run VM in container
+./docker_run.sh shell       # Interactive container shell
+
 # If anything goes wrong, run.sh may assist in healing the environment:
 ./run.sh [filename]         # Run a specific script
 ./run.sh -- [custom_code]   # Run custom Python code

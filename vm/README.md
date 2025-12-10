@@ -101,13 +101,28 @@ make clean
 
 ### Docker
 
+The easiest way to run the VM in Docker is using the provided Docker runner script:
+
+```bash
+# From repository root
+./docker_run.sh build              # Build Docker image
+./docker_run.sh run --help         # Run VM with help
+./docker_run.sh run /programs/example.zero  # Run a program
+./docker_run.sh shell              # Open interactive shell
+./docker_run.sh clean              # Remove Docker image
+```
+
+Alternatively, you can use make directly:
+
 ```bash
 # Build Docker image
 make docker
 
-# Run in container
+# Run in container manually
 docker run -v $(pwd)/programs:/programs zero-vm:latest /programs/example.zero
 ```
+
+See the main repository README for more details on the Docker runner.
 
 ### WASM (Future)
 
