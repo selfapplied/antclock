@@ -239,7 +239,10 @@ cd vm
 make docker  # Builds the image as 'zero-vm:latest'
 ```
 
-Note: The Makefile uses a different image name (`zero-vm`) than the runner script (`antclock-zero-vm`).
+**Note:** The Makefile uses a different image name (`zero-vm:latest`) than the runner script (`antclock-zero-vm:latest`). 
+- Use `docker_run.sh` for consistency and easier management
+- Use `make docker` if you need the legacy image name
+- Both images are functionally identical
 
 ## Architecture
 

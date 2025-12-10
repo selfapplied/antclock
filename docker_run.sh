@@ -79,10 +79,15 @@ build_image() {
     print_info "Build context: vm/"
     
     cd vm
-    docker build -t "${FULL_IMAGE}" .
-    cd ..
-    
-    print_status "Docker image built successfully: ${FULL_IMAGE}"
+    if docker build -t "${FULL_IMAGE}" .; then
+        cd ..
+        print_status "Docker image built successfully: ${FULL_IMAGE}"
+    else
+        cd ..
+        print_error "Docker build failed"
+        print_info "Check the error messages above for details"
+        exit 1
+    fi
     
     # Show image info
     print_info "Image details:"
@@ -169,11 +174,10 @@ clean_image() {
         print_warning "Docker image ${FULL_IMAGE} not found"
     fi
     
-    # Clean up dangling images
+    # Clean up dangling images (optional, with warning)
     if docker images -f "dangling=true" -q | grep -q .; then
-        print_info "Removing dangling images..."
-        docker image prune -f
-        print_status "Dangling images removed"
+        print_warning "Found dangling Docker images (may include images from other projects)"
+        print_info "Run 'docker image prune' manually to remove them if desired"
     fi
 }
 

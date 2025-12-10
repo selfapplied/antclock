@@ -119,10 +119,10 @@ Alternatively, you can use make directly:
 make docker
 
 # Run in container manually
-docker run -v $(pwd)/programs:/programs zero-vm:latest /programs/example.zero
+docker run -v $(pwd)/programs:/programs antclock-zero-vm:latest /programs/example.zero
 ```
 
-See the main repository README for more details on the Docker runner.
+📋 **[DOCKER.md](DOCKER.md)** - Complete Docker runner guide with examples and troubleshooting.
 
 ### WASM (Future)
 
