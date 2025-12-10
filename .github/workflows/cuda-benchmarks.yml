@@ -79,47 +79,57 @@ jobs:
             
             # Parse JSON and create summary table
             python3 << 'EOF'
-          import json
-          import sys
-          
-          try:
-              with open('real_benchmark_results.json', 'r') as f:
-                  results = json.load(f)
-              
-              benchmark_names = {
-                  'scan': 'SCAN',
-                  'cogs': 'COGS', 
-                  'cfq': 'CFQ',
-                  'pcfg': 'PCFG',
-                  'rpm': 'RPM',
-                  'math': 'Math'
-              }
-              
-              for key, name in benchmark_names.items():
-                  if key in results.get('results', {}):
-                      data = results['results'][key]
-                      if 'error' in data:
-                          print(f"| {name} | ❌ Failed | N/A | {data['error'][:50]}... |")
-                      else:
-                          # Try different accuracy keys
-                          acc = data.get('test_accuracy', 
-                                        data.get('accuracy',
-                                        data.get('evaluation', {}).get('test_accuracy', 'N/A')))
-                          if isinstance(acc, (int, float)):
-                              acc_str = f"{acc:.1%}"
-                          else:
-                              acc_str = str(acc)
-                          print(f"| {name} | ✅ Success | {acc_str} | - |")
-                  else:
-                      print(f"| {name} | ⚠️ Not Run | N/A | - |")
-          except FileNotFoundError:
-              print("| All | ⚠️ No Results | N/A | Benchmark file not found |")
-          except Exception as e:
-              print(f"| All | ❌ Error | N/A | {str(e)[:50]} |")
+            import json
+            import sys
+            
+            try:
+                with open('real_benchmark_results.json', 'r') as f:
+                    results = json.load(f)
+                
+                benchmark_names = {
+                    'scan': 'SCAN',
+                    'cogs': 'COGS', 
+                    'cfq': 'CFQ',
+                    'pcfg': 'PCFG',
+                    'rpm': 'RPM',
+                    'math': 'Math'
+                }
+                
+                for key, name in benchmark_names.items():
+                    if key in results.get('results', {}):
+                        data = results['results'][key]
+                        if 'error' in data:
+                            # Truncate error to 100 chars but preserve key information
+                            error_msg = data['error'][:100]
+                            if len(data['error']) > 100:
+                                error_msg += '...'
+                            print(f"| {name} | ❌ Failed | N/A | {error_msg} |")
+                        else:
+                            # Try different accuracy keys
+                            acc = data.get('test_accuracy', 
+                                          data.get('accuracy',
+                                          data.get('evaluation', {}).get('test_accuracy', 'N/A')))
+                            if isinstance(acc, (int, float)):
+                                acc_str = f"{acc:.1%}"
+                            else:
+                                acc_str = str(acc)
+                            print(f"| {name} | ✅ Success | {acc_str} | - |")
+                    else:
+                        print(f"| {name} | ⚠️ Not Run | N/A | - |")
+                
+                # Also print timestamp
+                print(f"\n**Timestamp:** {results.get('timestamp', 'N/A')}")
+            except FileNotFoundError:
+                print("| All | ⚠️ No Results | N/A | Benchmark file not found |")
+            except Exception as e:
+                # Preserve more of the error message
+                error_msg = str(e)[:100]
+                if len(str(e)) > 100:
+                    error_msg += '...'
+                print(f"| All | ❌ Error | N/A | {error_msg} |")
           EOF
             
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**Timestamp:** $(python3 -c "import json; print(json.load(open('real_benchmark_results.json'))['timestamp'])" 2>/dev/null || echo "N/A")" >> $GITHUB_STEP_SUMMARY
           else
             echo "⚠️ No benchmark results file found (real_benchmark_results.json)" >> $GITHUB_STEP_SUMMARY
           fi
