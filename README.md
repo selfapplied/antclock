@@ -45,6 +45,37 @@ cd vm/examples && make run  # Run example programs
 ./run.sh -- [custom_code]   # Run custom Python code
 ```
 
+## Benchmarks & Validation
+
+AntClock includes comprehensive benchmarking to validate the CE framework on both synthetic and standard ML tasks:
+
+### Standard Benchmarks
+
+The framework is evaluated on six standard systematic generalization benchmarks:
+- **SCAN** - Sequence-to-sequence compositional parsing (16K train, 4K test)
+- **COGS** - Semantic parsing compositional generalization (24K train, 3K test)  
+- **CFQ** - Compositional question answering (10K train, 2K test)
+- **PCFG** - Probabilistic context-free grammar parsing (1K train, 200 test)
+- **RPM** - Raven's Progressive Matrices visual reasoning (10K train, 1K test)
+- **Math** - Mathematical reasoning on SVAMP dataset (1K train, 200 test)
+
+### Viewing Benchmark Results
+
+Standard benchmark results are displayed automatically in GitHub Actions:
+
+1. Navigate to the [Actions tab](../../actions/workflows/cuda-benchmarks.yml)
+2. Click on any workflow run (triggered on push to main or manually via workflow_dispatch)
+3. View the **"🎯 Standard AntClock Benchmark Results"** section in the run summary
+4. Download full results as artifacts for detailed analysis
+
+You can also run benchmarks locally:
+```bash
+make benchmarks                    # Run full benchmark suite
+./run.sh benchmarks/benchmark.py   # Direct benchmark execution
+```
+
+See [docs/benchmarks.md](docs/benchmarks.md) for detailed information about the benchmark architecture and sentinel node design.
+
 ## Zero-image μVM
 
 AntClock now includes a **Zero-image μVM** - a minimal executable kernel (~400 lines of C, ~18 kB binary) that operationalizes CE1 bracket algebra into a concrete, shippable artifact. The VM runs on standard hardware (Docker, WASM compatible) without requiring quantum infrastructure.
