@@ -78,7 +78,7 @@ jobs:
             echo "|-----------|--------|----------|---------|" >> $GITHUB_STEP_SUMMARY
             
             # Parse JSON and create summary table
-            python3 << 'EOF'
+            python3 << 'EOF' >> $GITHUB_STEP_SUMMARY
             import json
             import sys
             
