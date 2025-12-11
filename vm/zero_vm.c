@@ -481,19 +481,28 @@ void print_vm_state(VMState *vm) {
  * ============================================================================ */
 
 /**
+ * Map opcode to counter index (helper for JIT tracking)
+ * Returns index into opcode_counts array, or -1 for unknown opcode
+ */
+static int opcode_to_index(Opcode op) {
+    switch(op) {
+        case OP_PROJECT: return 0;
+        case OP_DEPTH:   return 1;
+        case OP_MORPH:   return 2;
+        case OP_WITNESS: return 3;
+        default:         return -1;
+    }
+}
+
+/**
  * Execute a single opcode
  */
 bool vm_execute_opcode(VMState *vm, Opcode op) {
     /* Track opcode execution count for JIT (Planned Feature #1) */
-    uint8_t idx = 0;
-    switch (op) {
-        case OP_PROJECT: idx = 0; break;
-        case OP_DEPTH:   idx = 1; break;
-        case OP_MORPH:   idx = 2; break;
-        case OP_WITNESS: idx = 3; break;
-        default:
-            fprintf(stderr, "Unknown opcode: 0x%02X\n", op);
-            return false;
+    int idx = opcode_to_index(op);
+    if (idx < 0) {
+        fprintf(stderr, "Unknown opcode: 0x%02X\n", op);
+        return false;
     }
     vm->opcode_counts[idx]++;
     
@@ -516,6 +525,9 @@ bool vm_execute_opcode(VMState *vm, Opcode op) {
         case OP_WITNESS:
             op_witness(vm);
             break;
+        default:
+            /* Should never reach here since we validated above */
+            return false;
     }
     
     /* Record trace if enabled (Planned Feature #5) */
@@ -582,12 +594,9 @@ bool vm_jit_should_compile(VMState *vm, Opcode op) {
         return false;
     }
     
-    uint8_t idx = 0;
-    switch(op) {
-        case OP_PROJECT: idx = 0; break;
-        case OP_DEPTH:   idx = 1; break;
-        case OP_MORPH:   idx = 2; break;
-        case OP_WITNESS: idx = 3; break;
+    int idx = opcode_to_index(op);
+    if (idx < 0) {
+        return false;  /* Unknown opcode, can't JIT compile */
     }
     
     return vm->opcode_counts[idx] >= JIT_HOT_PATH_THRESHOLD;
