@@ -1,0 +1,144 @@
+{
+  "traces": [
+    {
+      "index": 0,
+      "rho": {"real": 0.5000000000, "imag": 14.1347250000},
+      "depth": 0,
+      "monodromy": 1.570000,
+      "timestamp": 1000
+    },
+    {
+      "index": 1,
+      "rho": {"real": 0.5000000000, "imag": 17.6347250000},
+      "depth": 1,
+      "monodromy": 1.670000,
+      "timestamp": 1100
+    },
+    {
+      "index": 2,
+      "rho": {"real": 0.5000000000, "imag": 21.1347250000},
+      "depth": 2,
+      "monodromy": 1.770000,
+      "timestamp": 1200
+    },
+    {
+      "index": 3,
+      "rho": {"real": 0.5000000000, "imag": 24.6347250000},
+      "depth": 3,
+      "monodromy": 1.870000,
+      "timestamp": 1300
+    },
+    {
+      "index": 4,
+      "rho": {"real": 0.5000000000, "imag": 28.1347250000},
+      "depth": 4,
+      "monodromy": 1.970000,
+      "timestamp": 1400
+    },
+    {
+      "index": 5,
+      "rho": {"real": 0.5000000000, "imag": 31.6347250000},
+      "depth": 5,
+      "monodromy": 2.070000,
+      "timestamp": 1500
+    },
+    {
+      "index": 6,
+      "rho": {"real": 0.5000000000, "imag": 35.1347250000},
+      "depth": 6,
+      "monodromy": 2.170000,
+      "timestamp": 1600
+    },
+    {
+      "index": 7,
+      "rho": {"real": 0.5000000000, "imag": 38.6347250000},
+      "depth": 7,
+      "monodromy": 2.270000,
+      "timestamp": 1700
+    },
+    {
+      "index": 8,
+      "rho": {"real": 0.5000000000, "imag": 42.1347250000},
+      "depth": 8,
+      "monodromy": 2.370000,
+      "timestamp": 1800
+    },
+    {
+      "index": 9,
+      "rho": {"real": 0.5000000000, "imag": 45.6347250000},
+      "depth": 9,
+      "monodromy": 2.470000,
+      "timestamp": 1900
+    },
+    {
+      "index": 10,
+      "rho": {"real": 0.5000000000, "imag": 49.1347250000},
+      "depth": 0,
+      "monodromy": 2.570000,
+      "timestamp": 2000
+    },
+    {
+      "index": 11,
+      "rho": {"real": 0.5000000000, "imag": 52.6347250000},
+      "depth": 1,
+      "monodromy": 2.670000,
+      "timestamp": 2100
+    },
+    {
+      "index": 12,
+      "rho": {"real": 0.5000000000, "imag": 56.1347250000},
+      "depth": 2,
+      "monodromy": 2.770000,
+      "timestamp": 2200
+    },
+    {
+      "index": 13,
+      "rho": {"real": 0.5000000000, "imag": 59.6347250000},
+      "depth": 3,
+      "monodromy": 2.870000,
+      "timestamp": 2300
+    },
+    {
+      "index": 14,
+      "rho": {"real": 0.5000000000, "imag": 63.1347250000},
+      "depth": 4,
+      "monodromy": 2.970000,
+      "timestamp": 2400
+    },
+    {
+      "index": 15,
+      "rho": {"real": 0.5000000000, "imag": 66.6347250000},
+      "depth": 5,
+      "monodromy": 3.070000,
+      "timestamp": 2500
+    },
+    {
+      "index": 16,
+      "rho": {"real": 0.5000000000, "imag": 70.1347250000},
+      "depth": 6,
+      "monodromy": 3.170000,
+      "timestamp": 2600
+    },
+    {
+      "index": 17,
+      "rho": {"real": 0.5000000000, "imag": 73.6347250000},
+      "depth": 7,
+      "monodromy": 3.270000,
+      "timestamp": 2700
+    },
+    {
+      "index": 18,
+      "rho": {"real": 0.5000000000, "imag": 77.1347250000},
+      "depth": 8,
+      "monodromy": 3.370000,
+      "timestamp": 2800
+    },
+    {
+      "index": 19,
+      "rho": {"real": 0.5000000000, "imag": 80.6347250000},
+      "depth": 9,
+      "monodromy": 3.470000,
+      "timestamp": 2900
+    }
+  ]
+}

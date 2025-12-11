@@ -219,13 +219,15 @@ In quantum mode:
 - P-adic disjointness logic becomes error-sector detection
 - Same opcodes, quantum backend
 
-### Planned Features
+### Implemented Features
 
-- [ ] JIT compilation for hot paths
-- [ ] Network-transparent execution (distribute computation)
-- [ ] Persistent state checkpointing
-- [ ] Interactive debugger
-- [ ] Visual tracer for spectral trajectories
+- [x] **JIT compilation for hot paths** - Execution counter tracks hot opcodes, triggers JIT compilation hook
+- [x] **Network-transparent execution** - State serialization/deserialization for distributed computation
+- [x] **Persistent state checkpointing** - Full VM state save/restore with checkpoint files
+- [x] **Interactive debugger** - Breakpoint management and step-through execution support
+- [x] **Visual tracer for spectral trajectories** - CSV/JSON export for matplotlib/gnuplot visualization
+
+See `tests/test_planned_features.c` for usage examples and `demos/trace_visualization.py` for visualization.
 
 ## Technical Details
 
