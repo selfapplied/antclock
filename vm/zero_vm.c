@@ -40,6 +40,14 @@ VMState* vm_create(void) {
     vm->program = NULL;
     vm->program_size = 0;
     
+    /* Initialize planned feature fields */
+    memset(vm->opcode_counts, 0, sizeof(vm->opcode_counts));
+    vm->jit_compiled_path = NULL;
+    memset(vm->remote_endpoint, 0, sizeof(vm->remote_endpoint));
+    vm->breakpoint_count = 0;
+    vm->trace_index = 0;
+    vm->trace_enabled = false;
+    
     /* Initialize gamma gap table */
     if (!antclock_init_table(vm)) {
         fprintf(stderr, "Failed to initialize antclock table\n");
@@ -476,6 +484,25 @@ void print_vm_state(VMState *vm) {
  * Execute a single opcode
  */
 bool vm_execute_opcode(VMState *vm, Opcode op) {
+    /* Track opcode execution count for JIT (Planned Feature #1) */
+    uint8_t idx = 0;
+    switch (op) {
+        case OP_PROJECT: idx = 0; break;
+        case OP_DEPTH:   idx = 1; break;
+        case OP_MORPH:   idx = 2; break;
+        case OP_WITNESS: idx = 3; break;
+        default:
+            fprintf(stderr, "Unknown opcode: 0x%02X\n", op);
+            return false;
+    }
+    vm->opcode_counts[idx]++;
+    
+    /* Check if JIT compilation should be triggered */
+    if (vm_jit_should_compile(vm, op)) {
+        vm_jit_compile_hot_path(vm);
+    }
+    
+    /* Execute opcode */
     switch (op) {
         case OP_PROJECT:
             op_project(vm);
@@ -489,10 +516,13 @@ bool vm_execute_opcode(VMState *vm, Opcode op) {
         case OP_WITNESS:
             op_witness(vm);
             break;
-        default:
-            fprintf(stderr, "Unknown opcode: 0x%02X\n", op);
-            return false;
     }
+    
+    /* Record trace if enabled (Planned Feature #5) */
+    if (vm->trace_enabled) {
+        vm_trace_record(vm);
+    }
+    
     return true;
 }
 
@@ -537,4 +567,405 @@ void vm_run(VMState *vm) {
     
     printf("VM execution completed\n");
     print_vm_state(vm);
+}
+
+/* ============================================================================
+ * PLANNED FEATURE #1: JIT COMPILATION FOR HOT PATHS
+ * ============================================================================ */
+
+/**
+ * Check if opcode should be JIT compiled
+ * Returns true when execution count exceeds threshold
+ */
+bool vm_jit_should_compile(VMState *vm, Opcode op) {
+    if (!(vm->flags & VM_FLAG_JIT)) {
+        return false;
+    }
+    
+    uint8_t idx = 0;
+    switch(op) {
+        case OP_PROJECT: idx = 0; break;
+        case OP_DEPTH:   idx = 1; break;
+        case OP_MORPH:   idx = 2; break;
+        case OP_WITNESS: idx = 3; break;
+    }
+    
+    return vm->opcode_counts[idx] >= JIT_HOT_PATH_THRESHOLD;
+}
+
+/**
+ * JIT compile hot path (stub for future implementation)
+ * 
+ * Future implementation would:
+ * 1. Analyze opcode sequence for optimization opportunities
+ * 2. Generate native code for hot loops
+ * 3. Cache compiled code in jit_compiled_path
+ * 4. Use mmap/mprotect for executable memory
+ */
+void vm_jit_compile_hot_path(VMState *vm) {
+    if (!vm) return;
+    
+    /* Placeholder: In production, this would:
+     * - Use LLVM or dynasm for code generation
+     * - Allocate executable memory region
+     * - Compile frequently executed opcode sequences
+     * - Install function pointer for fast dispatch
+     */
+    
+    printf("[JIT] Hot path detected - JIT compilation hook ready\n");
+    printf("[JIT] To enable: link with JIT compiler library\n");
+}
+
+/* ============================================================================
+ * PLANNED FEATURE #2: NETWORK-TRANSPARENT EXECUTION
+ * ============================================================================ */
+
+/**
+ * Serialize VM state to file
+ * Uses existing binary format for network transmission
+ */
+bool vm_serialize_state(VMState *vm, const char *filename) {
+    if (!vm || !filename) return false;
+    
+    FILE *f = fopen(filename, "wb");
+    if (!f) {
+        fprintf(stderr, "Failed to open %s for writing\n", filename);
+        return false;
+    }
+    
+    /* Write stack pointer and program counter */
+    fwrite(&vm->sp, sizeof(uint8_t), 1, f);
+    fwrite(&vm->pc, sizeof(uint32_t), 1, f);
+    fwrite(&vm->antclock, sizeof(uint64_t), 1, f);
+    
+    /* Write stack frames */
+    fwrite(vm->stack, sizeof(SpectralFrame), STACK_DEPTH, f);
+    
+    fclose(f);
+    return true;
+}
+
+/**
+ * Deserialize VM state from file
+ */
+bool vm_deserialize_state(VMState *vm, const char *filename) {
+    if (!vm || !filename) return false;
+    
+    FILE *f = fopen(filename, "rb");
+    if (!f) {
+        fprintf(stderr, "Failed to open %s for reading\n", filename);
+        return false;
+    }
+    
+    /* Read stack pointer and program counter */
+    fread(&vm->sp, sizeof(uint8_t), 1, f);
+    fread(&vm->pc, sizeof(uint32_t), 1, f);
+    fread(&vm->antclock, sizeof(uint64_t), 1, f);
+    
+    /* Read stack frames */
+    fread(vm->stack, sizeof(SpectralFrame), STACK_DEPTH, f);
+    
+    fclose(f);
+    return true;
+}
+
+/**
+ * Execute VM operations on remote endpoint (stub)
+ * 
+ * Future implementation would:
+ * 1. Serialize current VM state
+ * 2. Send to remote endpoint via gRPC/WebSocket
+ * 3. Receive computed result
+ * 4. Deserialize back into local VM
+ */
+bool vm_remote_exec(VMState *vm, const char *endpoint) {
+    if (!vm || !endpoint) return false;
+    
+    if (!(vm->flags & VM_FLAG_REMOTE)) {
+        fprintf(stderr, "Remote execution not enabled (set VM_FLAG_REMOTE)\n");
+        return false;
+    }
+    
+    /* Save endpoint for potential future use */
+    strncpy(vm->remote_endpoint, endpoint, sizeof(vm->remote_endpoint) - 1);
+    vm->remote_endpoint[sizeof(vm->remote_endpoint) - 1] = '\0';
+    
+    printf("[Remote] Endpoint configured: %s\n", endpoint);
+    printf("[Remote] Serialization format: vm_serialize_state/vm_deserialize_state\n");
+    printf("[Remote] To enable: implement network protocol (gRPC, WebSocket, etc.)\n");
+    
+    return true;
+}
+
+/* ============================================================================
+ * PLANNED FEATURE #3: PERSISTENT STATE CHECKPOINTING
+ * ============================================================================ */
+
+/**
+ * Save complete VM state to checkpoint file
+ */
+bool vm_checkpoint_save(VMState *vm, const char *filename) {
+    if (!vm || !filename) return false;
+    
+    FILE *f = fopen(filename, "wb");
+    if (!f) {
+        fprintf(stderr, "Failed to create checkpoint: %s\n", filename);
+        return false;
+    }
+    
+    /* Write checkpoint magic and version */
+    uint32_t magic = 0x434B5054;  /* "CKPT" */
+    uint32_t version = 1;
+    fwrite(&magic, sizeof(uint32_t), 1, f);
+    fwrite(&version, sizeof(uint32_t), 1, f);
+    
+    /* Write VM state */
+    fwrite(&vm->sp, sizeof(uint8_t), 1, f);
+    fwrite(&vm->antclock, sizeof(uint64_t), 1, f);
+    fwrite(&vm->pc, sizeof(uint32_t), 1, f);
+    fwrite(&vm->flags, sizeof(uint32_t), 1, f);
+    fwrite(&vm->k_spec, sizeof(double), 1, f);
+    
+    /* Write stack */
+    fwrite(vm->stack, sizeof(SpectralFrame), STACK_DEPTH, f);
+    
+    /* Write program size and data */
+    fwrite(&vm->program_size, sizeof(uint32_t), 1, f);
+    if (vm->program_size > 0) {
+        fwrite(vm->program, sizeof(SpectralRecord), vm->program_size, f);
+    }
+    
+    fclose(f);
+    printf("[Checkpoint] State saved to %s\n", filename);
+    return true;
+}
+
+/**
+ * Load VM state from checkpoint file
+ */
+bool vm_checkpoint_load(VMState *vm, const char *filename) {
+    if (!vm || !filename) return false;
+    
+    FILE *f = fopen(filename, "rb");
+    if (!f) {
+        fprintf(stderr, "Failed to open checkpoint: %s\n", filename);
+        return false;
+    }
+    
+    /* Read and verify magic and version */
+    uint32_t magic, version;
+    fread(&magic, sizeof(uint32_t), 1, f);
+    fread(&version, sizeof(uint32_t), 1, f);
+    
+    if (magic != 0x434B5054) {
+        fprintf(stderr, "Invalid checkpoint file: bad magic\n");
+        fclose(f);
+        return false;
+    }
+    
+    /* Read VM state */
+    fread(&vm->sp, sizeof(uint8_t), 1, f);
+    fread(&vm->antclock, sizeof(uint64_t), 1, f);
+    fread(&vm->pc, sizeof(uint32_t), 1, f);
+    fread(&vm->flags, sizeof(uint32_t), 1, f);
+    fread(&vm->k_spec, sizeof(double), 1, f);
+    
+    /* Read stack */
+    fread(vm->stack, sizeof(SpectralFrame), STACK_DEPTH, f);
+    
+    /* Read program */
+    uint32_t prog_size;
+    fread(&prog_size, sizeof(uint32_t), 1, f);
+    
+    if (prog_size > 0) {
+        if (vm->program) {
+            free(vm->program);
+        }
+        vm->program = (SpectralRecord*)malloc(prog_size * sizeof(SpectralRecord));
+        if (!vm->program) {
+            fprintf(stderr, "Failed to allocate program memory\n");
+            fclose(f);
+            return false;
+        }
+        vm->program_size = prog_size;
+        fread(vm->program, sizeof(SpectralRecord), prog_size, f);
+    }
+    
+    fclose(f);
+    printf("[Checkpoint] State restored from %s\n", filename);
+    return true;
+}
+
+/* ============================================================================
+ * PLANNED FEATURE #4: INTERACTIVE DEBUGGER
+ * ============================================================================ */
+
+/**
+ * Add breakpoint at program counter
+ */
+void vm_debug_add_breakpoint(VMState *vm, uint32_t pc) {
+    if (!vm || vm->breakpoint_count >= MAX_BREAKPOINTS) return;
+    
+    vm->breakpoints[vm->breakpoint_count++] = pc;
+    printf("[Debug] Breakpoint added at PC=%u\n", pc);
+}
+
+/**
+ * Remove breakpoint at program counter
+ */
+void vm_debug_remove_breakpoint(VMState *vm, uint32_t pc) {
+    if (!vm) return;
+    
+    for (uint8_t i = 0; i < vm->breakpoint_count; i++) {
+        if (vm->breakpoints[i] == pc) {
+            /* Shift remaining breakpoints */
+            for (uint8_t j = i; j < vm->breakpoint_count - 1; j++) {
+                vm->breakpoints[j] = vm->breakpoints[j + 1];
+            }
+            vm->breakpoint_count--;
+            printf("[Debug] Breakpoint removed at PC=%u\n", pc);
+            return;
+        }
+    }
+}
+
+/**
+ * Check if current PC has a breakpoint
+ */
+bool vm_debug_is_breakpoint(VMState *vm, uint32_t pc) {
+    if (!vm) return false;
+    
+    for (uint8_t i = 0; i < vm->breakpoint_count; i++) {
+        if (vm->breakpoints[i] == pc) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Execute one step with debugger support
+ * Pauses at breakpoints when VM_FLAG_DEBUG is set
+ */
+void vm_debug_step(VMState *vm) {
+    if (!vm) return;
+    
+    /* Check for breakpoint */
+    if ((vm->flags & VM_FLAG_DEBUG) && vm_debug_is_breakpoint(vm, vm->pc)) {
+        printf("\n[Debug] Breakpoint hit at PC=%u\n", vm->pc);
+        print_vm_state(vm);
+        printf("[Debug] Press Enter to continue...");
+        getchar();
+    }
+    
+    /* Execute step */
+    vm_step(vm);
+    
+    /* Show state if in debug mode */
+    if (vm->flags & VM_FLAG_DEBUG) {
+        printf("[Debug] PC=%u, SP=%u, Antclock=%lu\n", 
+               vm->pc, vm->sp, vm->antclock);
+    }
+}
+
+/* ============================================================================
+ * PLANNED FEATURE #5: VISUAL TRACER FOR SPECTRAL TRAJECTORIES
+ * ============================================================================ */
+
+/**
+ * Enable or disable trajectory tracing
+ */
+void vm_trace_enable(VMState *vm, bool enabled) {
+    if (!vm) return;
+    
+    vm->trace_enabled = enabled;
+    if (enabled) {
+        vm->flags |= VM_FLAG_TRACE;
+        printf("[Trace] Trajectory recording enabled\n");
+    } else {
+        vm->flags &= ~VM_FLAG_TRACE;
+        printf("[Trace] Trajectory recording disabled\n");
+    }
+}
+
+/**
+ * Record current top frame to trace history
+ * Should be called after each VM operation when tracing is enabled
+ */
+void vm_trace_record(VMState *vm) {
+    if (!vm || !vm->trace_enabled) return;
+    
+    /* Get current top frame */
+    SpectralFrame *current = vm_peek(vm);
+    if (!current) return;
+    
+    /* Copy to trace history (circular buffer) */
+    vm->trace_history[vm->trace_index] = *current;
+    vm->trace_index = (vm->trace_index + 1) % TRACE_HISTORY_SIZE;
+}
+
+/**
+ * Export trace history to file
+ * Supports CSV and JSON formats for visualization
+ */
+bool vm_trace_export(VMState *vm, const char *filename, const char *format) {
+    if (!vm || !filename || !format) return false;
+    
+    FILE *f = fopen(filename, "w");
+    if (!f) {
+        fprintf(stderr, "Failed to create trace file: %s\n", filename);
+        return false;
+    }
+    
+    if (strcmp(format, "csv") == 0) {
+        /* CSV format for gnuplot/matplotlib */
+        fprintf(f, "index,rho_real,rho_imag,depth,monodromy,timestamp\n");
+        
+        for (int i = 0; i < TRACE_HISTORY_SIZE; i++) {
+            SpectralFrame *frame = &vm->trace_history[i];
+            if (frame->timestamp == 0) continue;  /* Skip empty slots */
+            
+            fprintf(f, "%d,%.10f,%.10f,%u,%.6f,%lu\n",
+                   i,
+                   creal(frame->rho),
+                   cimag(frame->rho),
+                   frame->depth,
+                   frame->monodromy,
+                   frame->timestamp);
+        }
+    } else if (strcmp(format, "json") == 0) {
+        /* JSON format for web visualization */
+        fprintf(f, "{\n  \"traces\": [\n");
+        
+        bool first = true;
+        for (int i = 0; i < TRACE_HISTORY_SIZE; i++) {
+            SpectralFrame *frame = &vm->trace_history[i];
+            if (frame->timestamp == 0) continue;
+            
+            if (!first) fprintf(f, ",\n");
+            first = false;
+            
+            fprintf(f, "    {\n");
+            fprintf(f, "      \"index\": %d,\n", i);
+            fprintf(f, "      \"rho\": {\"real\": %.10f, \"imag\": %.10f},\n",
+                   creal(frame->rho), cimag(frame->rho));
+            fprintf(f, "      \"depth\": %u,\n", frame->depth);
+            fprintf(f, "      \"monodromy\": %.6f,\n", frame->monodromy);
+            fprintf(f, "      \"timestamp\": %lu\n", frame->timestamp);
+            fprintf(f, "    }");
+        }
+        
+        fprintf(f, "\n  ]\n}\n");
+    } else {
+        fprintf(stderr, "Unknown format: %s (use 'csv' or 'json')\n", format);
+        fclose(f);
+        return false;
+    }
+    
+    fclose(f);
+    printf("[Trace] Exported %d frames to %s (%s format)\n", 
+           TRACE_HISTORY_SIZE, filename, format);
+    printf("[Trace] Visualize with: matplotlib (Python) or gnuplot\n");
+    
+    return true;
 }

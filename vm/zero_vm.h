@@ -37,6 +37,15 @@
 #define STACK_DEPTH 256     /* Maximum stack depth (16 KB total) */
 #define GAMMA_GAP_TABLE_SIZE 100000  /* Pre-computed zeta zero spacings */
 
+/* JIT compilation constants */
+#define JIT_HOT_PATH_THRESHOLD 1000  /* Executions before JIT compilation */
+
+/* Debugger constants */
+#define MAX_BREAKPOINTS 16   /* Maximum number of breakpoints */
+
+/* Tracer constants */
+#define TRACE_HISTORY_SIZE 256  /* Number of frames to keep in trace history */
+
 /* ============================================================================
  * OPCODES - CE1 Bracket Algebra
  * ============================================================================ */
@@ -110,6 +119,22 @@ typedef struct {
     /* Program data */
     SpectralRecord *program;            /* Loaded program records */
     uint32_t program_size;              /* Number of records in program */
+    
+    /* JIT compilation support */
+    uint64_t opcode_counts[4];          /* Execution count per opcode */
+    void (*jit_compiled_path)(void);    /* JIT compiled hot path function */
+    
+    /* Network-transparent execution */
+    char remote_endpoint[256];          /* Remote execution endpoint */
+    
+    /* Interactive debugger */
+    uint32_t breakpoints[MAX_BREAKPOINTS];  /* Breakpoint program counters */
+    uint8_t breakpoint_count;           /* Number of active breakpoints */
+    
+    /* Visual tracer */
+    SpectralFrame trace_history[TRACE_HISTORY_SIZE];  /* Circular trace buffer */
+    uint8_t trace_index;                /* Current position in trace buffer */
+    bool trace_enabled;                 /* Whether tracing is active */
 } VMState;
 
 /* ============================================================================
@@ -124,6 +149,12 @@ typedef enum {
     GUARDIAN_PROTECT = 0,   /* States are too different - keep separate */
     GUARDIAN_COMPOSE = 1    /* States are compatible - merge them */
 } GuardianDecision;
+
+/* VM flags */
+#define VM_FLAG_DEBUG       0x01  /* Enable interactive debugging */
+#define VM_FLAG_TRACE       0x02  /* Enable trajectory tracing */
+#define VM_FLAG_JIT         0x04  /* Enable JIT compilation */
+#define VM_FLAG_REMOTE      0x08  /* Enable remote execution */
 
 /* ============================================================================
  * FUNCTION DECLARATIONS
@@ -163,5 +194,29 @@ double padic_distance(double complex rho1, double complex rho2, uint32_t p);
 double complex hecke_action(double complex rho, double complex phi);
 void print_frame(SpectralFrame *frame);
 void print_vm_state(VMState *vm);
+
+/* JIT compilation (Planned Feature #1) */
+void vm_jit_compile_hot_path(VMState *vm);
+bool vm_jit_should_compile(VMState *vm, Opcode op);
+
+/* Network-transparent execution (Planned Feature #2) */
+bool vm_remote_exec(VMState *vm, const char *endpoint);
+bool vm_serialize_state(VMState *vm, const char *filename);
+bool vm_deserialize_state(VMState *vm, const char *filename);
+
+/* Persistent state checkpointing (Planned Feature #3) */
+bool vm_checkpoint_save(VMState *vm, const char *filename);
+bool vm_checkpoint_load(VMState *vm, const char *filename);
+
+/* Interactive debugger (Planned Feature #4) */
+void vm_debug_step(VMState *vm);
+void vm_debug_add_breakpoint(VMState *vm, uint32_t pc);
+void vm_debug_remove_breakpoint(VMState *vm, uint32_t pc);
+bool vm_debug_is_breakpoint(VMState *vm, uint32_t pc);
+
+/* Visual tracer (Planned Feature #5) */
+void vm_trace_record(VMState *vm);
+bool vm_trace_export(VMState *vm, const char *filename, const char *format);
+void vm_trace_enable(VMState *vm, bool enabled);
 
 #endif /* ZERO_VM_H */
