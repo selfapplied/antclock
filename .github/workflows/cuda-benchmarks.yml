@@ -58,10 +58,95 @@ jobs:
         run: |
           python -c "import torch; print(f'CUDA available: {torch.cuda.is_available()}'); print(f'CUDA device: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else \"N/A\"}')"
       
-      - name: Run CE Synthetic Benchmarks
+      - name: Run AntClock Benchmarks (Synthetic + Standard)
         run: |
           export PYTHONPATH="${GITHUB_WORKSPACE}:${PYTHONPATH}"
+          echo "🧬 Running CE synthetic benchmarks..."
+          echo "🎯 Running standard benchmarks (SCAN, COGS, CFQ, PCFG, RPM, Math)..."
           python benchmarks/benchmark.py
+      
+      - name: Display Standard Benchmark Results
+        if: always()
+        run: |
+          echo "## 🎯 Standard AntClock Benchmark Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "real_benchmark_results.json" ]; then
+            echo "### Real Benchmark Results" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| Benchmark | Status | Accuracy | Details |" >> $GITHUB_STEP_SUMMARY
+            echo "|-----------|--------|----------|---------|" >> $GITHUB_STEP_SUMMARY
+            
+            # Parse JSON and create summary table
+            python3 << 'EOF' >> $GITHUB_STEP_SUMMARY
+            import json
+            import sys
+            
+            try:
+                with open('real_benchmark_results.json', 'r') as f:
+                    results = json.load(f)
+                
+                benchmark_names = {
+                    'scan': 'SCAN',
+                    'cogs': 'COGS', 
+                    'cfq': 'CFQ',
+                    'pcfg': 'PCFG',
+                    'rpm': 'RPM',
+                    'math': 'Math'
+                }
+                
+                for key, name in benchmark_names.items():
+                    if key in results.get('results', {}):
+                        data = results['results'][key]
+                        if 'error' in data:
+                            # Truncate error to 100 chars but preserve key information
+                            error_msg = data['error'][:100]
+                            if len(data['error']) > 100:
+                                error_msg += '...'
+                            print(f"| {name} | ❌ Failed | N/A | {error_msg} |")
+                        else:
+                            # Try different accuracy keys
+                            acc = data.get('test_accuracy', 
+                                          data.get('accuracy',
+                                          data.get('evaluation', {}).get('test_accuracy', 'N/A')))
+                            if isinstance(acc, (int, float)):
+                                acc_str = f"{acc:.1%}"
+                            else:
+                                acc_str = str(acc)
+                            print(f"| {name} | ✅ Success | {acc_str} | - |")
+                    else:
+                        print(f"| {name} | ⚠️ Not Run | N/A | - |")
+                
+                # Also print timestamp
+                print(f"\n**Timestamp:** {results.get('timestamp', 'N/A')}")
+            except FileNotFoundError:
+                print("| All | ⚠️ No Results | N/A | Benchmark file not found |")
+            except Exception as e:
+                # Preserve more of the error message
+                error_msg = str(e)[:100]
+                if len(str(e)) > 100:
+                    error_msg += '...'
+                print(f"| All | ❌ Error | N/A | {error_msg} |")
+          EOF
+            
+            echo "" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ No benchmark results file found (real_benchmark_results.json)" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Standard Benchmarks Information" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The standard AntClock benchmarks evaluate the CE framework on:" >> $GITHUB_STEP_SUMMARY
+          echo "- **SCAN**: Sequence-to-sequence compositional parsing (16K train, 4K test)" >> $GITHUB_STEP_SUMMARY
+          echo "- **COGS**: Semantic parsing compositional generalization (24K train, 3K test)" >> $GITHUB_STEP_SUMMARY
+          echo "- **CFQ**: Compositional question answering (10K train, 2K test)" >> $GITHUB_STEP_SUMMARY
+          echo "- **PCFG**: Probabilistic context-free grammar parsing (1K train, 200 test)" >> $GITHUB_STEP_SUMMARY
+          echo "- **RPM**: Raven's Progressive Matrices visual reasoning (10K train, 1K test)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Math**: Mathematical reasoning on SVAMP dataset (1K train, 200 test)" >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📊 Full results are available in the workflow artifacts." >> $GITHUB_STEP_SUMMARY
       
       - name: Upload benchmark results
         uses: actions/upload-artifact@v4
