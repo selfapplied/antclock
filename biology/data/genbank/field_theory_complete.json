@@ -1,0 +1,1094 @@
+{
+  "results": [
+    {
+      "sequence_id": "XM_077790403.1",
+      "field_theory": {
+        "field_theory": "Hurst-Curvature Complete Field Theory",
+        "lagrangian_formulation": {
+          "lagrangian": -0.004964715797560243,
+          "kinetic": 0.0,
+          "potential": 0.004964715797560243,
+          "curvature": 0.004964715797560243,
+          "interpretation": "L = T - V, system minimizes V (curvature)"
+        },
+        "euler_lagrange_equations": {
+          "euler_lagrange": {
+            "d2H_dt2": 0.24823578987801195,
+            "dV_dH": -0.24823578987801195,
+            "equation": "d\u00b2H/dt\u00b2 = -\u2202V/\u2202H",
+            "interpretation": "Memory acceleration driven by curvature gradient"
+          },
+          "fixed_point_condition": {
+            "d2H_dt2": 0.0,
+            "requires": "dV_dH = 0",
+            "meaning": "Fixed point when curvature gradient vanishes"
+          }
+        },
+        "conserved_quantity": {
+          "guardian_charge": 0.04434293567202329,
+          "components": {
+            "memory": 0.98,
+            "coherence": 0.7,
+            "nash": 0.06514679987214067,
+            "curvature": 0.9922183137969275
+          },
+          "conservation": "Q_G is conserved along CE circulation loop",
+          "interpretation": "Guardian charge measures strength of protection field"
+        },
+        "stability_manifold": {
+          "stability_manifold": {
+            "is_stable": true,
+            "conditions": {
+              "H > 0.6": true,
+              "C > 0.6": true,
+              "S < \u03c7_FEG": true,
+              "\u03ba < 0.3": true
+            },
+            "curvature": 0.004964715797560243,
+            "regime": "flat_spacetime"
+          },
+          "fixed_point": {
+            "H": 0.98,
+            "C": 0.7,
+            "S": 0.40125223613595706,
+            "\u03ba": 0.004964715797560243,
+            "interpretation": "Fixed point of evolutionary time when all conditions met"
+          }
+        },
+        "bifurcation_parameter": {
+          "bifurcation_parameter": {
+            "lambda": -2121.012862941285,
+            "lambda_crit": 1.0,
+            "should_protect": false,
+            "regime": "explore",
+            "interpretation": "\u03bb > 1 \u2192 protect, \u03bb < 1 \u2192 explore"
+          },
+          "components": {
+            "H": 0.98,
+            "C": 0.7,
+            "kappa": 0.004964715797560243,
+            "G": 0.5026467998721407,
+            "G_crit": 0.4375,
+            "G_diff": 0.06514679987214067
+          },
+          "bifurcation_point": {
+            "location": "lambda = 1.0",
+            "meaning": "Transition between explore and protect regimes"
+          }
+        },
+        "ce_circulation_loop": {
+          "ce_circulation": {
+            "loop": "[] \u2192 {} \u2192 () \u2192 <> \u2192 []",
+            "closed": true,
+            "self_reinforcing": false,
+            "bounded": true,
+            "interpretation": "Biological soliton - fixed point of evolutionary time"
+          },
+          "steps": {
+            "memory_H": 0.98,
+            "geometry_kappa": 0.004964715797560243,
+            "structure_C": 0.36082657949098174,
+            "witness_P": 0.8332612233219773,
+            "feedback_H": 0.98
+          },
+          "fixed_point": {
+            "achieved": true,
+            "H": 0.98,
+            "kappa": 0.004964715797560243,
+            "C": 0.36082657949098174,
+            "interpretation": "Fixed point when circulation stabilizes"
+          }
+        },
+        "interpretation": {
+          "lagrangian": "Variational principle: minimize curvature, maximize coherence",
+          "euler_lagrange": "Equations of motion for memory dynamics",
+          "guardian_charge": "Conserved quantity along CE circulation",
+          "stability": "Fixed point of evolutionary time",
+          "bifurcation": "Explore vs protect transition",
+          "circulation": "Biological soliton - self-reinforcing loop"
+        }
+      }
+    },
+    {
+      "sequence_id": "XM_077785225.1",
+      "field_theory": {
+        "field_theory": "Hurst-Curvature Complete Field Theory",
+        "lagrangian_formulation": {
+          "lagrangian": -0.0049634872036498,
+          "kinetic": 0.0,
+          "potential": 0.0049634872036498,
+          "curvature": 0.0049634872036498,
+          "interpretation": "L = T - V, system minimizes V (curvature)"
+        },
+        "euler_lagrange_equations": {
+          "euler_lagrange": {
+            "d2H_dt2": 0.24817436018248978,
+            "dV_dH": -0.24817436018248978,
+            "equation": "d\u00b2H/dt\u00b2 = -\u2202V/\u2202H",
+            "interpretation": "Memory acceleration driven by curvature gradient"
+          },
+          "fixed_point_condition": {
+            "d2H_dt2": 0.0,
+            "requires": "dV_dH = 0",
+            "meaning": "Fixed point when curvature gradient vanishes"
+          }
+        },
+        "conserved_quantity": {
+          "guardian_charge": 0.04401364802361792,
+          "components": {
+            "memory": 0.98,
+            "coherence": 0.7,
+            "nash": 0.06466289863420349,
+            "curvature": 0.9922202394927119
+          },
+          "conservation": "Q_G is conserved along CE circulation loop",
+          "interpretation": "Guardian charge measures strength of protection field"
+        },
+        "stability_manifold": {
+          "stability_manifold": {
+            "is_stable": true,
+            "conditions": {
+              "H > 0.6": true,
+              "C > 0.6": true,
+              "S < \u03c7_FEG": true,
+              "\u03ba < 0.3": true
+            },
+            "curvature": 0.0049634872036498,
+            "regime": "flat_spacetime"
+          },
+          "fixed_point": {
+            "H": 0.98,
+            "C": 0.7,
+            "S": 0.40176678445229685,
+            "\u03ba": 0.0049634872036498,
+            "interpretation": "Fixed point of evolutionary time when all conditions met"
+          }
+        },
+        "bifurcation_parameter": {
+          "bifurcation_parameter": {
+            "lambda": -2137.414526775036,
+            "lambda_crit": 1.0,
+            "should_protect": false,
+            "regime": "explore",
+            "interpretation": "\u03bb > 1 \u2192 protect, \u03bb < 1 \u2192 explore"
+          },
+          "components": {
+            "H": 0.98,
+            "C": 0.7,
+            "kappa": 0.0049634872036498,
+            "G": 0.5021628986342035,
+            "G_crit": 0.4375,
+            "G_diff": 0.06466289863420349
+          },
+          "bifurcation_point": {
+            "location": "lambda = 1.0",
+            "meaning": "Transition between explore and protect regimes"
+          }
+        },
+        "ce_circulation_loop": {
+          "ce_circulation": {
+            "loop": "[] \u2192 {} \u2192 () \u2192 <> \u2192 []",
+            "closed": true,
+            "self_reinforcing": false,
+            "bounded": true,
+            "interpretation": "Biological soliton - fixed point of evolutionary time"
+          },
+          "steps": {
+            "memory_H": 0.98,
+            "geometry_kappa": 0.0049634872036498,
+            "structure_C": 0.3600430566657334,
+            "witness_P": 0.8330658240396114,
+            "feedback_H": 0.98
+          },
+          "fixed_point": {
+            "achieved": true,
+            "H": 0.98,
+            "kappa": 0.0049634872036498,
+            "C": 0.3600430566657334,
+            "interpretation": "Fixed point when circulation stabilizes"
+          }
+        },
+        "interpretation": {
+          "lagrangian": "Variational principle: minimize curvature, maximize coherence",
+          "euler_lagrange": "Equations of motion for memory dynamics",
+          "guardian_charge": "Conserved quantity along CE circulation",
+          "stability": "Fixed point of evolutionary time",
+          "bifurcation": "Explore vs protect transition",
+          "circulation": "Biological soliton - self-reinforcing loop"
+        }
+      }
+    },
+    {
+      "sequence_id": "XM_077789344.1",
+      "field_theory": {
+        "field_theory": "Hurst-Curvature Complete Field Theory",
+        "lagrangian_formulation": {
+          "lagrangian": -0.12411689177517081,
+          "kinetic": 0.0,
+          "potential": 0.12411689177517081,
+          "curvature": 0.12411689177517081,
+          "interpretation": "L = T - V, system minimizes V (curvature)"
+        },
+        "euler_lagrange_equations": {
+          "euler_lagrange": {
+            "d2H_dt2": 0.24823378355034162,
+            "dV_dH": -0.24823378355034162,
+            "equation": "d\u00b2H/dt\u00b2 = -\u2202V/\u2202H",
+            "interpretation": "Memory acceleration driven by curvature gradient"
+          },
+          "fixed_point_condition": {
+            "d2H_dt2": 0.0,
+            "requires": "dV_dH = 0",
+            "meaning": "Fixed point when curvature gradient vanishes"
+          }
+        },
+        "conserved_quantity": {
+          "guardian_charge": 0.01836113235796796,
+          "components": {
+            "memory": 0.5,
+            "coherence": 0.7,
+            "nash": 0.065131001066149,
+            "curvature": 0.8054594172802966
+          },
+          "conservation": "Q_G is conserved along CE circulation loop",
+          "interpretation": "Guardian charge measures strength of protection field"
+        },
+        "stability_manifold": {
+          "stability_manifold": {
+            "is_stable": false,
+            "conditions": {
+              "H > 0.6": false,
+              "C > 0.6": true,
+              "S < \u03c7_FEG": true,
+              "\u03ba < 0.3": true
+            },
+            "curvature": 0.12411689177517081,
+            "regime": "curved_unstable"
+          },
+          "fixed_point": {
+            "H": 0.5,
+            "C": 0.7,
+            "S": 0.4012690355329949,
+            "\u03ba": 0.12411689177517081,
+            "interpretation": "Fixed point of evolutionary time when all conditions met"
+          }
+        },
+        "bifurcation_parameter": {
+          "bifurcation_parameter": {
+            "lambda": -43.296826761367264,
+            "lambda_crit": 1.0,
+            "should_protect": false,
+            "regime": "explore",
+            "interpretation": "\u03bb > 1 \u2192 protect, \u03bb < 1 \u2192 explore"
+          },
+          "components": {
+            "H": 0.5,
+            "C": 0.7,
+            "kappa": 0.12411689177517081,
+            "G": 0.502631001066149,
+            "G_crit": 0.4375,
+            "G_diff": 0.065131001066149
+          },
+          "bifurcation_point": {
+            "location": "lambda = 1.0",
+            "meaning": "Transition between explore and protect regimes"
+          }
+        },
+        "ce_circulation_loop": {
+          "ce_circulation": {
+            "loop": "[] \u2192 {} \u2192 () \u2192 <> \u2192 []",
+            "closed": true,
+            "self_reinforcing": false,
+            "bounded": true,
+            "interpretation": "Biological soliton - fixed point of evolutionary time"
+          },
+          "steps": {
+            "memory_H": 0.5,
+            "geometry_kappa": 0.12411689177517081,
+            "structure_C": 0.14943353032272452,
+            "witness_P": 0.6137232369007553,
+            "feedback_H": 0.5
+          },
+          "fixed_point": {
+            "achieved": true,
+            "H": 0.5,
+            "kappa": 0.12411689177517081,
+            "C": 0.14943353032272452,
+            "interpretation": "Fixed point when circulation stabilizes"
+          }
+        },
+        "interpretation": {
+          "lagrangian": "Variational principle: minimize curvature, maximize coherence",
+          "euler_lagrange": "Equations of motion for memory dynamics",
+          "guardian_charge": "Conserved quantity along CE circulation",
+          "stability": "Fixed point of evolutionary time",
+          "bifurcation": "Explore vs protect transition",
+          "circulation": "Biological soliton - self-reinforcing loop"
+        }
+      }
+    },
+    {
+      "sequence_id": "XM_077782098.1",
+      "field_theory": {
+        "field_theory": "Hurst-Curvature Complete Field Theory",
+        "lagrangian_formulation": {
+          "lagrangian": -0.12411274806582216,
+          "kinetic": 0.0,
+          "potential": 0.12411274806582216,
+          "curvature": 0.12411274806582216,
+          "interpretation": "L = T - V, system minimizes V (curvature)"
+        },
+        "euler_lagrange_equations": {
+          "euler_lagrange": {
+            "d2H_dt2": 0.24822549613164432,
+            "dV_dH": -0.24822549613164432,
+            "equation": "d\u00b2H/dt\u00b2 = -\u2202V/\u2202H",
+            "interpretation": "Memory acceleration driven by curvature gradient"
+          },
+          "fixed_point_condition": {
+            "d2H_dt2": 0.0,
+            "requires": "dV_dH = 0",
+            "meaning": "Fixed point when curvature gradient vanishes"
+          }
+        },
+        "conserved_quantity": {
+          "guardian_charge": 0.018342881850248054,
+          "components": {
+            "memory": 0.5,
+            "coherence": 0.7,
+            "nash": 0.06506573781595204,
+            "curvature": 0.8054659121225358
+          },
+          "conservation": "Q_G is conserved along CE circulation loop",
+          "interpretation": "Guardian charge measures strength of protection field"
+        },
+        "stability_manifold": {
+          "stability_manifold": {
+            "is_stable": false,
+            "conditions": {
+              "H > 0.6": false,
+              "C > 0.6": true,
+              "S < \u03c7_FEG": true,
+              "\u03ba < 0.3": true
+            },
+            "curvature": 0.12411274806582216,
+            "regime": "curved_unstable"
+          },
+          "fixed_point": {
+            "H": 0.5,
+            "C": 0.7,
+            "S": 0.40133843212237097,
+            "\u03ba": 0.12411274806582216,
+            "interpretation": "Fixed point of evolutionary time when all conditions met"
+          }
+        },
+        "bifurcation_parameter": {
+          "bifurcation_parameter": {
+            "lambda": -43.34170267276897,
+            "lambda_crit": 1.0,
+            "should_protect": false,
+            "regime": "explore",
+            "interpretation": "\u03bb > 1 \u2192 protect, \u03bb < 1 \u2192 explore"
+          },
+          "components": {
+            "H": 0.5,
+            "C": 0.7,
+            "kappa": 0.12411274806582216,
+            "G": 0.502565737815952,
+            "G_crit": 0.4375,
+            "G_diff": 0.06506573781595204
+          },
+          "bifurcation_point": {
+            "location": "lambda = 1.0",
+            "meaning": "Transition between explore and protect regimes"
+          }
+        },
+        "ce_circulation_loop": {
+          "ce_circulation": {
+            "loop": "[] \u2192 {} \u2192 () \u2192 <> \u2192 []",
+            "closed": true,
+            "self_reinforcing": false,
+            "bounded": true,
+            "interpretation": "Biological soliton - fixed point of evolutionary time"
+          },
+          "steps": {
+            "memory_H": 0.5,
+            "geometry_kappa": 0.12411274806582216,
+            "structure_C": 0.1493909291809592,
+            "witness_P": 0.6137142103258737,
+            "feedback_H": 0.5
+          },
+          "fixed_point": {
+            "achieved": true,
+            "H": 0.5,
+            "kappa": 0.12411274806582216,
+            "C": 0.1493909291809592,
+            "interpretation": "Fixed point when circulation stabilizes"
+          }
+        },
+        "interpretation": {
+          "lagrangian": "Variational principle: minimize curvature, maximize coherence",
+          "euler_lagrange": "Equations of motion for memory dynamics",
+          "guardian_charge": "Conserved quantity along CE circulation",
+          "stability": "Fixed point of evolutionary time",
+          "bifurcation": "Explore vs protect transition",
+          "circulation": "Biological soliton - self-reinforcing loop"
+        }
+      }
+    },
+    {
+      "sequence_id": "XM_077782097.1",
+      "field_theory": {
+        "field_theory": "Hurst-Curvature Complete Field Theory",
+        "lagrangian_formulation": {
+          "lagrangian": -0.0049646200854083005,
+          "kinetic": 0.0,
+          "potential": 0.0049646200854083005,
+          "curvature": 0.0049646200854083005,
+          "interpretation": "L = T - V, system minimizes V (curvature)"
+        },
+        "euler_lagrange_equations": {
+          "euler_lagrange": {
+            "d2H_dt2": 0.2482310042704148,
+            "dV_dH": -0.2482310042704148,
+            "equation": "d\u00b2H/dt\u00b2 = -\u2202V/\u2202H",
+            "interpretation": "Memory acceleration driven by curvature gradient"
+          },
+          "fixed_point_condition": {
+            "d2H_dt2": 0.0,
+            "requires": "dV_dH = 0",
+            "meaning": "Fixed point when curvature gradient vanishes"
+          }
+        },
+        "conserved_quantity": {
+          "guardian_charge": 0.044317291736674924,
+          "components": {
+            "memory": 0.98,
+            "coherence": 0.7,
+            "nash": 0.06510911502290806,
+            "curvature": 0.9922184638159744
+          },
+          "conservation": "Q_G is conserved along CE circulation loop",
+          "interpretation": "Guardian charge measures strength of protection field"
+        },
+        "stability_manifold": {
+          "stability_manifold": {
+            "is_stable": true,
+            "conditions": {
+              "H > 0.6": true,
+              "C > 0.6": true,
+              "S < \u03c7_FEG": true,
+              "\u03ba < 0.3": true
+            },
+            "curvature": 0.0049646200854083005,
+            "regime": "flat_spacetime"
+          },
+          "fixed_point": {
+            "H": 0.98,
+            "C": 0.7,
+            "S": 0.4012923076923077,
+            "\u03ba": 0.0049646200854083005,
+            "interpretation": "Fixed point of evolutionary time when all conditions met"
+          }
+        },
+        "bifurcation_parameter": {
+          "bifurcation_parameter": {
+            "lambda": -2122.281428406178,
+            "lambda_crit": 1.0,
+            "should_protect": false,
+            "regime": "explore",
+            "interpretation": "\u03bb > 1 \u2192 protect, \u03bb < 1 \u2192 explore"
+          },
+          "components": {
+            "H": 0.98,
+            "C": 0.7,
+            "kappa": 0.0049646200854083005,
+            "G": 0.5026091150229081,
+            "G_crit": 0.4375,
+            "G_diff": 0.06510911502290806
+          },
+          "bifurcation_point": {
+            "location": "lambda = 1.0",
+            "meaning": "Transition between explore and protect regimes"
+          }
+        },
+        "ce_circulation_loop": {
+          "ce_circulation": {
+            "loop": "[] \u2192 {} \u2192 () \u2192 <> \u2192 []",
+            "closed": true,
+            "self_reinforcing": false,
+            "bounded": true,
+            "interpretation": "Biological soliton - fixed point of evolutionary time"
+          },
+          "steps": {
+            "memory_H": 0.98,
+            "geometry_kappa": 0.0049646200854083005,
+            "structure_C": 0.36076556109445695,
+            "witness_P": 0.8332460062276078,
+            "feedback_H": 0.98
+          },
+          "fixed_point": {
+            "achieved": true,
+            "H": 0.98,
+            "kappa": 0.0049646200854083005,
+            "C": 0.36076556109445695,
+            "interpretation": "Fixed point when circulation stabilizes"
+          }
+        },
+        "interpretation": {
+          "lagrangian": "Variational principle: minimize curvature, maximize coherence",
+          "euler_lagrange": "Equations of motion for memory dynamics",
+          "guardian_charge": "Conserved quantity along CE circulation",
+          "stability": "Fixed point of evolutionary time",
+          "bifurcation": "Explore vs protect transition",
+          "circulation": "Biological soliton - self-reinforcing loop"
+        }
+      }
+    },
+    {
+      "sequence_id": "XM_077782096.1",
+      "field_theory": {
+        "field_theory": "Hurst-Curvature Complete Field Theory",
+        "lagrangian_formulation": {
+          "lagrangian": -0.004965041639255685,
+          "kinetic": 0.0,
+          "potential": 0.004965041639255685,
+          "curvature": 0.004965041639255685,
+          "interpretation": "L = T - V, system minimizes V (curvature)"
+        },
+        "euler_lagrange_equations": {
+          "euler_lagrange": {
+            "d2H_dt2": 0.24825208196278403,
+            "dV_dH": -0.24825208196278403,
+            "equation": "d\u00b2H/dt\u00b2 = -\u2202V/\u2202H",
+            "interpretation": "Memory acceleration driven by curvature gradient"
+          },
+          "fixed_point_condition": {
+            "d2H_dt2": 0.0,
+            "requires": "dV_dH = 0",
+            "meaning": "Fixed point when curvature gradient vanishes"
+          }
+        },
+        "conserved_quantity": {
+          "guardian_charge": 0.044430226504078026,
+          "components": {
+            "memory": 0.98,
+            "coherence": 0.7,
+            "nash": 0.06527507753706951,
+            "curvature": 0.9922178030732669
+          },
+          "conservation": "Q_G is conserved along CE circulation loop",
+          "interpretation": "Guardian charge measures strength of protection field"
+        },
+        "stability_manifold": {
+          "stability_manifold": {
+            "is_stable": true,
+            "conditions": {
+              "H > 0.6": true,
+              "C > 0.6": true,
+              "S < \u03c7_FEG": true,
+              "\u03ba < 0.3": true
+            },
+            "curvature": 0.004965041639255685,
+            "regime": "flat_spacetime"
+          },
+          "fixed_point": {
+            "H": 0.98,
+            "C": 0.7,
+            "S": 0.40111583421891606,
+            "\u03ba": 0.004965041639255685,
+            "interpretation": "Fixed point of evolutionary time when all conditions met"
+          }
+        },
+        "bifurcation_parameter": {
+          "bifurcation_parameter": {
+            "lambda": -2116.7056918688527,
+            "lambda_crit": 1.0,
+            "should_protect": false,
+            "regime": "explore",
+            "interpretation": "\u03bb > 1 \u2192 protect, \u03bb < 1 \u2192 explore"
+          },
+          "components": {
+            "H": 0.98,
+            "C": 0.7,
+            "kappa": 0.004965041639255685,
+            "G": 0.5027750775370695,
+            "G_crit": 0.4375,
+            "G_diff": 0.06527507753706951
+          },
+          "bifurcation_point": {
+            "location": "lambda = 1.0",
+            "meaning": "Transition between explore and protect regimes"
+          }
+        },
+        "ce_circulation_loop": {
+          "ce_circulation": {
+            "loop": "[] \u2192 {} \u2192 () \u2192 <> \u2192 []",
+            "closed": true,
+            "self_reinforcing": false,
+            "bounded": true,
+            "interpretation": "Biological soliton - fixed point of evolutionary time"
+          },
+          "steps": {
+            "memory_H": 0.98,
+            "geometry_kappa": 0.004965041639255685,
+            "structure_C": 0.36103428342173616,
+            "witness_P": 0.8333130216237508,
+            "feedback_H": 0.98
+          },
+          "fixed_point": {
+            "achieved": true,
+            "H": 0.98,
+            "kappa": 0.004965041639255685,
+            "C": 0.36103428342173616,
+            "interpretation": "Fixed point when circulation stabilizes"
+          }
+        },
+        "interpretation": {
+          "lagrangian": "Variational principle: minimize curvature, maximize coherence",
+          "euler_lagrange": "Equations of motion for memory dynamics",
+          "guardian_charge": "Conserved quantity along CE circulation",
+          "stability": "Fixed point of evolutionary time",
+          "bifurcation": "Explore vs protect transition",
+          "circulation": "Biological soliton - self-reinforcing loop"
+        }
+      }
+    },
+    {
+      "sequence_id": "XM_077782095.1",
+      "field_theory": {
+        "field_theory": "Hurst-Curvature Complete Field Theory",
+        "lagrangian_formulation": {
+          "lagrangian": -0.005024065479919237,
+          "kinetic": 0.0,
+          "potential": 0.005024065479919237,
+          "curvature": 0.005024065479919237,
+          "interpretation": "L = T - V, system minimizes V (curvature)"
+        },
+        "euler_lagrange_equations": {
+          "euler_lagrange": {
+            "d2H_dt2": 0.2512032739959616,
+            "dV_dH": -0.2512032739959616,
+            "equation": "d\u00b2H/dt\u00b2 = -\u2202V/\u2202H",
+            "interpretation": "Memory acceleration driven by curvature gradient"
+          },
+          "fixed_point_condition": {
+            "d2H_dt2": 0.0,
+            "requires": "dV_dH = 0",
+            "meaning": "Fixed point when curvature gradient vanishes"
+          }
+        },
+        "conserved_quantity": {
+          "guardian_charge": 0.05996170864337277,
+          "components": {
+            "memory": 0.98,
+            "coherence": 0.7,
+            "nash": 0.0881015124775466,
+            "curvature": 0.9921252892164275
+          },
+          "conservation": "Q_G is conserved along CE circulation loop",
+          "interpretation": "Guardian charge measures strength of protection field"
+        },
+        "stability_manifold": {
+          "stability_manifold": {
+            "is_stable": true,
+            "conditions": {
+              "H > 0.6": true,
+              "C > 0.6": true,
+              "S < \u03c7_FEG": true,
+              "\u03ba < 0.3": true
+            },
+            "curvature": 0.005024065479919237,
+            "regime": "flat_spacetime"
+          },
+          "fixed_point": {
+            "H": 0.98,
+            "C": 0.7,
+            "S": 0.37684372506554203,
+            "\u03ba": 0.005024065479919237,
+            "interpretation": "Fixed point of evolutionary time when all conditions met"
+          }
+        },
+        "bifurcation_parameter": {
+          "bifurcation_parameter": {
+            "lambda": -1549.8525777798504,
+            "lambda_crit": 1.0,
+            "should_protect": false,
+            "regime": "explore",
+            "interpretation": "\u03bb > 1 \u2192 protect, \u03bb < 1 \u2192 explore"
+          },
+          "components": {
+            "H": 0.98,
+            "C": 0.7,
+            "kappa": 0.005024065479919237,
+            "G": 0.5256015124775466,
+            "G_crit": 0.4375,
+            "G_diff": 0.0881015124775466
+          },
+          "bifurcation_point": {
+            "location": "lambda = 1.0",
+            "meaning": "Transition between explore and protect regimes"
+          }
+        },
+        "ce_circulation_loop": {
+          "ce_circulation": {
+            "loop": "[] \u2192 {} \u2192 () \u2192 <> \u2192 []",
+            "closed": true,
+            "self_reinforcing": false,
+            "bounded": true,
+            "interpretation": "Biological soliton - fixed point of evolutionary time"
+          },
+          "steps": {
+            "memory_H": 0.98,
+            "geometry_kappa": 0.005024065479919237,
+            "structure_C": 0.3979902036113374,
+            "witness_P": 0.8425288732069411,
+            "feedback_H": 0.98
+          },
+          "fixed_point": {
+            "achieved": true,
+            "H": 0.98,
+            "kappa": 0.005024065479919237,
+            "C": 0.3979902036113374,
+            "interpretation": "Fixed point when circulation stabilizes"
+          }
+        },
+        "interpretation": {
+          "lagrangian": "Variational principle: minimize curvature, maximize coherence",
+          "euler_lagrange": "Equations of motion for memory dynamics",
+          "guardian_charge": "Conserved quantity along CE circulation",
+          "stability": "Fixed point of evolutionary time",
+          "bifurcation": "Explore vs protect transition",
+          "circulation": "Biological soliton - self-reinforcing loop"
+        }
+      }
+    },
+    {
+      "sequence_id": "XM_077788556.1",
+      "field_theory": {
+        "field_theory": "Hurst-Curvature Complete Field Theory",
+        "lagrangian_formulation": {
+          "lagrangian": -0.004964245216577266,
+          "kinetic": 0.0,
+          "potential": 0.004964245216577266,
+          "curvature": 0.004964245216577266,
+          "interpretation": "L = T - V, system minimizes V (curvature)"
+        },
+        "euler_lagrange_equations": {
+          "euler_lagrange": {
+            "d2H_dt2": 0.24821226082886305,
+            "dV_dH": -0.24821226082886305,
+            "equation": "d\u00b2H/dt\u00b2 = -\u2202V/\u2202H",
+            "interpretation": "Memory acceleration driven by curvature gradient"
+          },
+          "fixed_point_condition": {
+            "d2H_dt2": 0.0,
+            "requires": "dV_dH = 0",
+            "meaning": "Fixed point when curvature gradient vanishes"
+          }
+        },
+        "conserved_quantity": {
+          "guardian_charge": 0.04421683963821103,
+          "components": {
+            "memory": 0.98,
+            "coherence": 0.7,
+            "nash": 0.06496149652446503,
+            "curvature": 0.9922190513846751
+          },
+          "conservation": "Q_G is conserved along CE circulation loop",
+          "interpretation": "Guardian charge measures strength of protection field"
+        },
+        "stability_manifold": {
+          "stability_manifold": {
+            "is_stable": true,
+            "conditions": {
+              "H > 0.6": true,
+              "C > 0.6": true,
+              "S < \u03c7_FEG": true,
+              "\u03ba < 0.3": true
+            },
+            "curvature": 0.004964245216577266,
+            "regime": "flat_spacetime"
+          },
+          "fixed_point": {
+            "H": 0.98,
+            "C": 0.7,
+            "S": 0.40144927536231884,
+            "\u03ba": 0.004964245216577266,
+            "interpretation": "Fixed point of evolutionary time when all conditions met"
+          }
+        },
+        "bifurcation_parameter": {
+          "bifurcation_parameter": {
+            "lambda": -2127.264800397753,
+            "lambda_crit": 1.0,
+            "should_protect": false,
+            "regime": "explore",
+            "interpretation": "\u03bb > 1 \u2192 protect, \u03bb < 1 \u2192 explore"
+          },
+          "components": {
+            "H": 0.98,
+            "C": 0.7,
+            "kappa": 0.004964245216577266,
+            "G": 0.502461496524465,
+            "G_crit": 0.4375,
+            "G_diff": 0.06496149652446503
+          },
+          "bifurcation_point": {
+            "location": "lambda = 1.0",
+            "meaning": "Transition between explore and protect regimes"
+          }
+        },
+        "ce_circulation_loop": {
+          "ce_circulation": {
+            "loop": "[] \u2192 {} \u2192 () \u2192 <> \u2192 []",
+            "closed": true,
+            "self_reinforcing": false,
+            "bounded": true,
+            "interpretation": "Biological soliton - fixed point of evolutionary time"
+          },
+          "steps": {
+            "memory_H": 0.98,
+            "geometry_kappa": 0.004964245216577266,
+            "structure_C": 0.36052654058349587,
+            "witness_P": 0.8331863979920427,
+            "feedback_H": 0.98
+          },
+          "fixed_point": {
+            "achieved": true,
+            "H": 0.98,
+            "kappa": 0.004964245216577266,
+            "C": 0.36052654058349587,
+            "interpretation": "Fixed point when circulation stabilizes"
+          }
+        },
+        "interpretation": {
+          "lagrangian": "Variational principle: minimize curvature, maximize coherence",
+          "euler_lagrange": "Equations of motion for memory dynamics",
+          "guardian_charge": "Conserved quantity along CE circulation",
+          "stability": "Fixed point of evolutionary time",
+          "bifurcation": "Explore vs protect transition",
+          "circulation": "Biological soliton - self-reinforcing loop"
+        }
+      }
+    },
+    {
+      "sequence_id": "XM_077788074.1",
+      "field_theory": {
+        "field_theory": "Hurst-Curvature Complete Field Theory",
+        "lagrangian_formulation": {
+          "lagrangian": -0.1248048134256743,
+          "kinetic": 0.0,
+          "potential": 0.1248048134256743,
+          "curvature": 0.1248048134256743,
+          "interpretation": "L = T - V, system minimizes V (curvature)"
+        },
+        "euler_lagrange_equations": {
+          "euler_lagrange": {
+            "d2H_dt2": 0.2496096268513486,
+            "dV_dH": -0.2496096268513486,
+            "equation": "d\u00b2H/dt\u00b2 = -\u2202V/\u2202H",
+            "interpretation": "Memory acceleration driven by curvature gradient"
+          },
+          "fixed_point_condition": {
+            "d2H_dt2": 0.0,
+            "requires": "dV_dH = 0",
+            "meaning": "Fixed point when curvature gradient vanishes"
+          }
+        },
+        "conserved_quantity": {
+          "guardian_charge": 0.021361568088039525,
+          "components": {
+            "memory": 0.5,
+            "coherence": 0.7,
+            "nash": 0.07587578369905956,
+            "curvature": 0.8043811701791939
+          },
+          "conservation": "Q_G is conserved along CE circulation loop",
+          "interpretation": "Guardian charge measures strength of protection field"
+        },
+        "stability_manifold": {
+          "stability_manifold": {
+            "is_stable": false,
+            "conditions": {
+              "H > 0.6": false,
+              "C > 0.6": true,
+              "S < \u03c7_FEG": true,
+              "\u03ba < 0.3": true
+            },
+            "curvature": 0.1248048134256743,
+            "regime": "curved_unstable"
+          },
+          "fixed_point": {
+            "H": 0.5,
+            "C": 0.7,
+            "S": 0.38984375,
+            "\u03ba": 0.1248048134256743,
+            "interpretation": "Fixed point of evolutionary time when all conditions met"
+          }
+        },
+        "bifurcation_parameter": {
+          "bifurcation_parameter": {
+            "lambda": -36.960619593863534,
+            "lambda_crit": 1.0,
+            "should_protect": false,
+            "regime": "explore",
+            "interpretation": "\u03bb > 1 \u2192 protect, \u03bb < 1 \u2192 explore"
+          },
+          "components": {
+            "H": 0.5,
+            "C": 0.7,
+            "kappa": 0.1248048134256743,
+            "G": 0.5133757836990596,
+            "G_crit": 0.4375,
+            "G_diff": 0.07587578369905956
+          },
+          "bifurcation_point": {
+            "location": "lambda = 1.0",
+            "meaning": "Transition between explore and protect regimes"
+          }
+        },
+        "ce_circulation_loop": {
+          "ce_circulation": {
+            "loop": "[] \u2192 {} \u2192 () \u2192 <> \u2192 []",
+            "closed": true,
+            "self_reinforcing": false,
+            "bounded": true,
+            "interpretation": "Biological soliton - fixed point of evolutionary time"
+          },
+          "steps": {
+            "memory_H": 0.5,
+            "geometry_kappa": 0.1248048134256743,
+            "structure_C": 0.1564359049861133,
+            "witness_P": 0.6152042687913268,
+            "feedback_H": 0.5
+          },
+          "fixed_point": {
+            "achieved": true,
+            "H": 0.5,
+            "kappa": 0.1248048134256743,
+            "C": 0.1564359049861133,
+            "interpretation": "Fixed point when circulation stabilizes"
+          }
+        },
+        "interpretation": {
+          "lagrangian": "Variational principle: minimize curvature, maximize coherence",
+          "euler_lagrange": "Equations of motion for memory dynamics",
+          "guardian_charge": "Conserved quantity along CE circulation",
+          "stability": "Fixed point of evolutionary time",
+          "bifurcation": "Explore vs protect transition",
+          "circulation": "Biological soliton - self-reinforcing loop"
+        }
+      }
+    },
+    {
+      "sequence_id": "XM_077787695.1",
+      "field_theory": {
+        "field_theory": "Hurst-Curvature Complete Field Theory",
+        "lagrangian_formulation": {
+          "lagrangian": -0.004976707445816031,
+          "kinetic": 0.0,
+          "potential": 0.004976707445816031,
+          "curvature": 0.004976707445816031,
+          "interpretation": "L = T - V, system minimizes V (curvature)"
+        },
+        "euler_lagrange_equations": {
+          "euler_lagrange": {
+            "d2H_dt2": 0.24883537229080135,
+            "dV_dH": -0.24883537229080135,
+            "equation": "d\u00b2H/dt\u00b2 = -\u2202V/\u2202H",
+            "interpretation": "Memory acceleration driven by curvature gradient"
+          },
+          "fixed_point_condition": {
+            "d2H_dt2": 0.0,
+            "requires": "dV_dH = 0",
+            "meaning": "Fixed point when curvature gradient vanishes"
+          }
+        },
+        "conserved_quantity": {
+          "guardian_charge": 0.011810004677927505,
+          "components": {
+            "memory": 0.98,
+            "coherence": 0.7,
+            "nash": 0.017351097178683383,
+            "curvature": 0.9921995181100062
+          },
+          "conservation": "Q_G is conserved along CE circulation loop",
+          "interpretation": "Guardian charge measures strength of protection field"
+        },
+        "stability_manifold": {
+          "stability_manifold": {
+            "is_stable": true,
+            "conditions": {
+              "H > 0.6": true,
+              "C > 0.6": true,
+              "S < \u03c7_FEG": true,
+              "\u03ba < 0.3": true
+            },
+            "curvature": 0.004976707445816031,
+            "regime": "flat_spacetime"
+          },
+          "fixed_point": {
+            "H": 0.98,
+            "C": 0.7,
+            "S": 0.39625000000000005,
+            "\u03ba": 0.004976707445816031,
+            "interpretation": "Fixed point of evolutionary time when all conditions met"
+          }
+        },
+        "bifurcation_parameter": {
+          "bifurcation_parameter": {
+            "lambda": -7944.74737975033,
+            "lambda_crit": 1.0,
+            "should_protect": false,
+            "regime": "explore",
+            "interpretation": "\u03bb > 1 \u2192 protect, \u03bb < 1 \u2192 explore"
+          },
+          "components": {
+            "H": 0.98,
+            "C": 0.7,
+            "kappa": 0.004976707445816031,
+            "G": 0.5073510971786833,
+            "G_crit": 0.48999999999999994,
+            "G_diff": 0.017351097178683383
+          },
+          "bifurcation_point": {
+            "location": "lambda = 1.0",
+            "meaning": "Transition between explore and protect regimes"
+          }
+        },
+        "ce_circulation_loop": {
+          "ce_circulation": {
+            "loop": "[] \u2192 {} \u2192 () \u2192 <> \u2192 []",
+            "closed": true,
+            "self_reinforcing": false,
+            "bounded": true,
+            "interpretation": "Biological soliton - fixed point of evolutionary time"
+          },
+          "steps": {
+            "memory_H": 0.98,
+            "geometry_kappa": 0.004976707445816031,
+            "structure_C": 0.3684434934687023,
+            "witness_P": 0.8351607528946772,
+            "feedback_H": 0.98
+          },
+          "fixed_point": {
+            "achieved": true,
+            "H": 0.98,
+            "kappa": 0.004976707445816031,
+            "C": 0.3684434934687023,
+            "interpretation": "Fixed point when circulation stabilizes"
+          }
+        },
+        "interpretation": {
+          "lagrangian": "Variational principle: minimize curvature, maximize coherence",
+          "euler_lagrange": "Equations of motion for memory dynamics",
+          "guardian_charge": "Conserved quantity along CE circulation",
+          "stability": "Fixed point of evolutionary time",
+          "bifurcation": "Explore vs protect transition",
+          "circulation": "Biological soliton - self-reinforcing loop"
+        }
+      }
+    }
+  ]
+}

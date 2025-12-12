@@ -7,3 +7,5 @@ datasets
 scikit-learn
 wandb
 tqdm
+biopython
+requests

@@ -1,0 +1,175 @@
+{
+  "immune_manifold": {
+    "num_erv_anchors": 10,
+    "avg_anchor_depth": 0.0,
+    "flow_coherence": 0.0,
+    "curvature_constraints": 0
+  },
+  "self_identity": {
+    "self_identity_strength": 0.0,
+    "ancestral_treaties": 0,
+    "identity_anchors": [
+      {
+        "erv_id": "XM_077790403.1",
+        "identity_strength": 0.0,
+        "anchor_depth": 0.0,
+        "is_ancestral_treaty": false
+      },
+      {
+        "erv_id": "XM_077785225.1",
+        "identity_strength": 0.0,
+        "anchor_depth": 0.0,
+        "is_ancestral_treaty": false
+      },
+      {
+        "erv_id": "XM_077789344.1",
+        "identity_strength": 0.0,
+        "anchor_depth": 0.0,
+        "is_ancestral_treaty": false
+      },
+      {
+        "erv_id": "XM_077782098.1",
+        "identity_strength": 0.0,
+        "anchor_depth": 0.0,
+        "is_ancestral_treaty": false
+      },
+      {
+        "erv_id": "XM_077782097.1",
+        "identity_strength": 0.0,
+        "anchor_depth": 0.0,
+        "is_ancestral_treaty": false
+      },
+      {
+        "erv_id": "XM_077782096.1",
+        "identity_strength": 0.0,
+        "anchor_depth": 0.0,
+        "is_ancestral_treaty": false
+      },
+      {
+        "erv_id": "XM_077782095.1",
+        "identity_strength": 0.0,
+        "anchor_depth": 0.0,
+        "is_ancestral_treaty": false
+      },
+      {
+        "erv_id": "XM_077788556.1",
+        "identity_strength": 0.0,
+        "anchor_depth": 0.0,
+        "is_ancestral_treaty": false
+      },
+      {
+        "erv_id": "XM_077788074.1",
+        "identity_strength": 0.0,
+        "anchor_depth": 0.0,
+        "is_ancestral_treaty": false
+      },
+      {
+        "erv_id": "XM_077787695.1",
+        "identity_strength": 0.0,
+        "anchor_depth": 0.0,
+        "is_ancestral_treaty": false
+      }
+    ],
+    "self_as_layered_archive": true
+  },
+  "pathway_flows": {
+    "flow_coherence": 0.0,
+    "curvature_constraints": [],
+    "num_anchors": 10,
+    "avg_anchor_depth": 0.0
+  },
+  "curvature_conflicts": {
+    "num_conflicts": 10,
+    "conflicts": [
+      {
+        "erv_id": "XM_077790403.1",
+        "misalignment": 0.5987477638640429,
+        "stress": 0.40125223613595706,
+        "curvature_stability": 0.0,
+        "coherence": 0.7,
+        "conflict_type": "curvature_mismatch"
+      },
+      {
+        "erv_id": "XM_077785225.1",
+        "misalignment": 0.5982332155477031,
+        "stress": 0.40176678445229685,
+        "curvature_stability": 0.0,
+        "coherence": 0.7,
+        "conflict_type": "curvature_mismatch"
+      },
+      {
+        "erv_id": "XM_077789344.1",
+        "misalignment": 0.5987309644670051,
+        "stress": 0.4012690355329949,
+        "curvature_stability": 0.0,
+        "coherence": 0.7,
+        "conflict_type": "curvature_mismatch"
+      },
+      {
+        "erv_id": "XM_077782098.1",
+        "misalignment": 0.598661567877629,
+        "stress": 0.40133843212237097,
+        "curvature_stability": 0.0,
+        "coherence": 0.7,
+        "conflict_type": "curvature_mismatch"
+      },
+      {
+        "erv_id": "XM_077782097.1",
+        "misalignment": 0.5987076923076923,
+        "stress": 0.4012923076923077,
+        "curvature_stability": 0.0,
+        "coherence": 0.7,
+        "conflict_type": "curvature_mismatch"
+      },
+      {
+        "erv_id": "XM_077782096.1",
+        "misalignment": 0.5988841657810839,
+        "stress": 0.40111583421891606,
+        "curvature_stability": 0.0,
+        "coherence": 0.7,
+        "conflict_type": "curvature_mismatch"
+      },
+      {
+        "erv_id": "XM_077782095.1",
+        "misalignment": 0.6231562749344579,
+        "stress": 0.37684372506554203,
+        "curvature_stability": 0.0,
+        "coherence": 0.7,
+        "conflict_type": "curvature_mismatch"
+      },
+      {
+        "erv_id": "XM_077788556.1",
+        "misalignment": 0.5985507246376811,
+        "stress": 0.40144927536231884,
+        "curvature_stability": 0.0,
+        "coherence": 0.7,
+        "conflict_type": "curvature_mismatch"
+      },
+      {
+        "erv_id": "XM_077788074.1",
+        "misalignment": 0.61015625,
+        "stress": 0.38984375,
+        "curvature_stability": 0.0,
+        "coherence": 0.7,
+        "conflict_type": "curvature_mismatch"
+      },
+      {
+        "erv_id": "XM_077787695.1",
+        "misalignment": 0.60375,
+        "stress": 0.39625000000000005,
+        "curvature_stability": 0.0,
+        "coherence": 0.7,
+        "conflict_type": "curvature_mismatch"
+      }
+    ],
+    "avg_misalignment": 0.6027578619417295,
+    "interpretation": "Curvature mismatch between inherited ERV structure and current state"
+  },
+  "interpretation": {
+    "model_type": "geometric_reframing",
+    "erv_role": "structural_anchors",
+    "immune_system": "historical_structure_on_viral_fossils",
+    "self_non_self": "relative_concepts_in_curved_manifold",
+    "safety": "conceptual_only_no_manipulation"
+  }
+}

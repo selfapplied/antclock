@@ -1,0 +1,157 @@
+{
+  "input_file": "biology/data/test/test_erv_sequences.fasta",
+  "num_sequences": 5,
+  "analyses": [
+    {
+      "memory": {
+        "sequence_id": "test_erv_1",
+        "length": 507,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.0,
+          "stability_score": 0.5,
+          "identity_preserved": true
+        },
+        "conserved_regions": [],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.3973002958579882,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.5
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "test_erv_2",
+        "length": 713,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.0,
+          "stability_score": 0.5,
+          "identity_preserved": true
+        },
+        "conserved_regions": [],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.40252454417952316,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.5
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "test_erv_3",
+        "length": 440,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.0,
+          "stability_score": 0.5,
+          "identity_preserved": true
+        },
+        "conserved_regions": [],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.39784090909090913,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.2
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "test_erv_4",
+        "length": 572,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.0,
+          "stability_score": 0.5,
+          "identity_preserved": true
+        },
+        "conserved_regions": [],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.39064685314685316,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.5
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "test_erv_5",
+        "length": 475,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.0,
+          "stability_score": 0.5,
+          "identity_preserved": true
+        },
+        "conserved_regions": [],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.4031578947368421,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.2
+      }
+    }
+  ],
+  "summary": {
+    "volte_activated_count": 0,
+    "avg_stress": 0.39829409940242316,
+    "avg_coherence": 0.7,
+    "avg_exaptation_potential": 0.38
+  }
+}

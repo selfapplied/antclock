@@ -1,0 +1,161 @@
+{
+  "guardian_vectors": [
+    {
+      "erv_id": "XM_077790403.1",
+      "direction": [
+        0.0,
+        0.0,
+        0.6828229389244799,
+        0.7305838994109685
+      ],
+      "magnitude": 0.0,
+      "anchor_depth": 0.0,
+      "curvature_strength": 0.0
+    },
+    {
+      "erv_id": "XM_077785225.1",
+      "direction": [
+        0.0,
+        0.0,
+        0.6805341070516819,
+        0.7327164043061748
+      ],
+      "magnitude": 0.0,
+      "anchor_depth": 0.0,
+      "curvature_strength": 0.0
+    },
+    {
+      "erv_id": "XM_077789344.1",
+      "direction": [
+        0.0,
+        0.0,
+        0.7051353886242749,
+        0.7090726928247151
+      ],
+      "magnitude": 0.0,
+      "anchor_depth": 0.0,
+      "curvature_strength": 0.0
+    },
+    {
+      "erv_id": "XM_077782098.1",
+      "direction": [
+        0.0,
+        0.0,
+        0.7059584990508867,
+        0.7082532016290637
+      ],
+      "magnitude": 0.0,
+      "anchor_depth": 0.0,
+      "curvature_strength": 0.0
+    },
+    {
+      "erv_id": "XM_077782097.1",
+      "direction": [
+        0.0,
+        0.0,
+        0.7043057031794978,
+        0.7098968069155073
+      ],
+      "magnitude": 0.0,
+      "anchor_depth": 0.0,
+      "curvature_strength": 0.0
+    },
+    {
+      "erv_id": "XM_077782096.1",
+      "direction": [
+        0.0,
+        0.0,
+        0.7036212519600848,
+        0.710575213323771
+      ],
+      "magnitude": 0.0,
+      "anchor_depth": 0.0,
+      "curvature_strength": 0.0
+    },
+    {
+      "erv_id": "XM_077782095.1",
+      "direction": [
+        0.0,
+        0.0,
+        0.6933779715962534,
+        0.7205740687153996
+      ],
+      "magnitude": 0.0,
+      "anchor_depth": 0.0,
+      "curvature_strength": 0.0
+    },
+    {
+      "erv_id": "XM_077788556.1",
+      "direction": [
+        0.0,
+        0.0,
+        0.6823182503600111,
+        0.731055268242869
+      ],
+      "magnitude": 0.0,
+      "anchor_depth": 0.0,
+      "curvature_strength": 0.0
+    },
+    {
+      "erv_id": "XM_077788074.1",
+      "direction": [
+        0.0,
+        0.0,
+        0.7064441796099024,
+        0.707768762446671
+      ],
+      "magnitude": 0.0,
+      "anchor_depth": 0.0,
+      "curvature_strength": 0.0
+    },
+    {
+      "erv_id": "XM_077787695.1",
+      "direction": [
+        0.0,
+        0.0,
+        0.6825614055062357,
+        0.7308282477527481
+      ],
+      "magnitude": 0.0,
+      "anchor_depth": 0.0,
+      "curvature_strength": 0.0
+    }
+  ],
+  "field_gradient": {
+    "field_coherence": 0.9998853199643267,
+    "gradient_magnitude": 6.080941944488117e-17,
+    "avg_direction": [
+      0.0,
+      0.0,
+      0.6947876478585726,
+      0.7192149361513233
+    ],
+    "num_vectors": 10
+  },
+  "immune_centroids": [
+    {
+      "centroid_id": "primary_immune_identity",
+      "direction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "strength": 0.0,
+      "num_contributing_vectors": 10,
+      "interpretation": "Stable attractor identity defined by ERV guardian-vectors"
+    }
+  ],
+  "field_geometry": {
+    "num_vectors": 10,
+    "field_coherence": 0.9998853199643267,
+    "num_centroids": 1,
+    "avg_centroid_strength": 0.0
+  },
+  "interpretation": {
+    "model": "guardian_vector_field",
+    "erv_role": "curvature_defining_vectors",
+    "immune_evolution": "constrained_by_erv_curvature",
+    "centroids": "stable_attractor_identities"
+  }
+}

@@ -1,0 +1,506 @@
+{
+  "blast_analysis": {
+    "bracket_depth": 8,
+    "coherence": 0.9999861001932074,
+    "evolution_potential": 118.83333333333333,
+    "num_hits": 30,
+    "avg_identity": 83.671,
+    "min_evalue": 1.39e-10
+  },
+  "erv_analyses": [
+    {
+      "memory": {
+        "sequence_id": "XM_077790403.1",
+        "length": 1677,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.9994036970781157,
+          "stability_score": 0.5349731663685152,
+          "identity_preserved": true
+        },
+        "conserved_regions": [
+          [
+            1,
+            1677
+          ]
+        ],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.40125223613595706,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638,
+        "nash_equilibrium": {
+          "G": 0.5026467998721407,
+          "hurst": 0.5,
+          "g_crit": 0.4375,
+          "beta": 0.0,
+          "s1_star": 0.0,
+          "s2_star": 1.0,
+          "payoff1": 0.0,
+          "payoff2": 0.49735320012785933,
+          "error_cost": 0.0,
+          "should_exapt": false,
+          "should_protect": true,
+          "interpretation": "Protection recommended: G=0.503 >= G_crit=0.438. Composition would be unsafe (\u03b2=0)."
+        }
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.8
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "XM_077785225.1",
+        "length": 849,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.9988221436984688,
+          "stability_score": 0.538339222614841,
+          "identity_preserved": true
+        },
+        "conserved_regions": [
+          [
+            1,
+            849
+          ]
+        ],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.40176678445229685,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638,
+        "nash_equilibrium": {
+          "G": 0.5021628986342035,
+          "hurst": 0.5,
+          "g_crit": 0.4375,
+          "beta": 0.0,
+          "s1_star": 0.0,
+          "s2_star": 1.0,
+          "payoff1": 0.0,
+          "payoff2": 0.4978371013657965,
+          "error_cost": 0.0,
+          "should_exapt": false,
+          "should_protect": true,
+          "interpretation": "Protection recommended: G=0.502 >= G_crit=0.438. Composition would be unsafe (\u03b2=0)."
+        }
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.8
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "XM_077789344.1",
+        "length": 1182,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.9991539763113367,
+          "stability_score": 0.5027918781725889,
+          "identity_preserved": true
+        },
+        "conserved_regions": [
+          [
+            1,
+            1182
+          ]
+        ],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.4012690355329949,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638,
+        "nash_equilibrium": {
+          "G": 0.502631001066149,
+          "hurst": 0.5,
+          "g_crit": 0.4375,
+          "beta": 0.0,
+          "s1_star": 0.0,
+          "s2_star": 1.0,
+          "payoff1": 0.0,
+          "payoff2": 0.497368998933851,
+          "error_cost": 0.0,
+          "should_exapt": false,
+          "should_protect": true,
+          "interpretation": "Protection recommended: G=0.503 >= G_crit=0.438. Composition would be unsafe (\u03b2=0)."
+        }
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.8
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "XM_077782098.1",
+        "length": 1569,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.9993626513702996,
+          "stability_score": 0.5016252390057362,
+          "identity_preserved": true
+        },
+        "conserved_regions": [
+          [
+            1,
+            1569
+          ]
+        ],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.40133843212237097,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638,
+        "nash_equilibrium": {
+          "G": 0.502565737815952,
+          "hurst": 0.5,
+          "g_crit": 0.4375,
+          "beta": 0.0,
+          "s1_star": 0.0,
+          "s2_star": 1.0,
+          "payoff1": 0.0,
+          "payoff2": 0.49743426218404796,
+          "error_cost": 0.0,
+          "should_exapt": false,
+          "should_protect": true,
+          "interpretation": "Protection recommended: G=0.503 >= G_crit=0.438. Composition would be unsafe (\u03b2=0)."
+        }
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.8
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "XM_077782097.1",
+        "length": 1625,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.9993846153846154,
+          "stability_score": 0.5039692307692307,
+          "identity_preserved": true
+        },
+        "conserved_regions": [
+          [
+            1,
+            1625
+          ]
+        ],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.4012923076923077,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638,
+        "nash_equilibrium": {
+          "G": 0.5026091150229081,
+          "hurst": 0.5,
+          "g_crit": 0.4375,
+          "beta": 0.0,
+          "s1_star": 0.0,
+          "s2_star": 1.0,
+          "payoff1": 0.0,
+          "payoff2": 0.49739088497709194,
+          "error_cost": 0.0,
+          "should_exapt": false,
+          "should_protect": true,
+          "interpretation": "Protection recommended: G=0.503 >= G_crit=0.438. Composition would be unsafe (\u03b2=0)."
+        }
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.8
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "XM_077782096.1",
+        "length": 1882,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.975557917109458,
+          "stability_score": 0.5049415515409139,
+          "identity_preserved": true
+        },
+        "conserved_regions": [
+          [
+            1,
+            1837
+          ]
+        ],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.40111583421891606,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638,
+        "nash_equilibrium": {
+          "G": 0.5027750775370695,
+          "hurst": 0.5,
+          "g_crit": 0.4375,
+          "beta": 0.0,
+          "s1_star": 0.0,
+          "s2_star": 1.0,
+          "payoff1": 0.0,
+          "payoff2": 0.4972249224629305,
+          "error_cost": 0.0,
+          "should_exapt": false,
+          "should_protect": true,
+          "interpretation": "Protection recommended: G=0.503 >= G_crit=0.438. Composition would be unsafe (\u03b2=0)."
+        }
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.8
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "XM_077782095.1",
+        "length": 566,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.9982332155477032,
+          "stability_score": 0.5196113074204947,
+          "identity_preserved": true
+        },
+        "conserved_regions": [
+          [
+            1,
+            566
+          ]
+        ],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.37684372506554203,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638,
+        "nash_equilibrium": {
+          "G": 0.5256015124775466,
+          "hurst": 0.5,
+          "g_crit": 0.4375,
+          "beta": 0.0,
+          "s1_star": 0.0,
+          "s2_star": 1.0,
+          "payoff1": 0.0,
+          "payoff2": 0.4743984875224534,
+          "error_cost": 0.0,
+          "should_exapt": false,
+          "should_protect": true,
+          "interpretation": "Protection recommended: G=0.526 >= G_crit=0.438. Composition would be unsafe (\u03b2=0)."
+        }
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.8
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "XM_077788556.1",
+        "length": 1449,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.9993098688750862,
+          "stability_score": 0.5357142857142857,
+          "identity_preserved": true
+        },
+        "conserved_regions": [
+          [
+            1,
+            1449
+          ]
+        ],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.40144927536231884,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638,
+        "nash_equilibrium": {
+          "G": 0.502461496524465,
+          "hurst": 0.5,
+          "g_crit": 0.4375,
+          "beta": 0.0,
+          "s1_star": 0.0,
+          "s2_star": 1.0,
+          "payoff1": 0.0,
+          "payoff2": 0.49753850347553497,
+          "error_cost": 0.0,
+          "should_exapt": false,
+          "should_protect": true,
+          "interpretation": "Protection recommended: G=0.502 >= G_crit=0.438. Composition would be unsafe (\u03b2=0)."
+        }
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.8
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "XM_077788074.1",
+        "length": 640,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.9984375,
+          "stability_score": 0.5009375,
+          "identity_preserved": true
+        },
+        "conserved_regions": [
+          [
+            1,
+            640
+          ]
+        ],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.38984375,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638,
+        "nash_equilibrium": {
+          "G": 0.5133757836990596,
+          "hurst": 0.5,
+          "g_crit": 0.4375,
+          "beta": 0.0,
+          "s1_star": 0.0,
+          "s2_star": 1.0,
+          "payoff1": 0.0,
+          "payoff2": 0.48662421630094044,
+          "error_cost": 0.0,
+          "should_exapt": false,
+          "should_protect": true,
+          "interpretation": "Protection recommended: G=0.513 >= G_crit=0.438. Composition would be unsafe (\u03b2=0)."
+        }
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.8
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "XM_077787695.1",
+        "length": 840,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.9988095238095238,
+          "stability_score": 0.5353571428571429,
+          "identity_preserved": true
+        },
+        "conserved_regions": [
+          [
+            1,
+            840
+          ]
+        ],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.39625000000000005,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638,
+        "nash_equilibrium": {
+          "G": 0.5073510971786833,
+          "hurst": 0.8,
+          "g_crit": 0.48999999999999994,
+          "beta": 0.0,
+          "s1_star": 0.0,
+          "s2_star": 1.0,
+          "payoff1": 0.0,
+          "payoff2": 0.4926489028213167,
+          "error_cost": 0.0,
+          "should_exapt": false,
+          "should_protect": true,
+          "interpretation": "Protection recommended: G=0.507 >= G_crit=0.490. Composition would be unsafe (\u03b2=0)."
+        }
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.8
+      }
+    }
+  ],
+  "integration": {
+    "blast_bracket_depth_to_erv_invariant": {
+      "blast_ce1_depth": 8,
+      "erv_invariant_preserved": true
+    },
+    "blast_coherence_to_erv_coherence": {
+      "blast_ce2_coherence": 0.9999861001932074,
+      "erv_avg_coherence": 0.7
+    },
+    "blast_evolution_to_erv_exaptation": {
+      "blast_ce3_evolution_potential": 118.83333333333333,
+      "erv_avg_exaptation_potential": 0.8
+    }
+  }
+}

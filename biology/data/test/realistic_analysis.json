@@ -1,0 +1,157 @@
+{
+  "input_file": "biology/data/test/realistic_erv_sequences.fasta",
+  "num_sequences": 5,
+  "analyses": [
+    {
+      "memory": {
+        "sequence_id": "HERV-K_001",
+        "length": 992,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.0,
+          "stability_score": 0.5,
+          "identity_preserved": true
+        },
+        "conserved_regions": [],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.4015120967741936,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.5
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "HERV-W_002",
+        "length": 2634,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.0,
+          "stability_score": 0.5,
+          "identity_preserved": true
+        },
+        "conserved_regions": [],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.40227790432801824,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.5
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "HERV-H_003",
+        "length": 1031,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.0,
+          "stability_score": 0.5,
+          "identity_preserved": true
+        },
+        "conserved_regions": [],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.40203685741998063,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.5
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "HERV-L_004",
+        "length": 2158,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.0,
+          "stability_score": 0.5,
+          "identity_preserved": true
+        },
+        "conserved_regions": [],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.4036144578313253,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.5
+      }
+    },
+    {
+      "memory": {
+        "sequence_id": "HERV-F_005",
+        "length": 1047,
+        "integration_site": null,
+        "timestamp": "current"
+      },
+      "domain": {
+        "invariant_Q": {
+          "conserved_coverage": 0.0,
+          "stability_score": 0.5,
+          "identity_preserved": true
+        },
+        "conserved_regions": [],
+        "functional_annotations": {}
+      },
+      "transform": {
+        "stress_S": 0.4020057306590258,
+        "coherence_C": 0.7,
+        "volte_activated": false,
+        "threshold": 0.638
+      },
+      "witness": {
+        "identity_preserved": true,
+        "stress_reduced": false,
+        "coherence_increased": false,
+        "exaptation_potential": 0.5
+      }
+    }
+  ],
+  "summary": {
+    "volte_activated_count": 0,
+    "avg_stress": 0.40228940940250874,
+    "avg_coherence": 0.7,
+    "avg_exaptation_potential": 0.5
+  }
+}

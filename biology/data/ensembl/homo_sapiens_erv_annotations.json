@@ -1,0 +1,11 @@
+{
+  "species": "homo_sapiens",
+  "source": "Ensembl",
+  "note": "Direct ERV endpoints may require custom queries",
+  "suggested_approach": [
+    "Use Ensembl Biomart for bulk downloads",
+    "Query RepeatMasker annotations",
+    "Use Ensembl variation API for ERV-associated variants"
+  ],
+  "api_base": "https://rest.ensembl.org"
+}

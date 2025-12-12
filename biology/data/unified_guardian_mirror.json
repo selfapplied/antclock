@@ -1,0 +1,495 @@
+{
+  "operator": "Unified-Guardian-Mirror",
+  "ce1_static": {
+    "memory": {
+      "memory_type": "Unified-Memory",
+      "genetic_memory": {
+        "type": "Genetic-Memory",
+        "traces": [
+          {
+            "generation": 0,
+            "curvature": 0.5
+          },
+          {
+            "generation": 1,
+            "curvature": 0.5841470984807897
+          },
+          {
+            "generation": 2,
+            "curvature": 0.5909297426825681
+          },
+          {
+            "generation": 3,
+            "curvature": 0.5141120008059867
+          },
+          {
+            "generation": 4,
+            "curvature": 0.42431975046920717
+          }
+        ],
+        "timescale": "evolutionary",
+        "stability": "identity_over_time"
+      },
+      "behavioral_memory": {
+        "type": "Behavioral-Memory",
+        "traces": [
+          {
+            "time": 0,
+            "intention": 0.6
+          },
+          {
+            "time": 1,
+            "intention": 0.554030230586814
+          },
+          {
+            "time": 2,
+            "intention": 0.4583853163452858
+          },
+          {
+            "time": 3,
+            "intention": 0.40100075033995547
+          },
+          {
+            "time": 4,
+            "intention": 0.4346356379136388
+          }
+        ],
+        "timescale": "lived",
+        "stability": "intention_recognition"
+      },
+      "unified_structure": true
+    },
+    "domain": {
+      "domain_type": "Unified-Domain",
+      "genetic_manifold": {
+        "space": "genome-space",
+        "curvature": 0.5,
+        "centroids": [
+          {
+            "id": "g1",
+            "curvature": 0.6
+          },
+          {
+            "id": "g2",
+            "curvature": 0.4
+          }
+        ],
+        "guardian_vectors": [
+          [
+            0.8,
+            0.2
+          ],
+          [
+            0.7,
+            0.3
+          ]
+        ]
+      },
+      "behavioral_manifold": {
+        "space": "behavior-space",
+        "curvature": 0.5,
+        "centroids": [
+          {
+            "id": "b1",
+            "curvature": 0.55
+          },
+          {
+            "id": "b2",
+            "curvature": 0.45
+          }
+        ],
+        "mirror_vectors": [
+          [
+            0.75,
+            0.25
+          ],
+          [
+            0.65,
+            0.35
+          ]
+        ]
+      },
+      "shared_structure": {
+        "curved": true,
+        "constraint_laden": true,
+        "centroid_defined": true,
+        "same_topology": true
+      }
+    },
+    "sobel_morphism": {
+      "morphism_type": "Unified-Sobel",
+      "genetic_sobel": {
+        "edges": [
+          [
+            1.144316215318611,
+            1.3166280074683832,
+            0.819055873905722,
+            0.19826684487265064,
+            0.4856158585597984,
+            0.3503015892342799,
+            1.3777246608422395,
+            0.6396431784583527,
+            1.497847027488651,
+            0.9526157702898337
+          ],
+          [
+            1.3442008935190521,
+            0.3555106845827192,
+            0.9133028593839952,
+            0.0730551905401579,
+            0.389451887876931,
+            0.4815314370385213,
+            0.8852672769697371,
+            0.9903096744380825,
+            0.8860858595320542,
+            0.7898262655477276
+          ],
+          [
+            0.15601765706916093,
+            0.5873122709844405,
+            0.3463677675052273,
+            0.30756251182657496,
+            0.13468497542851013,
+            0.24685306386123593,
+            0.24855134406572993,
+            0.10580498662617333,
+            0.5253017107717367,
+            0.9142756582442084
+          ],
+          [
+            0.538647121753928,
+            0.32476753291097016,
+            0.24755929727583662,
+            0.44593768948121176,
+            0.07536205425086494,
+            0.1337867665724078,
+            0.5354411448213257,
+            1.1230102059454525,
+            0.8817868197768403,
+            0.2904460077457091
+          ],
+          [
+            0.5128227123868998,
+            0.31288552038892686,
+            0.254828893664651,
+            0.2592815220955959,
+            0.5981837759308434,
+            0.5099047833019371,
+            0.9665184682495147,
+            0.29449584729690537,
+            0.44926944329200885,
+            0.14628098341993243
+          ],
+          [
+            0.5173850974585497,
+            0.14639215702271227,
+            0.40393076977706094,
+            0.30396409872544766,
+            0.8467026894840743,
+            0.798946404180628,
+            0.7654039686796065,
+            0.9349568052520952,
+            0.5054631584150084,
+            0.5943544072967738
+          ],
+          [
+            0.7577756861776969,
+            0.7284170890062868,
+            0.5999538390227678,
+            0.24507132981793375,
+            0.6001611719479323,
+            0.5574807453172735,
+            0.9939951898224754,
+            1.1910612833320005,
+            0.7473100055603749,
+            0.7764390862207066
+          ],
+          [
+            1.2600404176577662,
+            1.0170559487276525,
+            0.5451865824082137,
+            0.9809555894169227,
+            0.6361447374154404,
+            0.6869951547911533,
+            1.1613232047731585,
+            0.7507225689921371,
+            0.8074529671581768,
+            0.4461568618051755
+          ],
+          [
+            1.303091969184289,
+            1.4126956839120606,
+            0.9322806072786489,
+            0.8716999595084101,
+            0.378800606646516,
+            0.2368742506464695,
+            0.4667652950396756,
+            0.6451453543394862,
+            0.9778362451352717,
+            0.8420093120215568
+          ],
+          [
+            0.7263151180007821,
+            0.9420071342366121,
+            0.7674296721519328,
+            0.35527314331355137,
+            1.1065245645997412,
+            0.36357443108790616,
+            1.000446999433868,
+            0.7653919428908683,
+            0.7892539293840671,
+            1.2134490788403596
+          ]
+        ],
+        "stable": "False",
+        "detects": "stress_boundaries_allowed_transitions"
+      },
+      "behavioral_sobel": {
+        "edges": [
+          [
+            0.4349632184449958,
+            0.7539755480195068,
+            0.7433179118697775,
+            0.40695654238068835,
+            1.2460450060359778,
+            0.3119598285877074,
+            0.8528432667647571,
+            0.5473288924271515,
+            0.8538370410686694,
+            0.9001834358208345
+          ],
+          [
+            0.5976628818825788,
+            0.5619591849606255,
+            0.4718313985529036,
+            0.16273234790358732,
+            0.6889320753307345,
+            0.2698023520683945,
+            0.8508030863169826,
+            0.40880418749546305,
+            0.9316658887393066,
+            0.6355765845847109
+          ],
+          [
+            0.5312852480675345,
+            0.8679912702594645,
+            0.91186832480891,
+            0.6366342331906896,
+            0.7249725451353161,
+            0.5767125596037953,
+            0.9515649657741432,
+            0.21492667078109623,
+            0.7382677499452222,
+            0.8648405169196088
+          ],
+          [
+            0.9344702230679107,
+            1.1190728588794474,
+            0.2257958615247242,
+            1.130687295398472,
+            0.7213490488880737,
+            0.39973717929248376,
+            0.4605628726769694,
+            1.0261051319673238,
+            0.5981745087967597,
+            0.6314068491359814
+          ],
+          [
+            0.4965318174494987,
+            0.2951443912569446,
+            0.8876277527288632,
+            0.97168805236174,
+            0.7486379751532702,
+            0.4060997594463581,
+            0.2237542852047236,
+            1.3238511240642006,
+            0.8064843080435438,
+            0.888288848701457
+          ],
+          [
+            0.6918101005837111,
+            0.7065470502710518,
+            0.7568590282784596,
+            0.3677281428598242,
+            0.6105565742156632,
+            0.08478754769589579,
+            0.17240927190621783,
+            0.8812899960980324,
+            0.882595343608852,
+            1.032452405025247
+          ],
+          [
+            0.562312952207963,
+            0.6577557299598964,
+            0.26072783658611554,
+            0.7638398496050054,
+            0.18084909657935214,
+            0.652166567917318,
+            0.31018496579950594,
+            0.31291364824849827,
+            0.37867482082971815,
+            1.011727325752047
+          ],
+          [
+            0.5006492555092976,
+            0.5306309496658139,
+            0.9313300451829536,
+            0.39477272799122076,
+            0.7750419864971334,
+            0.46266854544058494,
+            0.26794743238262486,
+            0.4479839837177202,
+            0.5031917463629034,
+            0.9583188785275037
+          ],
+          [
+            0.23678301224357126,
+            0.1928879197928318,
+            0.4998125663052306,
+            1.0358383139377627,
+            0.6645205513948441,
+            0.9413869336984495,
+            0.42805176669298545,
+            0.2228925212630486,
+            0.1577748878330949,
+            0.8481432244971825
+          ],
+          [
+            1.413837788115308,
+            0.6818419544747034,
+            1.0290359483790827,
+            0.8597050856641881,
+            0.484743364410681,
+            1.423168838680613,
+            0.28952286527232396,
+            0.9025832967357699,
+            1.3722328963287937,
+            1.5355539627237569
+          ]
+        ],
+        "stable": "False",
+        "detects": "intention_boundaries_allowed_interpretations"
+      },
+      "same_operator": true,
+      "different_substrates": true
+    },
+    "witness": {
+      "witness_type": "Unified-Witness",
+      "genetic_witness": {
+        "centroids": [
+          {
+            "id": "genetic_1",
+            "curvature": 0.6
+          },
+          {
+            "id": "genetic_2",
+            "curvature": 0.4
+          }
+        ],
+        "witnesses": "viable_centroids_biological_form",
+        "defines": "what_body_capable_of_becoming"
+      },
+      "behavioral_witness": {
+        "centroids": [
+          {
+            "id": "behavioral_1",
+            "curvature": 0.55
+          },
+          {
+            "id": "behavioral_2",
+            "curvature": 0.45
+          }
+        ],
+        "witnesses": "viable_centroids_self_other_recognition",
+        "defines": "what_mind_capable_of_interpreting"
+      },
+      "shared_invariants": [
+        "conserved_edges",
+        "stable_gradients",
+        "allowable_flows",
+        "centroid_attraction",
+        "curvature_limits",
+        "sobel_recursion",
+        "driftless_timing"
+      ]
+    }
+  },
+  "ce2_dynamics": {
+    "phase_axis": {
+      "phase_axis_type": "Antclock-Phase-Axis-of-Selfhood",
+      "tau": 0.0,
+      "monotonic": true,
+      "driftless": true,
+      "synchronizes": [
+        "genotypic_recursion",
+        "phenotypic_recursion",
+        "guardian_stability",
+        "mirror_stability"
+      ],
+      "temporal_manifold": true,
+      "invariant": "allows_sobel_convergence"
+    },
+    "antclock_synchronization": true
+  },
+  "ce3_evolution": {
+    "centroid_mapping": {
+      "mapping_type": "Cross-Layer-Centroid-Mapping",
+      "mappings": [
+        {
+          "genetic_centroid": {
+            "id": "genetic_1",
+            "curvature": 0.6
+          },
+          "behavioral_centroid": {
+            "id": "behavioral_1",
+            "curvature": 0.55
+          },
+          "distance": 0.04999999999999993,
+          "correspondence": "functional_uplift"
+        },
+        {
+          "genetic_centroid": {
+            "id": "genetic_2",
+            "curvature": 0.4
+          },
+          "behavioral_centroid": {
+            "id": "behavioral_2",
+            "curvature": 0.45
+          },
+          "distance": 0.04999999999999999,
+          "correspondence": "functional_uplift"
+        }
+      ],
+      "num_mappings": 2,
+      "interpretation": "cognitive_manifold_is_functional_uplift_of_genetic_manifold"
+    },
+    "fixed_point_equation": {
+      "equation_type": "Unified-Fixed-Point",
+      "genetic_fixed_point": {
+        "condition": "Sobel_\u03c4(genome) \u2192 stable, drift \u2192 0",
+        "achieved": false,
+        "tau": 0.0
+      },
+      "behavioral_fixed_point": {
+        "condition": "Sobel_\u03c4(behavior) \u2192 stable, drift \u2192 0",
+        "achieved": false,
+        "tau": 0.0
+      },
+      "unified_fixed_point": {
+        "achieved": false,
+        "interpretation": "both_manifolds_converge_to_same_structure",
+        "tau": 0.0
+      },
+      "equation": "Fix[Sobel_\u03c4(genome) \u2227 Sobel_\u03c4(behavior)] = stable_centroids"
+    }
+  },
+  "synthesis": {
+    "same_topological_language": true,
+    "different_scales": true,
+    "genetic_guardian": "genome-space_stability",
+    "behavioral_mirror": "behavior-space_stability",
+    "cognitive_feg": "intention-space_stability",
+    "unified_geometry": "CE_topology",
+    "antclock_binds": "temporal_manifold"
+  }
+}

@@ -41,3 +41,4 @@ done
 2. **Fallback on failure**: Scripts with broken shebangs get their shebang replaced with `#!/run.sh`
 3. **Preservation**: Scripts already using `#!/run.sh` are not modified
 4. **Self-awareness**: No infinite recursion occurs due to identity recognition
+
